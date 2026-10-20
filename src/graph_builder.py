@@ -6,10 +6,24 @@ knowledge graph JSON file (nodes & edges).
 """
 
 import os
+import re
+from datetime import date
 import json
 from citation_resolver import extract_short_names, parse_citations, load_aliases, normalize_text
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+KIND_ORDER = ["憲法與法律", "命令", "行政規則"]
+
+
+def law_kind(name, source):
+    """Rough 法律 / 命令 / 行政規則 split for the home page grouping."""
+    if source == "dgbas":
+        return "行政規則"
+    if name.endswith(("憲法", "條例", "通則")) or (name.endswith("法") and not name.endswith("辦法")):
+        return "憲法與法律"
+    return "命令"
 
 
 def original_offsets(text):
@@ -38,6 +52,7 @@ def build_graph():
 
     nodes = []
     edges = []
+    laws = []
 
     print("Building Knowledge Graph from extracted laws...")
 
@@ -69,14 +84,23 @@ def build_graph():
             for art in law_data.get("content", []):
                 short_names.update(extract_short_names(art.get("article", "")))
 
+            laws.append({
+                "code": law_code,
+                "name": law_name,
+                "kind": law_kind(law_name, law_data.get("source")),
+                "count": len(article_order),
+            })
+            chapter = None
             for art in law_data.get("content", []):
                 main_no = art.get("num", 0)
                 sub_no = art.get("sub_num")
                 zh_no = art.get("zh", "")
                 text = art.get("article", "")
 
-                # num 0 = chapter heading ("第 一 章 總則"), not an article
+                # num 0 = chapter heading ("第 一 章 總則"), not an article;
+                # it is attached to the next article for the table of contents
                 if not main_no:
+                    chapter = re.sub(r"\s+", " ", text).strip() or chapter
                     continue
 
                 # Format current node ID
@@ -92,8 +116,10 @@ def build_graph():
                     "article_zh": zh_no,
                     "article_num": main_no,
                     "article_sub_num": sub_no,
-                    "text": text
+                    "text": text,
+                    **({"chapter": chapter} if chapter else {}),
                 })
+                chapter = None
 
                 # Parse citations to generate edges
                 # E.g. "62" or "62-1" as current coordinates
@@ -128,6 +154,8 @@ def build_graph():
         "edges": edges,
         # name -> code, so the query page understands 憲法 / 政府採購法 etc.
         "aliases": name_to_code,
+        "laws": sorted(laws, key=lambda law: (KIND_ORDER.index(law["kind"]), law["name"])),
+        "built": date.today().isoformat(),
     }
 
     # web/ copy is what the dashboard fetches

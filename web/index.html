@@ -2,12 +2,28 @@
 <html lang="zh-Hant-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>法規引用查詢</title>
-<meta name="description" content="輸入條文，列出所有引用它的法規條文。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%233b5bdb%22/%3E%3Cpath d=%22M9 8h9a5 5 0 0 1 0 10h-4v6H9z%22 fill=%22white%22/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>歲計會計隨身法典</title>
+<meta name="description" content="歲計會計法規全文、條文互連與引用查詢，可離線使用。">
+<meta name="theme-color" content="#3b5bdb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="隨身法典">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>
+    // Apply saved theme / font size before first paint
+    try {
+        const theme = JSON.parse(localStorage.getItem("theme"));
+        if (theme) document.documentElement.dataset.theme = theme;
+        const fs = JSON.parse(localStorage.getItem("fontSize"));
+        if (fs) document.documentElement.style.setProperty("--fs", fs + "px");
+    } catch (e) {}
+</script>
 <style>
 :root {
+    --fs: 17px;
     --bg: #f7f7f5; --surface: #ffffff; --border: #e3e2de;
     --text: #1f2328; --muted: #6a6f76; --accent: #3b5bdb; --accent-soft: #edf2ff;
     --warn: #b35c00; --warn-soft: #fff4e5; --mark: #fff3bf;
@@ -25,90 +41,141 @@
     --warn: #ffb057; --warn-soft: #33260f; --mark: #4a3f10;
 }
 * { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
 body {
     margin: 0; background: var(--bg); color: var(--text);
-    font: 16px/1.65 -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    font: var(--fs)/1.75 -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);
 }
-main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-h1 { font-size: 22px; margin: 0; }
 a { color: var(--accent); }
-.muted { color: var(--muted); font-size: 14px; }
-form { display: flex; gap: 8px; margin: 20px 0 8px; }
-input[type=search] {
-    flex: 1; min-width: 0; font: inherit; padding: 10px 12px;
+button { font: inherit; cursor: pointer; }
+
+/* Sticky top bar: brand, tools, search */
+.topbar {
+    position: sticky; top: 0; z-index: 10; background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: max(8px, env(safe-area-inset-top)) 16px 10px;
+}
+.topbar-inner, main, footer { max-width: 860px; margin: 0 auto; }
+.brand-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.brand { font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
+.tools { display: flex; gap: 6px; }
+.tool {
+    min-width: 40px; min-height: 36px; padding: 0 10px; font-size: 14px;
     border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text);
 }
-input[type=search]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-button {
-    font: inherit; padding: 10px 18px; border: 0; border-radius: 8px;
-    background: var(--accent); color: var(--surface); cursor: pointer;
+form { display: flex; gap: 8px; margin-top: 8px; }
+input[type=search] {
+    flex: 1; min-width: 0; font-size: 16px; padding: 10px 12px;  /* 16px stops iOS zoom-on-focus */
+    border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text);
 }
-.examples { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
-.examples button {
-    padding: 4px 10px; font-size: 14px; background: var(--accent-soft); color: var(--accent);
-}
-.card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-    padding: 16px; margin-bottom: 12px;
-}
-.target h2 { font-size: 18px; margin: 0 0 6px; }
-.warn { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 10px 12px; margin: 12px 0; font-size: 14px; }
-h3 { font-size: 15px; margin: 28px 0 10px; color: var(--muted); font-weight: 600; }
-.hit-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-.hit-head a { font-weight: 600; text-decoration: none; }
-.badges { display: flex; gap: 6px; flex-wrap: wrap; }
-.badge { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
-.badge.review { background: var(--warn-soft); color: var(--warn); }
-.text { margin: 8px 0 0; font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
-mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
-details > summary { cursor: pointer; color: var(--muted); font-size: 14px; margin-top: 6px; }
-.article-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border); }
-.article-row:first-child { border-top: 0; }
-.article-row a { text-decoration: none; }
+input[type=search]:focus, .jump input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.go { padding: 10px 16px; border: 0; border-radius: 10px; background: var(--accent); color: var(--surface); font-size: 16px; }
+
+main { padding: 16px 16px 96px; }
+.muted { color: var(--muted); font-size: 0.85em; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+.title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+h2 { font-size: 1.15em; margin: 0 0 4px; line-height: 1.5; }
+h3 { font-size: 0.9em; margin: 24px 0 8px; color: var(--muted); font-weight: 600; }
+.warn { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 10px 12px; margin: 12px 0; font-size: 0.9em; }
 .empty { color: var(--muted); }
+.text { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+.star { flex: none; border: 0; background: none; font-size: 1.4em; line-height: 1; padding: 4px; color: var(--muted); }
+.star[aria-pressed="true"] { color: #f2b705; }
+.hit-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hit-head > a:first-child { font-weight: 600; text-decoration: none; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; text-decoration: none; }
+.badge.review { background: var(--warn-soft); color: var(--warn); }
+
 a.cite { color: var(--accent); text-decoration: underline dotted; text-underline-offset: 3px; }
-a.cite.focus { background: var(--mark); border-radius: 3px; padding: 0 1px; text-decoration: none; }
-.cite-unresolved { text-decoration: underline dotted var(--muted); text-underline-offset: 3px; cursor: help; }
-.article-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; font-size: 14px; }
-.article-nav a { text-decoration: none; }
-.law-article { padding: 12px 0; border-top: 1px solid var(--border); }
+a.cite.focus { background: var(--mark); border-radius: 3px; text-decoration: none; }
+.cite-unresolved { text-decoration: underline dotted var(--muted); text-underline-offset: 3px; }
+
+/* Lists: laws, favourites, recents, cited articles */
+.list a { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); text-decoration: none; color: var(--text); }
+.list > :first-child { border-top: 0; padding-top: 0; }
+.list .count { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
+details > summary { cursor: pointer; list-style: none; font-weight: 600; padding: 4px 0; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "▸ "; color: var(--muted); }
+details[open] > summary::before { content: "▾ "; }
+details.card[open] > summary { margin-bottom: 8px; }
+
+.article-nav { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 12px; font-size: 0.9em; }
+.article-nav a { text-decoration: none; padding: 6px 0; }
+.law-article { padding: 14px 0; border-top: 1px solid var(--border); scroll-margin-top: 140px; }
 .law-article:first-child { border-top: 0; padding-top: 0; }
-.law-article .hit-head > a:first-child { font-weight: 600; text-decoration: none; }
-a.badge { text-decoration: none; }
-#full-text.only-cited .law-article:not(.is-cited) { display: none; }
-label input { vertical-align: middle; }
+.chapter { margin: 18px 0 4px; font-weight: 700; color: var(--accent); scroll-margin-top: 140px; }
+.chapter:first-child { margin-top: 0; }
+#full-text.only-cited .law-article:not(.is-cited), #full-text.only-cited .chapter { display: none; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-top: 10px; font-size: 0.9em; }
+.jump { display: flex; align-items: center; gap: 6px; margin: 0; }
+.jump input { width: 4.5em; font-size: 16px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); }
+.toc { margin-top: 10px; }
+.toc button { display: block; width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--border); padding: 10px 0; color: var(--accent); font-size: 0.9em; }
+
+#to-top {
+    position: fixed; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 5;
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); font-size: 18px; box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+    display: none;
+}
+footer { padding: 0 16px max(24px, env(safe-area-inset-bottom)); font-size: 13px; color: var(--muted); }
+footer a { color: var(--muted); }
+.offline-pill { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
 </style>
 </head>
 <body>
-<main>
-    <header>
-        <h1>法規引用查詢</h1>
-        <a class="muted" href="graph.html">看關聯圖 →</a>
-    </header>
-    <p class="muted">輸入法規名稱看全文，條文中的引用可以點擊跳轉；加上條號，列出所有引用它的條文。</p>
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand-row">
+            <a class="brand" href="#">📖 隨身法典</a>
+            <div class="tools">
+                <button class="tool" type="button" data-font="-1" aria-label="縮小字體">A−</button>
+                <button class="tool" type="button" data-font="1" aria-label="放大字體">A＋</button>
+                <button class="tool" type="button" id="theme-btn" aria-label="切換深淺色">◐</button>
+            </div>
+        </div>
+        <form id="query-form" role="search">
+            <input id="q" type="search" list="law-names" autocomplete="off" enterkeyhint="search"
+                   placeholder="法規名稱、條號或關鍵字" aria-label="法規名稱、條號或關鍵字">
+            <datalist id="law-names"></datalist>
+            <button class="go" type="submit">查詢</button>
+        </form>
+    </div>
+</header>
 
-    <form id="query-form" role="search">
-        <input id="q" type="search" list="law-names" autocomplete="off"
-               placeholder="例：預算法、預算法第62條、預算法 62-1" aria-label="法規與條號">
-        <datalist id="law-names"></datalist>
-        <button type="submit">查詢</button>
-    </form>
-    <div class="examples" id="examples"></div>
+<main id="result" aria-live="polite"><p class="empty">資料載入中…</p></main>
 
-    <div id="result" aria-live="polite"><p class="empty">資料載入中…</p></div>
-</main>
+<footer>
+    <p><span id="data-info"></span> <span id="offline-info"></span></p>
+    <p>條文來自法務部全國法規資料庫與行政院主計總處主管法規共用系統；引用關係由程式自動解析，正式用途請以原文為準。
+       · <a href="graph.html">關聯圖</a> · <a href="https://github.com/cormort/LawsGraphify">原始碼</a></p>
+</footer>
+<button id="to-top" type="button" aria-label="回到頂端">↑</button>
 
 <script>
 let nodes = new Map();      // id -> node
 let incoming = new Map();   // target id -> [edge]
 let outgoing = new Map();   // source id -> [edge]
 let lawOrder = new Map();   // code -> [article ids in order]
+let laws = [];              // [{code, name, kind, count}]
 let nameToCode = {};        // normalized name -> code
 let codeToName = {};        // code -> display name
 let sortedNames = [];       // names, longest first
+const scrollPositions = new Map();  // hash -> scrollY, restored on back
 
-const EXAMPLES = ["預算法", "預算法第62條之1", "會計法第15條", "附屬單位預算執行要點第23點"];
+const MAX_RESULTS = 200;
+
+// localStorage can throw (private mode) or be empty; the app works without it
+const store = {
+    get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch (e) { return fallback; } },
+    set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {} },
+};
 
 function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, c => ({
@@ -142,24 +209,41 @@ function articleLabel(id) {
 
 function lawName(code) { return codeToName[code] || code; }
 function codeOf(id) { return id.replace(/-\d{4}(-\d{3})?$/, ""); }
+// 行政規則 number by 點, laws by 條
+function unit(code) { return nodes.get(lawOrder.get(code)?.[0])?.article_zh.includes("點") ? "點" : "條"; }
 function citerCount(id) { return new Set((incoming.get(id) || []).map(e => e.source)).size; }
+function label(id) { return /-\d{4}/.test(id) ? `${lawName(codeOf(id))} ${articleLabel(id)}` : lawName(id); }
+function link(id, text) { return `<a href="#${encodeURIComponent(id)}">${escapeHtml(text ?? label(id))}</a>`; }
 
-// Free text -> { code, main, sub } (main null for a whole-law query)
+const NUM = "[0-9零一二三四五六七八九十百千兩]+";
+const ARTICLE_PAT = new RegExp(`^第?(${NUM})[條點]?(?:[之\\-](${NUM}))?[條點]?$`);
+
+// Free text -> {type: "article"|"law"|"search", ...}
 function parseQuery(raw) {
-    const text = raw.normalize("NFKC").replace(/\s+/g, "");
+    const text = raw.normalize("NFKC").trim();
     if (!text) return null;
-    const direct = text.toUpperCase().match(/^([A-Z0-9]+)-(\d{1,4})(?:-(\d{1,3}))?$/);
+    const compact = text.replace(/\s+/g, "");
+    const direct = compact.toUpperCase().match(/^([A-Z0-9]+)-(\d{1,4})(?:-(\d{1,3}))?$/);
     if (direct && codeToName[direct[1]]) {
-        return { code: direct[1], main: +direct[2], sub: direct[3] ? +direct[3] : null };
+        return { type: "article", code: direct[1], main: +direct[2], sub: direct[3] ? +direct[3] : null };
     }
-    const name = sortedNames.find(n => text.includes(n));
-    if (!name) return { error: `找不到法規名稱「${raw}」。請從輸入框的建議清單選一部法規。` };
-    const num = "[0-9零一二三四五六七八九十百千兩]+";
-    const m = text.replace(name, "").match(new RegExp(`(${num})[條點]?(?:[之\\-](${num}))?`));
+    const name = sortedNames.find(n => compact.includes(n));
+    if (!name) return { type: "search", code: null, ...terms(text) };
+
+    const code = nameToCode[name];
+    const rest = (text.includes(name) ? text.replace(name, " ") : compact.replace(name, " ")).trim();
+    if (!rest) return { type: "law", code };
+    const m = rest.replace(/\s+/g, "").match(ARTICLE_PAT);
+    if (m) return { type: "article", code, main: toNumber(m[1]), sub: m[2] ? toNumber(m[2]) : null };
+    return { type: "search", code, ...terms(rest) };
+}
+
+// "流用 預備金 -特別" -> include all of [流用, 預備金], exclude [特別]
+function terms(text) {
+    const words = text.split(/\s+/).filter(Boolean);
     return {
-        code: nameToCode[name],
-        main: m ? toNumber(m[1]) : null,
-        sub: m && m[2] ? toNumber(m[2]) : null,
+        include: words.filter(w => !w.startsWith("-")),
+        exclude: words.filter(w => w.startsWith("-") && w.length > 1).map(w => w.slice(1)),
     };
 }
 
@@ -183,7 +267,7 @@ function linkify(node, focusId) {
         if (!known.length) {
             html += `<span class="cite-unresolved" title="引用的法規未收錄">${words}</span>`;
         } else {
-            const title = known.map(t => `${lawName(codeOf(t))} ${articleLabel(t)}`).join("、");
+            const title = known.map(label).join("、");
             const focus = focusId && known.includes(focusId) ? " focus" : "";
             html += `<a class="cite${focus}" href="#${encodeURIComponent(known[0])}" title="${escapeHtml(title)}">${words}</a>`;
         }
@@ -192,10 +276,16 @@ function linkify(node, focusId) {
     return html + escapeHtml(text.slice(pos));
 }
 
+function starButton(id) {
+    const on = store.get("favs", []).includes(id);
+    return `<button class="star" type="button" data-fav="${escapeHtml(id)}" aria-pressed="${on}"
+        aria-label="${on ? "取消收藏" : "加入收藏"}">${on ? "★" : "☆"}</button>`;
+}
+
 function edgeBadges(edges) {
     const subRefs = [...new Set(edges.map(e => e.sub_ref).filter(Boolean))];
     const badges = subRefs.map(s => `<span class="badge">${escapeHtml(s)}</span>`);
-    if (edges.some(e => e.kind === "relative")) badges.push(`<span class="badge">相對引用（前條／次條）</span>`);
+    if (edges.some(e => e.kind === "relative")) badges.push(`<span class="badge">相對引用</span>`);
     const review = edges.filter(e => e.needs_review);
     if (review.length) {
         const pct = Math.round(Math.min(...review.map(e => e.confidence)) * 100);
@@ -210,37 +300,48 @@ function groupBySource(edges) {
     return [...groups.values()];
 }
 
-function citingCard(edges, targetId) {
-    const src = nodes.get(edges[0].source);
-    if (!src) return "";
-    return `<div class="card">
-        <div class="hit-head">
-            <a href="#${encodeURIComponent(src.id)}">${escapeHtml(src.law_name)} ${escapeHtml(src.article_zh)}</a>
-            <div class="badges">${edgeBadges(edges)}</div>
-        </div>
-        <p class="text">${linkify(src, targetId)}</p></div>`;
+function rememberRecent(id) {
+    const recents = store.get("recents", []).filter(x => x !== id);
+    store.set("recents", [id, ...recents].slice(0, 10));
 }
 
-function articleNav(id) {
-    const code = codeOf(id);
-    const order = lawOrder.get(code) || [];
-    const i = order.indexOf(id);
-    const link = (target, label) => target
-        ? `<a href="#${encodeURIComponent(target)}">${label}</a>` : `<span class="muted">${label}</span>`;
-    return `<nav class="article-nav">
-        <a href="#${encodeURIComponent(code)}">← 《${escapeHtml(lawName(code))}》全文</a>
-        <span>${link(order[i - 1], "‹ 上一條")} ${link(order[i + 1], "下一條 ›")}</span></nav>`;
+// --- Views ---
+
+function renderHome() {
+    const known = id => nodes.has(id) || lawOrder.has(id);
+    const favs = store.get("favs", []).filter(known);
+    const recents = store.get("recents", []).filter(known);
+    let html = `<p class="muted">點法規看全文，條文中的引用可以點擊跳轉。也可以輸入條號（預算法第62條）或關鍵字（預算法 流用）。</p>`;
+    if (favs.length) html += `<h3>★ 收藏</h3><div class="card list">${favs.map(id => link(id)).join("")}</div>`;
+    if (recents.length) html += `<h3>最近查看</h3><div class="card list">${recents.map(id => link(id)).join("")}</div>`;
+    const kinds = [...new Set(laws.map(l => l.kind))];
+    html += `<h3>法規（${laws.length} 部）</h3>`;
+    html += kinds.map(kind => {
+        const group = laws.filter(l => l.kind === kind);
+        return `<details class="card" open><summary>${escapeHtml(kind)}（${group.length}）</summary>
+            <div class="list">${group.map(l => `<a href="#${encodeURIComponent(l.code)}">
+                <span>${escapeHtml(l.name)}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div></details>`;
+    }).join("");
+    return html;
 }
 
 function renderArticle(q) {
     const id = nodeId(q.code, q.main, q.sub);
     const target = nodes.get(id);
     const lawHasText = lawOrder.has(q.code);
+    let html = "";
 
-    let html = lawHasText ? articleNav(id) : "";
-    html += `<div class="card target"><h2>${escapeHtml(lawName(q.code))} ${escapeHtml(articleLabel(id))}</h2>`;
+    if (lawHasText) {
+        const order = lawOrder.get(q.code), i = order.indexOf(id);
+        const step = (t, txt) => t ? link(t, txt) : `<span class="muted">${txt}</span>`;
+        html += `<nav class="article-nav">${link(q.code, `← 《${lawName(q.code)}》全文`)}
+            <span>${step(order[i - 1], "‹ 上一條")}　${step(order[i + 1], "下一條 ›")}</span></nav>`;
+    }
+    html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? starButton(id) : ""}</div>`;
     if (target) {
+        if (target.chapter) html += `<p class="muted">${escapeHtml(target.chapter)}</p>`;
         html += `<p class="text">${linkify(target)}</p>`;
+        rememberRecent(id);
     } else if (lawHasText) {
         html += `<div class="warn">資料中沒有這一條（可能已刪除、改條號，或條號輸入錯誤）。${incoming.has(id) ? "下面的引用可能已經失效。" : ""}</div>`;
     } else {
@@ -253,24 +354,37 @@ function renderArticle(q) {
     // Other laws first, then the same law; each in article order
     const own = sid => sid.startsWith(q.code + "-");
     bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
-    return html + bySource.map(group => citingCard(group, id)).join("");
+    return html + bySource.map(group => {
+        const src = nodes.get(group[0].source);
+        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}</div></div>
+            <p class="text">${linkify(src, id)}</p></div>`;
+    }).join("");
 }
 
-// Whole law: full text with live citations
+// Whole law: table of contents, jump box, full text with live citations
 function renderFullText(code) {
     const ids = lawOrder.get(code);
     const cited = ids.filter(id => citerCount(id)).length;
-    let html = `<div class="card target"><h2>${escapeHtml(lawName(code))}</h2>
-        <p class="muted">共 ${ids.length} 條，其中 ${cited} 條被其他條文引用。條文中的引用可點擊跳轉。</p>
-        <label class="muted"><input type="checkbox" id="only-cited"> 只顯示被引用的條文</label></div>
-        <div class="card" id="full-text">`;
+    const chapters = ids.filter(id => nodes.get(id).chapter);
+    rememberRecent(code);
+
+    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2>${starButton(code)}</div>
+        <p class="muted">共 ${ids.length} ${unit(code)}，${cited} ${unit(code)}被其他條文引用</p>
+        <div class="controls">
+            <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)}</form>
+            <label><input type="checkbox" id="only-cited"> 只看被引用的</label>
+        </div>`;
+    if (chapters.length) {
+        html += `<details class="toc"><summary>目錄（${chapters.length} 章）</summary>
+            ${chapters.map(id => `<button type="button" data-scroll="ch-${escapeHtml(id)}">${escapeHtml(nodes.get(id).chapter)}</button>`).join("")}</details>`;
+    }
+    html += `</div><div class="card" id="full-text">`;
     html += ids.map(id => {
         const node = nodes.get(id), n = citerCount(id);
-        return `<article class="law-article${n ? " is-cited" : ""}">
-            <div class="hit-head">
-                <a href="#${encodeURIComponent(id)}">${escapeHtml(node.article_zh)}</a>
-                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}
-            </div>
+        const chapter = node.chapter ? `<div class="chapter" id="ch-${escapeHtml(id)}">${escapeHtml(node.chapter)}</div>` : "";
+        return `${chapter}<article class="law-article${n ? " is-cited" : ""}" id="a-${escapeHtml(id)}">
+            <div class="hit-head">${link(id, node.article_zh)}
+                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}</div>
             <p class="text">${linkify(node)}</p></article>`;
     }).join("");
     return html + `</div>`;
@@ -278,41 +392,71 @@ function renderFullText(code) {
 
 // Law without full text (external): which of its articles are cited
 function renderCitedList(code) {
-    const prefix = code + "-";
-    const cited = [...incoming.keys()].filter(id => id.startsWith(prefix)).sort();
-    let html = `<div class="card target"><h2>${escapeHtml(lawName(code))}</h2>
-        <p class="muted">這部法規沒有收錄全文。${cited.length} 條被引用，點條號看是誰引用。</p></div>`;
-    if (!cited.length) return html;
-    return html + `<div class="card">` + cited.map(id => `<div class="article-row">
-            <a href="#${encodeURIComponent(id)}">${escapeHtml(articleLabel(id))}</a>
-            <span class="muted">${citerCount(id)} 處</span></div>`).join("") + `</div>`;
+    const cited = [...incoming.keys()].filter(id => id.startsWith(code + "-")).sort();
+    return `<div class="card"><h2>${escapeHtml(lawName(code))}</h2>
+        <p class="muted">這部法規沒有收錄全文，以下是被引用的條文。</p></div>`
+        + (cited.length ? `<div class="card list">${cited.map(id => `<a href="#${encodeURIComponent(id)}">
+            <span>${escapeHtml(articleLabel(id))}</span><span class="count">${citerCount(id)} 處</span></a>`).join("")}</div>` : "");
 }
 
-function run(raw) {
+// Keyword search (all laws, or one law): every include term, no exclude term
+function renderSearch(q) {
+    if (!q.include.length) return `<p class="warn">請輸入要搜尋的關鍵字。</p>`;
+    const scope = q.code ? lawOrder.get(q.code) || [] : [...nodes.keys()];
+    const hits = scope.filter(id => {
+        const t = nodes.get(id).norm;
+        return q.include.every(w => t.includes(w)) && !q.exclude.some(w => t.includes(w));
+    });
+    const where = q.code ? `《${lawName(q.code)}》` : "全部法規";
+    let html = `<h3>在${escapeHtml(where)}中找到 ${hits.length} 條「${escapeHtml(q.include.join(" "))}」${q.exclude.length ? `（排除 ${escapeHtml(q.exclude.join("、"))}）` : ""}</h3>`;
+    if (!hits.length) return html + `<p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
+    html += hits.slice(0, MAX_RESULTS).map(id =>
+        `<div class="card"><div class="hit-head">${link(id)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
+    ).join("");
+    if (hits.length > MAX_RESULTS) html += `<p class="muted">只顯示前 ${MAX_RESULTS} 條，請加關鍵字縮小範圍。</p>`;
+    return html;
+}
+
+// ~160 characters around the first hit, every term marked
+function snippet(node, words) {
+    const text = node.text;  // same length as node.norm
+    const first = Math.min(...words.map(w => node.norm.indexOf(w)).filter(i => i >= 0));
+    const start = Math.max(0, first - 60), end = Math.min(text.length, first + 100);
+    let html = (start ? "…" : "") + escapeHtml(text.slice(start, end)) + (end < text.length ? "…" : "");
+    for (const w of words) {
+        const escaped = escapeHtml(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        html = html.replace(new RegExp(escaped, "g"), "<mark>$&</mark>");
+    }
+    return html;
+}
+
+function render(raw) {
     const result = document.getElementById("result");
     const q = parseQuery(raw);
-    if (!q) { result.innerHTML = `<p class="empty">輸入法規與條號開始查詢。</p>`; return; }
-    if (q.error) { result.innerHTML = `<p class="warn">${escapeHtml(q.error)}</p>`; return; }
-    if (q.main) result.innerHTML = renderArticle(q);
-    else result.innerHTML = lawOrder.has(q.code) ? renderFullText(q.code) : renderCitedList(q.code);
-    document.getElementById("only-cited")?.addEventListener("change", e =>
-        document.getElementById("full-text").classList.toggle("only-cited", e.target.checked));
+    if (!q) result.innerHTML = renderHome();
+    else if (q.type === "article") result.innerHTML = renderArticle(q);
+    else if (q.type === "law") result.innerHTML = lawOrder.has(q.code) ? renderFullText(q.code) : renderCitedList(q.code);
+    else result.innerHTML = renderSearch(q);
+    return q;
 }
 
 function runFromHash() {
     const raw = decodeURIComponent(location.hash.slice(1));
+    const q = render(raw);
     // Show "預算法 第 32 條" rather than the internal id a link carried
-    const q = parseQuery(raw);
-    document.getElementById("q").value = q && !q.error
-        ? lawName(q.code) + (q.main ? " " + articleLabel(nodeId(q.code, q.main, q.sub)) : "")
-        : raw;
-    run(raw);
-    window.scrollTo(0, 0);
+    document.getElementById("q").value = !q ? "" : q.type === "article"
+        ? label(nodeId(q.code, q.main, q.sub)) : q.type === "law" ? lawName(q.code) : raw;
+    window.scrollTo(0, scrollPositions.get(location.hash) || 0);
 }
+
+// --- Data & wiring ---
 
 async function init() {
     const data = await (await fetch("laws_graph.json")).json();
     data.nodes.forEach(n => {
+        // Half-width per character, keeping any character that would expand
+        // ("︰" -> ".."), so search offsets line up with the original text
+        n.norm = [...n.text].map(c => { const h = c.normalize("NFKC"); return h.length === c.length ? h : c; }).join("");
         nodes.set(n.id, n);
         if (!lawOrder.has(n.law_code)) lawOrder.set(n.law_code, []);
         lawOrder.get(n.law_code).push(n.id);
@@ -324,6 +468,7 @@ async function init() {
         if (!incoming.has(e.target)) incoming.set(e.target, []);
         incoming.get(e.target).push(e);
     });
+    laws = data.laws || [];
 
     nameToCode = data.aliases || {};
     data.nodes.forEach(n => { nameToCode[n.law_name.normalize("NFKC")] = n.law_code; });
@@ -334,22 +479,91 @@ async function init() {
     data.nodes.forEach(n => { codeToName[n.law_code] = n.law_name; });
     sortedNames = Object.keys(nameToCode).sort((a, b) => b.length - a.length);
 
-    document.getElementById("law-names").innerHTML = [...new Set(Object.values(codeToName))]
-        .sort().map(n => `<option value="${escapeHtml(n)}">`).join("");
-    document.getElementById("examples").innerHTML = EXAMPLES
-        .map(x => `<button type="button" data-q="${escapeHtml(x)}">${escapeHtml(x)}</button>`).join("");
-
+    document.getElementById("law-names").innerHTML = laws
+        .map(l => `<option value="${escapeHtml(l.name)}">`).join("");
+    document.getElementById("data-info").textContent =
+        `${laws.length} 部法規、${nodes.size} 條條文 · 資料建置 ${data.built || ""}`;
     runFromHash();
 }
 
 document.getElementById("query-form").addEventListener("submit", e => {
     e.preventDefault();
-    location.hash = encodeURIComponent(document.getElementById("q").value.trim());
+    const input = document.getElementById("q");
+    input.blur();  // close the phone keyboard
+    location.hash = encodeURIComponent(input.value.trim());
 });
-document.getElementById("examples").addEventListener("click", e => {
-    if (e.target.dataset.q) location.hash = encodeURIComponent(e.target.dataset.q);
+
+window.addEventListener("hashchange", e => {
+    scrollPositions.set(new URL(e.oldURL).hash, window.scrollY);
+    runFromHash();
 });
-window.addEventListener("hashchange", runFromHash);
+
+document.addEventListener("click", e => {
+    const fav = e.target.closest("[data-fav]");
+    if (fav) {
+        const id = fav.dataset.fav, favs = store.get("favs", []);
+        store.set("favs", favs.includes(id) ? favs.filter(x => x !== id) : [id, ...favs]);
+        fav.outerHTML = starButton(id);
+    }
+    const scroll = e.target.closest("[data-scroll]");
+    if (scroll) document.getElementById(scroll.dataset.scroll)?.scrollIntoView();  // instant: laws are long
+    const font = e.target.closest("[data-font]");
+    if (font) {
+        const now = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--fs")) || 17;
+        const size = Math.min(26, Math.max(14, now + 2 * font.dataset.font));
+        document.documentElement.style.setProperty("--fs", size + "px");
+        store.set("fontSize", size);
+    }
+});
+
+document.addEventListener("change", e => {
+    if (e.target.id === "only-cited") document.getElementById("full-text").classList.toggle("only-cited", e.target.checked);
+});
+
+// "跳至 N 條" inside a law's full text
+document.addEventListener("submit", e => {
+    const form = e.target.closest(".jump");
+    if (!form) return;
+    e.preventDefault();
+    const m = form.n.value.normalize("NFKC").replace(/\s+/g, "").match(ARTICLE_PAT);
+    const el = m && document.getElementById("a-" + nodeId(form.dataset.law, toNumber(m[1]), m[2] ? toNumber(m[2]) : null));
+    if (el) {
+        form.n.blur();
+        el.scrollIntoView();
+    } else {
+        form.n.setCustomValidity("沒有這一條");
+        form.n.reportValidity();
+        form.n.setCustomValidity("");
+    }
+});
+
+// Theme: auto -> light -> dark
+const THEMES = [null, "light", "dark"];
+document.getElementById("theme-btn").addEventListener("click", () => {
+    const now = document.documentElement.dataset.theme || null;
+    const next = THEMES[(THEMES.indexOf(now) + 1) % THEMES.length];
+    if (next) document.documentElement.dataset.theme = next; else delete document.documentElement.dataset.theme;
+    store.set("theme", next);
+});
+
+const toTop = document.getElementById("to-top");
+window.addEventListener("scroll", () => { toTop.style.display = window.scrollY > 600 ? "block" : "none"; }, { passive: true });
+toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+// Offline: cache the app and data on the phone
+function showOnline() {
+    const info = document.getElementById("offline-info");
+    if (!navigator.onLine) info.innerHTML = `<span class="offline-pill">離線中</span>`;
+    else if (navigator.serviceWorker?.controller) info.textContent = "· ✓ 已可離線使用";
+    else info.textContent = "";
+}
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").then(() => navigator.serviceWorker.ready).then(showOnline).catch(() => {});
+    navigator.serviceWorker.addEventListener("controllerchange", showOnline);
+}
+window.addEventListener("online", showOnline);
+window.addEventListener("offline", showOnline);
+showOnline();
 
 init().catch(err => {
     document.getElementById("result").innerHTML =
