@@ -1,0 +1,47 @@
+# Daily check that the Mac mini's update jobs are still running. Each run of
+# update_local.sh (here and in tw-county-map) force-pushes a "heartbeat" branch;
+# if one is too old or last reported "fail", this job fails and GitHub emails.
+name: Mac mini watchdog
+
+on:
+  schedule:
+    - cron: "0 4 * * *"   # 每天 12:00（台灣時間），在 10:00／10:30 的排程之後
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - repo: cormort/tw-county-map   # daily 10:30
+            max_hours: 30
+          - repo: cormort/LawsGraphify    # weekly, Monday 10:00
+            max_hours: 198
+    steps:
+      - name: Check ${{ matrix.repo }}
+        env:
+          REPO: ${{ matrix.repo }}
+          MAX_HOURS: ${{ matrix.max_hours }}
+        run: |
+          git init -q hb && cd hb
+          if ! git fetch -q --depth=1 "https://github.com/$REPO" heartbeat; then
+            echo "::error title=$REPO::還沒有 heartbeat 分支：Mac mini 的排程從沒成功回報過"
+            exit 1
+          fi
+          when=$(git log -1 --format=%ct FETCH_HEAD)
+          body=$(git show FETCH_HEAD:heartbeat.txt | tr '\n' ' ')
+          age=$(( ($(date +%s) - when) / 3600 ))
+          echo "**$REPO**：上次回報 $(TZ=Asia/Taipei date -d "@$when" '+%F %H:%M')（$age 小時前）— $body" >> "$GITHUB_STEP_SUMMARY"
+          if [ "$age" -gt "$MAX_HOURS" ]; then
+            echo "::error title=$REPO::Mac mini 已 $age 小時沒有回報（上限 $MAX_HOURS 小時）：可能關機、斷網或排程沒有載入"
+            exit 1
+          fi
+          case "$body" in
+            status=fail*) echo "::error title=$REPO::上次更新失敗（$body），詳見 Mac mini 的 ~/Library/Logs"; exit 1 ;;
+          esac
+          echo "OK"

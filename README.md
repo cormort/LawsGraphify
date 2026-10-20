@@ -53,6 +53,10 @@ LawsGraphify/
 - **push 到 main**：直接部署 `web/`。
 - 也可以在 GitHub 的 Actions 頁籤按「Run workflow」立即更新。
 - 主計總處某部抓不到時沿用舊條文並顯示警告；GitHub 排程失敗時會寄信通知。
+- **通知**：Mac mini 的排程透過 Hermes 傳 Telegram（失敗、部分失敗、有更新、跳過；沒變動不通知）。
+- **看門狗**（[`watchdog.yml`](.github/workflows/watchdog.yml)，每天 12:00）：每次排程跑完都會強制推送一個
+  `heartbeat` 分支（只有一個 commit，不影響 main）；tw-county-map 超過 30 小時、本 repo 超過 8 天沒回報，
+  或上次回報是失敗，這個 workflow 就會失敗並由 GitHub 寄信——涵蓋 Mac mini 關機、斷網、排程沒載入。
 
 **每年要人工處理的一件事**：新年度的編製辦法、要點發布後，改 `config/law_aliases.yaml` 裡帶年度的那幾行
 （名稱與代碼），commit 後排程會抓新版；`fetch_laws.py` 會列出不再需要的舊年度檔案，移除即可。
