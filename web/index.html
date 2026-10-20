@@ -67,6 +67,17 @@ details > summary { cursor: pointer; color: var(--muted); font-size: 14px; margi
 .article-row:first-child { border-top: 0; }
 .article-row a { text-decoration: none; }
 .empty { color: var(--muted); }
+a.cite { color: var(--accent); text-decoration: underline dotted; text-underline-offset: 3px; }
+a.cite.focus { background: var(--mark); border-radius: 3px; padding: 0 1px; text-decoration: none; }
+.cite-unresolved { text-decoration: underline dotted var(--muted); text-underline-offset: 3px; cursor: help; }
+.article-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; font-size: 14px; }
+.article-nav a { text-decoration: none; }
+.law-article { padding: 12px 0; border-top: 1px solid var(--border); }
+.law-article:first-child { border-top: 0; padding-top: 0; }
+.law-article .hit-head > a:first-child { font-weight: 600; text-decoration: none; }
+a.badge { text-decoration: none; }
+#full-text.only-cited .law-article:not(.is-cited) { display: none; }
+label input { vertical-align: middle; }
 </style>
 </head>
 <body>
@@ -75,11 +86,11 @@ details > summary { cursor: pointer; color: var(--muted); font-size: 14px; margi
         <h1>法規引用查詢</h1>
         <a class="muted" href="graph.html">看關聯圖 →</a>
     </header>
-    <p class="muted">輸入法規與條號，列出所有引用它的條文。只輸入法規名稱，會列出這部法規被引用的每一條。</p>
+    <p class="muted">輸入法規名稱看全文，條文中的引用可以點擊跳轉；加上條號，列出所有引用它的條文。</p>
 
     <form id="query-form" role="search">
         <input id="q" type="search" list="law-names" autocomplete="off"
-               placeholder="例：預算法第62條、預算法 62-1、會計法" aria-label="法規與條號">
+               placeholder="例：預算法、預算法第62條、預算法 62-1" aria-label="法規與條號">
         <datalist id="law-names"></datalist>
         <button type="submit">查詢</button>
     </form>
@@ -91,12 +102,13 @@ details > summary { cursor: pointer; color: var(--muted); font-size: 14px; margi
 <script>
 let nodes = new Map();      // id -> node
 let incoming = new Map();   // target id -> [edge]
-let lawsInData = new Set(); // codes whose full text we have
+let outgoing = new Map();   // source id -> [edge]
+let lawOrder = new Map();   // code -> [article ids in order]
 let nameToCode = {};        // normalized name -> code
 let codeToName = {};        // code -> display name
 let sortedNames = [];       // names, longest first
 
-const EXAMPLES = ["預算法第62條", "預算法第62條之1", "會計法", "中央對各級地方政府重大天然災害救災經費處理辦法第8條"];
+const EXAMPLES = ["預算法", "預算法第62條之1", "會計法第15條", "附屬單位預算執行要點第23點"];
 
 function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, c => ({
@@ -117,18 +129,6 @@ function toNumber(s) {
     return total + digit;
 }
 
-// 62 -> "六十二", 110 -> "一百十" (Taiwanese statutes omit 一 before 十)
-function toChinese(n) {
-    const d = "零一二三四五六七八九";
-    if (n < 10) return d[n];
-    if (n < 20) return "十" + (n % 10 ? d[n % 10] : "");
-    if (n < 100) return d[Math.floor(n / 10)] + "十" + (n % 10 ? d[n % 10] : "");
-    const h = Math.floor(n / 100), r = n % 100;
-    if (!r) return d[h] + "百";
-    if (r < 10) return d[h] + "百零" + d[r];
-    return d[h] + "百" + toChinese(r);
-}
-
 function nodeId(code, main, sub) {
     return `${code}-${String(main).padStart(4, "0")}` + (sub ? `-${String(sub).padStart(3, "0")}` : "");
 }
@@ -141,6 +141,8 @@ function articleLabel(id) {
 }
 
 function lawName(code) { return codeToName[code] || code; }
+function codeOf(id) { return id.replace(/-\d{4}(-\d{3})?$/, ""); }
+function citerCount(id) { return new Set((incoming.get(id) || []).map(e => e.source)).size; }
 
 // Free text -> { code, main, sub } (main null for a whole-law query)
 function parseQuery(raw) {
@@ -161,7 +163,35 @@ function parseQuery(raw) {
     };
 }
 
-// Badges for all edges from one citing article (sub_refs listed once each)
+// Article text with each citation as a link; citations of focusId are marked
+function linkify(node, focusId) {
+    const text = node.text || "";
+    const bySpan = new Map();  // "a,b" -> targets (a range has several)
+    for (const e of outgoing.get(node.id) || []) {
+        for (const [a, b] of e.spans || []) {
+            const key = `${a},${b}`;
+            if (!bySpan.has(key)) bySpan.set(key, { a, b, targets: [] });
+            bySpan.get(key).targets.push(e.target);
+        }
+    }
+    let html = "", pos = 0;
+    for (const { a, b, targets } of [...bySpan.values()].sort((x, y) => x.a - y.a)) {
+        if (a < pos) continue;  // overlapping span: keep the first
+        html += escapeHtml(text.slice(pos, a));
+        const words = escapeHtml(text.slice(a, b));
+        const known = targets.filter(Boolean);
+        if (!known.length) {
+            html += `<span class="cite-unresolved" title="引用的法規未收錄">${words}</span>`;
+        } else {
+            const title = known.map(t => `${lawName(codeOf(t))} ${articleLabel(t)}`).join("、");
+            const focus = focusId && known.includes(focusId) ? " focus" : "";
+            html += `<a class="cite${focus}" href="#${encodeURIComponent(known[0])}" title="${escapeHtml(title)}">${words}</a>`;
+        }
+        pos = b;
+    }
+    return html + escapeHtml(text.slice(pos));
+}
+
 function edgeBadges(edges) {
     const subRefs = [...new Set(edges.map(e => e.sub_ref).filter(Boolean))];
     const badges = subRefs.map(s => `<span class="badge">${escapeHtml(s)}</span>`);
@@ -174,76 +204,88 @@ function edgeBadges(edges) {
     return badges.join("");
 }
 
-// Mark "第六十二條" / "第62條" / "第五點" in the citing text
-function highlight(text, main) {
-    const html = escapeHtml(text);
-    if (!main) return html;
-    const forms = `(?:${main}|${toChinese(main)})`;
-    return html.replace(new RegExp(`第\\s*${forms}\\s*[條點](?:之[一二三四五六七八九十]+)?`, "g"), "<mark>$&</mark>");
-}
-
-function citingCard(edges, targetMain) {
-    const src = nodes.get(edges[0].source);
-    if (!src) return "";
-    const text = src.text || "";
-    const long = text.length > 220;
-    const body = `<p class="text">${highlight(long ? text.slice(0, 220) + "…" : text, targetMain)}</p>`
-        + (long ? `<details><summary>展開全文</summary><p class="text">${highlight(text, targetMain)}</p></details>` : "");
-    return `<div class="card">
-        <div class="hit-head">
-            <a href="#${encodeURIComponent(src.id)}">${escapeHtml(src.law_name)} ${escapeHtml(src.article_zh)}</a>
-            <div class="badges">${edgeBadges(edges)}</div>
-        </div>${body}</div>`;
-}
-
-function renderArticle(q) {
-    const id = nodeId(q.code, q.main, q.sub);
-    const target = nodes.get(id);
-    const edges = incoming.get(id) || [];
-
-    let html = `<div class="card target"><h2>${escapeHtml(lawName(q.code))} ${escapeHtml(articleLabel(id))}</h2>`;
-    if (target) {
-        html += `<p class="text">${escapeHtml(target.text)}</p>`;
-    } else if (lawsInData.has(q.code)) {
-        html += `<div class="warn">資料中沒有這一條（可能已刪除、改條號，或條號輸入錯誤）。${edges.length ? "下面的引用可能已經失效。" : ""}</div>`;
-    } else {
-        html += `<p class="muted">這部法規沒有收錄全文，只列出引用它的條文。</p>`;
-    }
-    const bySource = groupBySource(edges);
-    html += `</div><h3>被 ${bySource.length} 條條文引用</h3>`;
-
-    if (!bySource.length) return html + `<p class="empty">沒有其他條文引用這一條。</p>`;
-    // Other laws first, then the same law; each in article order
-    const own = id => id.startsWith(q.code + "-");
-    bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
-    return html + bySource.map(group => citingCard(group, q.main)).join("");
-}
-
 function groupBySource(edges) {
     const groups = new Map();
     edges.forEach(e => groups.set(e.source, [...(groups.get(e.source) || []), e]));
     return [...groups.values()];
 }
 
-function renderLaw(code) {
-    const prefix = code + "-";
-    const cited = [...incoming.entries()].filter(([id]) => id.startsWith(prefix))
-        .sort(([a], [b]) => a.localeCompare(b));
-    const total = cited.reduce((sum, [, es]) => sum + groupBySource(es).length, 0);
+function citingCard(edges, targetId) {
+    const src = nodes.get(edges[0].source);
+    if (!src) return "";
+    return `<div class="card">
+        <div class="hit-head">
+            <a href="#${encodeURIComponent(src.id)}">${escapeHtml(src.law_name)} ${escapeHtml(src.article_zh)}</a>
+            <div class="badges">${edgeBadges(edges)}</div>
+        </div>
+        <p class="text">${linkify(src, targetId)}</p></div>`;
+}
 
+function articleNav(id) {
+    const code = codeOf(id);
+    const order = lawOrder.get(code) || [];
+    const i = order.indexOf(id);
+    const link = (target, label) => target
+        ? `<a href="#${encodeURIComponent(target)}">${label}</a>` : `<span class="muted">${label}</span>`;
+    return `<nav class="article-nav">
+        <a href="#${encodeURIComponent(code)}">← 《${escapeHtml(lawName(code))}》全文</a>
+        <span>${link(order[i - 1], "‹ 上一條")} ${link(order[i + 1], "下一條 ›")}</span></nav>`;
+}
+
+function renderArticle(q) {
+    const id = nodeId(q.code, q.main, q.sub);
+    const target = nodes.get(id);
+    const lawHasText = lawOrder.has(q.code);
+
+    let html = lawHasText ? articleNav(id) : "";
+    html += `<div class="card target"><h2>${escapeHtml(lawName(q.code))} ${escapeHtml(articleLabel(id))}</h2>`;
+    if (target) {
+        html += `<p class="text">${linkify(target)}</p>`;
+    } else if (lawHasText) {
+        html += `<div class="warn">資料中沒有這一條（可能已刪除、改條號，或條號輸入錯誤）。${incoming.has(id) ? "下面的引用可能已經失效。" : ""}</div>`;
+    } else {
+        html += `<p class="muted">這部法規沒有收錄全文，只列出引用它的條文。</p>`;
+    }
+
+    const bySource = groupBySource(incoming.get(id) || []);
+    html += `</div><h3>被 ${bySource.length} 條條文引用</h3>`;
+    if (!bySource.length) return html + `<p class="empty">沒有其他條文引用這一條。</p>`;
+    // Other laws first, then the same law; each in article order
+    const own = sid => sid.startsWith(q.code + "-");
+    bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
+    return html + bySource.map(group => citingCard(group, id)).join("");
+}
+
+// Whole law: full text with live citations
+function renderFullText(code) {
+    const ids = lawOrder.get(code);
+    const cited = ids.filter(id => citerCount(id)).length;
     let html = `<div class="card target"><h2>${escapeHtml(lawName(code))}</h2>
-        <p class="muted">${cited.length} 條被引用，共 ${total} 處。點條號看是誰引用。</p></div>`;
-    if (!cited.length) return html + `<p class="empty">這部法規沒有任何條文被引用。</p>`;
+        <p class="muted">共 ${ids.length} 條，其中 ${cited} 條被其他條文引用。條文中的引用可點擊跳轉。</p>
+        <label class="muted"><input type="checkbox" id="only-cited"> 只顯示被引用的條文</label></div>
+        <div class="card" id="full-text">`;
+    html += ids.map(id => {
+        const node = nodes.get(id), n = citerCount(id);
+        return `<article class="law-article${n ? " is-cited" : ""}">
+            <div class="hit-head">
+                <a href="#${encodeURIComponent(id)}">${escapeHtml(node.article_zh)}</a>
+                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}
+            </div>
+            <p class="text">${linkify(node)}</p></article>`;
+    }).join("");
+    return html + `</div>`;
+}
 
-    return html + `<div class="card">` + cited.map(([id, es]) => {
-        const missing = lawsInData.has(code) && !nodes.has(id);
-        const groups = groupBySource(es);
-        const fromOther = groups.filter(g => !g[0].source.startsWith(prefix)).length;
-        return `<div class="article-row">
+// Law without full text (external): which of its articles are cited
+function renderCitedList(code) {
+    const prefix = code + "-";
+    const cited = [...incoming.keys()].filter(id => id.startsWith(prefix)).sort();
+    let html = `<div class="card target"><h2>${escapeHtml(lawName(code))}</h2>
+        <p class="muted">這部法規沒有收錄全文。${cited.length} 條被引用，點條號看是誰引用。</p></div>`;
+    if (!cited.length) return html;
+    return html + `<div class="card">` + cited.map(id => `<div class="article-row">
             <a href="#${encodeURIComponent(id)}">${escapeHtml(articleLabel(id))}</a>
-            <span class="muted">${groups.length} 處${fromOther ? `（其他法規 ${fromOther}）` : ""}${missing ? ` <span class="badge review">資料中無此條</span>` : ""}</span>
-        </div>`;
-    }).join("") + `</div>`;
+            <span class="muted">${citerCount(id)} 處</span></div>`).join("") + `</div>`;
 }
 
 function run(raw) {
@@ -251,19 +293,33 @@ function run(raw) {
     const q = parseQuery(raw);
     if (!q) { result.innerHTML = `<p class="empty">輸入法規與條號開始查詢。</p>`; return; }
     if (q.error) { result.innerHTML = `<p class="warn">${escapeHtml(q.error)}</p>`; return; }
-    result.innerHTML = q.main ? renderArticle(q) : renderLaw(q.code);
+    if (q.main) result.innerHTML = renderArticle(q);
+    else result.innerHTML = lawOrder.has(q.code) ? renderFullText(q.code) : renderCitedList(q.code);
+    document.getElementById("only-cited")?.addEventListener("change", e =>
+        document.getElementById("full-text").classList.toggle("only-cited", e.target.checked));
 }
 
 function runFromHash() {
     const raw = decodeURIComponent(location.hash.slice(1));
-    document.getElementById("q").value = raw;
+    // Show "預算法 第 32 條" rather than the internal id a link carried
+    const q = parseQuery(raw);
+    document.getElementById("q").value = q && !q.error
+        ? lawName(q.code) + (q.main ? " " + articleLabel(nodeId(q.code, q.main, q.sub)) : "")
+        : raw;
     run(raw);
+    window.scrollTo(0, 0);
 }
 
 async function init() {
     const data = await (await fetch("laws_graph.json")).json();
-    data.nodes.forEach(n => { nodes.set(n.id, n); lawsInData.add(n.law_code); });
+    data.nodes.forEach(n => {
+        nodes.set(n.id, n);
+        if (!lawOrder.has(n.law_code)) lawOrder.set(n.law_code, []);
+        lawOrder.get(n.law_code).push(n.id);
+    });
     data.edges.forEach(e => {
+        if (!outgoing.has(e.source)) outgoing.set(e.source, []);
+        outgoing.get(e.source).push(e);
         if (!e.target) return;  // unresolved citations have nowhere to land
         if (!incoming.has(e.target)) incoming.set(e.target, []);
         incoming.get(e.target).push(e);

@@ -12402,7 +12402,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          180,
+          183
+        ]
+      ]
     },
     {
       "source": "CMPB-0002",
@@ -12411,7 +12417,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          186,
+          191
+        ]
+      ]
     },
     {
       "source": "CMPB-0003",
@@ -12420,7 +12432,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          23,
+          28
+        ]
+      ]
     },
     {
       "source": "CMPB-0004",
@@ -12429,7 +12447,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          133,
+          138
+        ]
+      ]
     },
     {
       "source": "CMPB-0005",
@@ -12438,7 +12462,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          42,
+          47
+        ]
+      ]
     },
     {
       "source": "CMPB-0005",
@@ -12447,7 +12477,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          130,
+          135
+        ]
+      ]
     },
     {
       "source": "CAGDAP-0004",
@@ -12456,7 +12492,13 @@
       "is_external": true,
       "sub_ref": "第二款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          65,
+          71
+        ]
+      ]
     },
     {
       "source": "FDRS-0001",
@@ -12465,7 +12507,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          41,
+          47
+        ]
+      ]
     },
     {
       "source": "FDRS-0003",
@@ -12474,7 +12522,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          53,
+          58
+        ]
+      ]
     },
     {
       "source": "FDRS-0003",
@@ -12483,7 +12537,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          295,
+          301
+        ]
+      ]
     },
     {
       "source": "FDRS-0004",
@@ -12492,7 +12552,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          92,
+          98
+        ]
+      ]
     },
     {
       "source": "FDRS-0005",
@@ -12501,7 +12567,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          54,
+          57
+        ]
+      ]
     },
     {
       "source": "CNDR-0001",
@@ -12510,7 +12582,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          9,
+          17
+        ]
+      ]
     },
     {
       "source": "CNDR-0002",
@@ -12519,7 +12597,13 @@
       "is_external": true,
       "sub_ref": "第一款第一目",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          24,
+          33
+        ]
+      ]
     },
     {
       "source": "CNDR-0004",
@@ -12528,7 +12612,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          68,
+          76
+        ]
+      ]
     },
     {
       "source": "CNDR-0005",
@@ -12537,7 +12627,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          20,
+          22
+        ]
+      ]
     },
     {
       "source": "CNDR-0006",
@@ -12546,7 +12642,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          11,
+          13
+        ]
+      ]
     },
     {
       "source": "CNDR-0006",
@@ -12555,7 +12657,13 @@
       "is_external": false,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          75,
+          81
+        ]
+      ]
     },
     {
       "source": "CNDR-0007",
@@ -12564,7 +12672,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          22,
+          25
+        ]
+      ]
     },
     {
       "source": "CNDR-0009",
@@ -12573,7 +12687,17 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          86,
+          91
+        ],
+        [
+          171,
+          176
+        ]
+      ]
     },
     {
       "source": "CNDR-0010",
@@ -12582,7 +12706,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          91,
+          94
+        ]
+      ]
     },
     {
       "source": "CNDR-0011",
@@ -12591,7 +12721,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          5,
+          10
+        ]
+      ]
     },
     {
       "source": "CNDR-0012",
@@ -12600,7 +12736,29 @@
       "is_external": false,
       "sub_ref": "第一項第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          6,
+          15
+        ],
+        [
+          146,
+          155
+        ],
+        [
+          207,
+          216
+        ],
+        [
+          268,
+          277
+        ],
+        [
+          339,
+          348
+        ]
+      ]
     },
     {
       "source": "CNDR-0012",
@@ -12609,7 +12767,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          313,
+          317
+        ]
+      ]
     },
     {
       "source": "CNDR-0013",
@@ -12618,7 +12782,13 @@
       "is_external": false,
       "sub_ref": "第一項第二款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          35,
+          44
+        ]
+      ]
     },
     {
       "source": "CNDR-0014",
@@ -12627,7 +12797,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          340,
+          346
+        ]
+      ]
     },
     {
       "source": "CNDR-0015",
@@ -12636,7 +12812,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          11,
+          17
+        ]
+      ]
     },
     {
       "source": "CNDR-0016",
@@ -12645,7 +12827,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          12,
+          18
+        ]
+      ]
     },
     {
       "source": "CNDR-0017",
@@ -12654,7 +12842,13 @@
       "is_external": false,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          305,
+          312
+        ]
+      ]
     },
     {
       "source": "CACGSB-0001",
@@ -12663,7 +12857,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          11,
+          18
+        ]
+      ]
     },
     {
       "source": "CACGSB-0001",
@@ -12672,7 +12872,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          24,
+          32
+        ]
+      ]
     },
     {
       "source": "CACGSB-0004",
@@ -12681,7 +12887,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          5
+        ]
+      ]
     },
     {
       "source": "CACGSB-0006",
@@ -12690,7 +12902,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          46,
+          49
+        ]
+      ]
     },
     {
       "source": "CACGSB-0008",
@@ -12699,7 +12917,13 @@
       "is_external": false,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          144,
+          150
+        ]
+      ]
     },
     {
       "source": "CACGSB-0008",
@@ -12708,7 +12932,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          159,
+          166
+        ]
+      ]
     },
     {
       "source": "CACGSB-0013",
@@ -12717,7 +12947,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          12,
+          22
+        ]
+      ]
     },
     {
       "source": "CACGSB-0013",
@@ -12726,7 +12962,13 @@
       "is_external": true,
       "sub_ref": "第四項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          23,
+          31
+        ]
+      ]
     },
     {
       "source": "CACGSB-0013",
@@ -12735,7 +12977,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          37,
+          45
+        ]
+      ]
     },
     {
       "source": "CACGSB-0013",
@@ -12744,7 +12992,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          46,
+          54
+        ]
+      ]
     },
     {
       "source": "CACGSB-0013",
@@ -12753,7 +13007,13 @@
       "is_external": true,
       "sub_ref": "第四項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          55,
+          63
+        ]
+      ]
     },
     {
       "source": "CACGSB-0013",
@@ -12762,7 +13022,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          211,
+          216
+        ]
+      ]
     },
     {
       "source": "CACGSB-0013",
@@ -12771,7 +13037,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          222,
+          230
+        ]
+      ]
     },
     {
       "source": "CACGSB-0014",
@@ -12780,7 +13052,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGSB-0014",
@@ -12789,7 +13067,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGSB-0014",
@@ -12798,7 +13082,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGSB-0014",
@@ -12807,7 +13097,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGSB-0014",
@@ -12816,7 +13112,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGSB-0014",
@@ -12825,7 +13127,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGSB-0014",
@@ -12834,7 +13142,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGSB-0016",
@@ -12843,7 +13157,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          54,
+          60
+        ]
+      ]
     },
     {
       "source": "CACGSB-0016",
@@ -12852,7 +13172,13 @@
       "is_external": false,
       "sub_ref": "第三項第二款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          75,
+          84
+        ]
+      ]
     },
     {
       "source": "CACGSB-0017",
@@ -12861,7 +13187,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          131,
+          137
+        ]
+      ]
     },
     {
       "source": "CACGSB-0017",
@@ -12870,7 +13202,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          138,
+          144
+        ]
+      ]
     },
     {
       "source": "CACGP-0001",
@@ -12879,7 +13217,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          23,
+          30
+        ]
+      ]
     },
     {
       "source": "CACGP-0004",
@@ -12888,7 +13232,13 @@
       "is_external": false,
       "sub_ref": "第二款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          2,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGP-0005",
@@ -12897,7 +13247,13 @@
       "is_external": false,
       "sub_ref": "第三款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          2,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGP-0006",
@@ -12906,7 +13262,13 @@
       "is_external": false,
       "sub_ref": "第四款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          2,
+          8
+        ]
+      ]
     },
     {
       "source": "CACGP-0006",
@@ -12915,7 +13277,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          311,
+          317
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12924,7 +13292,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          61,
+          67
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12933,7 +13307,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          92,
+          98
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12942,7 +13322,13 @@
       "is_external": false,
       "sub_ref": "第二款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          120,
+          126
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12951,7 +13337,13 @@
       "is_external": false,
       "sub_ref": "第四款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          149,
+          155
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12960,7 +13352,13 @@
       "is_external": false,
       "sub_ref": "第二款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          166,
+          172
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12969,7 +13367,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          195,
+          198
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12978,7 +13382,13 @@
       "is_external": false,
       "sub_ref": "第三款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          218,
+          224
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12987,7 +13397,13 @@
       "is_external": false,
       "sub_ref": "第三款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          235,
+          241
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -12996,7 +13412,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          268,
+          274
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -13005,7 +13427,13 @@
       "is_external": false,
       "sub_ref": "第三款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          292,
+          298
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -13014,7 +13442,13 @@
       "is_external": false,
       "sub_ref": "第四款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          317,
+          323
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -13023,7 +13457,13 @@
       "is_external": false,
       "sub_ref": "第四款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          334,
+          340
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -13032,7 +13472,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          363,
+          369
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -13041,7 +13487,13 @@
       "is_external": false,
       "sub_ref": "第三款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          399,
+          405
+        ]
+      ]
     },
     {
       "source": "CACGP-0010",
@@ -13050,7 +13502,13 @@
       "is_external": false,
       "sub_ref": "第七款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          432,
+          438
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0001",
@@ -13059,7 +13517,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          12
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0008",
@@ -13068,7 +13532,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          16,
+          18
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0011",
@@ -13077,7 +13547,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0012",
@@ -13086,7 +13562,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          33,
+          36
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0015",
@@ -13095,7 +13577,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          5
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0017",
@@ -13104,7 +13592,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          74,
+          76
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0019",
@@ -13113,7 +13607,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0020",
@@ -13122,7 +13622,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          95,
+          97
+        ]
+      ]
     },
     {
       "source": "CGMBPP-0028",
@@ -13131,7 +13637,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          6,
+          8
+        ]
+      ]
     },
     {
       "source": "BDA-0004",
@@ -13140,7 +13652,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          29,
+          35
+        ]
+      ]
     },
     {
       "source": "BDA-0006",
@@ -13149,7 +13667,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          78,
+          81
+        ]
+      ]
     },
     {
       "source": "BDA-0009",
@@ -13158,7 +13682,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          130,
+          133
+        ]
+      ]
     },
     {
       "source": "CSFPP-0006",
@@ -13167,7 +13697,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          3,
+          6
+        ]
+      ]
     },
     {
       "source": "CSVPP-0006",
@@ -13176,7 +13712,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          41,
+          47
+        ]
+      ]
     },
     {
       "source": "CSVPP-0012",
@@ -13185,7 +13727,17 @@
       "is_external": false,
       "sub_ref": "第二款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          44,
+          50
+        ],
+        [
+          166,
+          172
+        ]
+      ]
     },
     {
       "source": "CSVPP-0012",
@@ -13194,7 +13746,17 @@
       "is_external": false,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          55,
+          61
+        ],
+        [
+          177,
+          183
+        ]
+      ]
     },
     {
       "source": "CSVPP-0012",
@@ -13203,7 +13765,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          64,
+          67
+        ],
+        [
+          186,
+          189
+        ]
+      ]
     },
     {
       "source": "CSVPP-0012",
@@ -13212,7 +13784,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          68,
+          71
+        ],
+        [
+          190,
+          193
+        ]
+      ]
     },
     {
       "source": "MOGCIP-0007",
@@ -13221,7 +13803,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          52,
+          55
+        ]
+      ]
     },
     {
       "source": "MOGCIP-0007",
@@ -13230,7 +13818,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          65,
+          68
+        ]
+      ]
     },
     {
       "source": "MOGCIP-0007",
@@ -13239,7 +13833,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          95,
+          99
+        ]
+      ]
     },
     {
       "source": "MOGCIP-0008",
@@ -13248,7 +13848,13 @@
       "is_external": false,
       "sub_ref": "第五款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          53,
+          59
+        ]
+      ]
     },
     {
       "source": "CSMF-0002",
@@ -13257,7 +13863,13 @@
       "is_external": true,
       "sub_ref": "第一項第二款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          14,
+          23
+        ]
+      ]
     },
     {
       "source": "CSMF-0005",
@@ -13266,7 +13878,13 @@
       "is_external": true,
       "sub_ref": "第二款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          35,
+          42
+        ]
+      ]
     },
     {
       "source": "CSMF-0009",
@@ -13275,7 +13893,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "CSMF-0013",
@@ -13284,7 +13908,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          47,
+          52
+        ]
+      ]
     },
     {
       "source": "CSMF-0014",
@@ -13293,7 +13923,13 @@
       "is_external": false,
       "sub_ref": "第四項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          67,
+          73
+        ]
+      ]
     },
     {
       "source": "CSMF-0020",
@@ -13302,7 +13938,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          28,
+          32
+        ]
+      ]
     },
     {
       "source": "CSMF-0020",
@@ -13311,7 +13953,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          33,
+          37
+        ]
+      ]
     },
     {
       "source": "TBSCR-0001",
@@ -13320,7 +13968,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          16,
+          21
+        ]
+      ]
     },
     {
       "source": "TBSCR-0001",
@@ -13329,7 +13983,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          32,
+          37
+        ]
+      ]
     },
     {
       "source": "TBSCR-0002",
@@ -13338,7 +13998,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          6,
+          11
+        ]
+      ]
     },
     {
       "source": "CNGSDAP-0002",
@@ -13347,7 +14013,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          39,
+          42
+        ]
+      ]
     },
     {
       "source": "CNGSDAP-0002",
@@ -13356,7 +14028,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          43,
+          46
+        ]
+      ]
     },
     {
       "source": "CNGSF-0001",
@@ -13365,7 +14043,13 @@
       "is_external": true,
       "sub_ref": "第四項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          9,
+          15
+        ]
+      ]
     },
     {
       "source": "FY2026GHYR-0014",
@@ -13374,7 +14058,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          27,
+          30
+        ]
+      ]
     },
     {
       "source": "FY2026GHYR-0014",
@@ -13383,7 +14073,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          31,
+          34
+        ]
+      ]
     },
     {
       "source": "FY2026GHYR-0014",
@@ -13392,7 +14088,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          35,
+          38
+        ]
+      ]
     },
     {
       "source": "FY2026GHYR-0014",
@@ -13401,7 +14103,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          39,
+          42
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0001",
@@ -13410,7 +14118,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          12
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0010",
@@ -13419,7 +14133,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0011",
@@ -13428,7 +14148,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          474,
+          479
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0014",
@@ -13437,7 +14163,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          253,
+          260
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0018",
@@ -13446,7 +14178,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          32,
+          39
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0021",
@@ -13455,7 +14193,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          115,
+          120
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0024",
@@ -13464,7 +14208,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          5,
+          10
+        ]
+      ]
     },
     {
       "source": "FY2027GBPP-0028",
@@ -13473,7 +14223,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          11,
+          16
+        ]
+      ]
     },
     {
       "source": "FY2027GSUBPP-0001",
@@ -13482,7 +14238,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          12
+        ]
+      ]
     },
     {
       "source": "FY2027GSUBPP-0006",
@@ -13491,7 +14253,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          210,
+          215
+        ]
+      ]
     },
     {
       "source": "FY2027GSUBPP-0007",
@@ -13500,7 +14268,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          4,
+          6
+        ]
+      ]
     },
     {
       "source": "FY2027GSUBPP-0009",
@@ -13509,7 +14283,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          11,
+          14
+        ]
+      ]
     },
     {
       "source": "FY2027GSUBPP-0009",
@@ -13518,7 +14298,13 @@
       "is_external": false,
       "sub_ref": "第一款第二目",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          644,
+          653
+        ]
+      ]
     },
     {
       "source": "FY2027GSUBPP-0012",
@@ -13527,7 +14313,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          6,
+          8
+        ]
+      ]
     },
     {
       "source": "FY2027LCGBPP-0001",
@@ -13536,7 +14328,13 @@
       "is_external": false,
       "sub_ref": "第十三款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          84,
+          91
+        ]
+      ]
     },
     {
       "source": "FY2027LCGBPP-0017",
@@ -13545,7 +14343,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          39,
+          45
+        ]
+      ]
     },
     {
       "source": "FY2027LCGBPP-0025",
@@ -13554,7 +14358,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          24,
+          29
+        ]
+      ]
     },
     {
       "source": "FY2027LCGSUBPP-0001",
@@ -13563,7 +14373,13 @@
       "is_external": false,
       "sub_ref": "第十三款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          93,
+          100
+        ]
+      ]
     },
     {
       "source": "FY2027LCGSUBPP-0012",
@@ -13572,7 +14388,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          8,
+          14
+        ]
+      ]
     },
     {
       "source": "FY2025SET-0010",
@@ -13581,7 +14403,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          70,
+          75
+        ]
+      ]
     },
     {
       "source": "FY2025SET-0029",
@@ -13590,7 +14418,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          4,
+          9
+        ]
+      ]
     },
     {
       "source": "FY2025SET-0041",
@@ -13599,7 +14433,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          29,
+          34
+        ]
+      ]
     },
     {
       "source": "FY2025SET-0041",
@@ -13608,7 +14448,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          35,
+          40
+        ]
+      ]
     },
     {
       "source": "FY2025SET-0041",
@@ -13617,7 +14463,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          41,
+          46
+        ]
+      ]
     },
     {
       "source": "FY2025SET-0041",
@@ -13626,7 +14478,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          47,
+          52
+        ]
+      ]
     },
     {
       "source": "FY2025SET-0041",
@@ -13635,7 +14493,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          79,
+          84
+        ]
+      ]
     },
     {
       "source": "CONST-0030",
@@ -13644,7 +14508,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          27,
+          32
+        ]
+      ]
     },
     {
       "source": "CONST-0049",
@@ -13653,7 +14523,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          51,
+          55
+        ]
+      ]
     },
     {
       "source": "CONST-0072",
@@ -13662,7 +14538,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          42,
+          47
+        ]
+      ]
     },
     {
       "source": "CONST-0079",
@@ -13671,7 +14553,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          47,
+          52
+        ]
+      ]
     },
     {
       "source": "CONST-0099",
@@ -13680,7 +14568,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          28,
+          33
+        ]
+      ]
     },
     {
       "source": "CONST-0099",
@@ -13689,7 +14583,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          34,
+          39
+        ]
+      ]
     },
     {
       "source": "CONST-0099",
@@ -13698,7 +14598,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          40,
+          45
+        ]
+      ]
     },
     {
       "source": "CONST-0111",
@@ -13707,7 +14613,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          22,
+          27
+        ]
+      ]
     },
     {
       "source": "BAIRP-0005",
@@ -13716,7 +14628,13 @@
       "is_external": false,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          13
+        ]
+      ]
     },
     {
       "source": "MOPE-0007",
@@ -13725,7 +14643,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          19,
+          27
+        ]
+      ]
     },
     {
       "source": "MOPE-0007",
@@ -13734,7 +14658,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          33,
+          41
+        ]
+      ]
     },
     {
       "source": "MOPE-0012",
@@ -13743,7 +14673,17 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          38,
+          43
+        ],
+        [
+          63,
+          68
+        ]
+      ]
     },
     {
       "source": "MOPE-0012",
@@ -13752,7 +14692,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          118,
+          121
+        ]
+      ]
     },
     {
       "source": "MOPE-0018",
@@ -13761,7 +14707,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          262,
+          269
+        ]
+      ]
     },
     {
       "source": "MOPE-0019",
@@ -13770,7 +14722,13 @@
       "is_external": true,
       "sub_ref": "第二款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          105,
+          111
+        ]
+      ]
     },
     {
       "source": "MOPE-0028",
@@ -13779,7 +14737,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          237,
+          242
+        ]
+      ]
     },
     {
       "source": "MOPE-0031",
@@ -13788,7 +14752,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          13,
+          17
+        ]
+      ]
     },
     {
       "source": "MOPE-0033",
@@ -13797,7 +14767,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          15,
+          20
+        ]
+      ]
     },
     {
       "source": "MOPE-0034",
@@ -13806,7 +14782,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          68,
+          73
+        ]
+      ]
     },
     {
       "source": "MOPE-0044",
@@ -13815,7 +14797,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          57,
+          62
+        ]
+      ]
     },
     {
       "source": "MOPE-0051",
@@ -13824,7 +14812,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          41,
+          46
+        ]
+      ]
     },
     {
       "source": "MOPE-0051",
@@ -13833,7 +14827,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          120,
+          127
+        ]
+      ]
     },
     {
       "source": "ETPP-0003",
@@ -13842,7 +14842,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          175,
+          178
+        ]
+      ]
     },
     {
       "source": "ETPP-0005",
@@ -13851,7 +14857,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          62,
+          65
+        ]
+      ]
     },
     {
       "source": "ETPP-0005",
@@ -13860,7 +14872,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          66,
+          69
+        ]
+      ]
     },
     {
       "source": "LGER-0001",
@@ -13869,7 +14887,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          43,
+          50
+        ]
+      ]
     },
     {
       "source": "LGER-0005",
@@ -13878,7 +14902,13 @@
       "is_external": true,
       "sub_ref": "第一項第四款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          43,
+          54
+        ]
+      ]
     },
     {
       "source": "LGER-0006",
@@ -13887,7 +14917,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          67,
+          74
+        ]
+      ]
     },
     {
       "source": "LGER-0007",
@@ -13896,7 +14932,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          36,
+          39
+        ]
+      ]
     },
     {
       "source": "LGER-0009",
@@ -13905,7 +14947,13 @@
       "is_external": true,
       "sub_ref": "第二款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          47,
+          54
+        ]
+      ]
     },
     {
       "source": "LGER-0010",
@@ -13914,7 +14962,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          88,
+          95
+        ]
+      ]
     },
     {
       "source": "LGER-0010",
@@ -13923,7 +14977,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          88,
+          95
+        ]
+      ]
     },
     {
       "source": "LGER-0010",
@@ -13932,7 +14992,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          88,
+          95
+        ]
+      ]
     },
     {
       "source": "LGER-0010",
@@ -13941,7 +15007,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          88,
+          95
+        ]
+      ]
     },
     {
       "source": "LGER-0010",
@@ -13950,7 +15022,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          88,
+          95
+        ]
+      ]
     },
     {
       "source": "LGER-0010",
@@ -13959,7 +15037,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          88,
+          95
+        ]
+      ]
     },
     {
       "source": "LGER-0010",
@@ -13968,7 +15052,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          88,
+          95
+        ]
+      ]
     },
     {
       "source": "CPA-0040",
@@ -13977,7 +15067,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          95,
+          103
+        ]
+      ]
     },
     {
       "source": "CPA-0040",
@@ -13986,7 +15082,13 @@
       "is_external": false,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          104,
+          112
+        ]
+      ]
     },
     {
       "source": "CPA-0052",
@@ -13995,7 +15097,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1,
+          3
+        ]
+      ]
     },
     {
       "source": "CPA-0072",
@@ -14004,7 +15112,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          17,
+          19
+        ]
+      ]
     },
     {
       "source": "CPA-0073",
@@ -14013,7 +15127,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          28,
+          31
+        ]
+      ]
     },
     {
       "source": "CPA-0073",
@@ -14022,7 +15142,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          28,
+          31
+        ]
+      ]
     },
     {
       "source": "CPA-0075",
@@ -14031,7 +15157,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          33,
+          38
+        ]
+      ]
     },
     {
       "source": "CPA-0075",
@@ -14040,7 +15172,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          39,
+          44
+        ]
+      ]
     },
     {
       "source": "CPA-0076",
@@ -14049,7 +15187,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          57,
+          62
+        ]
+      ]
     },
     {
       "source": "CPA-0076",
@@ -14058,7 +15202,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          91,
+          96
+        ]
+      ]
     },
     {
       "source": "CPA-0076",
@@ -14067,7 +15217,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          121,
+          126
+        ]
+      ]
     },
     {
       "source": "CPA-0076",
@@ -14076,7 +15232,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          148,
+          153
+        ]
+      ]
     },
     {
       "source": "CPA-0077",
@@ -14085,7 +15247,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          13
+        ]
+      ]
     },
     {
       "source": "CPA-0078",
@@ -14094,7 +15262,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          57,
+          63
+        ]
+      ]
     },
     {
       "source": "CPA-0078",
@@ -14103,7 +15277,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          71,
+          75
+        ]
+      ]
     },
     {
       "source": "CPA-0078",
@@ -14112,7 +15292,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          98,
+          103
+        ]
+      ]
     },
     {
       "source": "CPA-0078",
@@ -14121,7 +15307,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          117,
+          122
+        ]
+      ]
     },
     {
       "source": "CPA-0078",
@@ -14130,7 +15322,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          139,
+          147
+        ]
+      ]
     },
     {
       "source": "CPA-0078",
@@ -14139,7 +15337,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          161,
+          166
+        ]
+      ]
     },
     {
       "source": "CPA-0079",
@@ -14148,7 +15352,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          56,
+          59
+        ]
+      ]
     },
     {
       "source": "CPA-0079",
@@ -14157,7 +15367,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          60,
+          63
+        ]
+      ]
     },
     {
       "source": "CPA-0079",
@@ -14166,7 +15382,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          73,
+          78
+        ]
+      ]
     },
     {
       "source": "CPA-0079",
@@ -14175,7 +15397,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          99,
+          104
+        ]
+      ]
     },
     {
       "source": "CPA-0079",
@@ -14184,7 +15412,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          117,
+          125
+        ]
+      ]
     },
     {
       "source": "CPA-0079",
@@ -14193,7 +15427,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          138,
+          146
+        ]
+      ]
     },
     {
       "source": "CPA-0079",
@@ -14202,7 +15442,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          167,
+          171
+        ]
+      ]
     },
     {
       "source": "CPA-0080",
@@ -14211,7 +15457,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          27,
+          32
+        ]
+      ]
     },
     {
       "source": "CPA-0080",
@@ -14220,7 +15472,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          33,
+          38
+        ]
+      ]
     },
     {
       "source": "CPA-0080",
@@ -14229,7 +15487,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          39,
+          44
+        ]
+      ]
     },
     {
       "source": "CPA-0081",
@@ -14238,7 +15502,13 @@
       "is_external": false,
       "sub_ref": "第六款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          9,
+          17
+        ]
+      ]
     },
     {
       "source": "FTRP-0009",
@@ -14247,7 +15517,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          339,
+          342
+        ]
+      ]
     },
     {
       "source": "FTRP-0010",
@@ -14256,7 +15532,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          114,
+          117
+        ],
+        [
+          204,
+          207
+        ]
+      ]
     },
     {
       "source": "FTRP-0016",
@@ -14265,7 +15551,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          283,
+          289
+        ]
+      ]
     },
     {
       "source": "SOREP-0004",
@@ -14274,7 +15566,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          19,
+          24
+        ]
+      ]
     },
     {
       "source": "SOARP-0012",
@@ -14283,7 +15581,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          50,
+          53
+        ]
+      ]
     },
     {
       "source": "SOARP-0012",
@@ -14292,7 +15596,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          54,
+          57
+        ]
+      ]
     },
     {
       "source": "SOARP-0012",
@@ -14301,7 +15611,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          58,
+          61
+        ]
+      ]
     },
     {
       "source": "SOARP-0012",
@@ -14310,7 +15626,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          62,
+          65
+        ]
+      ]
     },
     {
       "source": "GASD-0015",
@@ -14319,7 +15641,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          47,
+          51
+        ]
+      ]
     },
     {
       "source": "GEVP-0007",
@@ -14328,7 +15656,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          137,
+          143
+        ]
+      ]
     },
     {
       "source": "GEVP-0011",
@@ -14337,7 +15671,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          18,
+          24
+        ]
+      ]
     },
     {
       "source": "GEVP-0011",
@@ -14346,7 +15686,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          25,
+          28
+        ]
+      ]
     },
     {
       "source": "GEVP-0011",
@@ -14355,7 +15701,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          29,
+          32
+        ]
+      ]
     },
     {
       "source": "GEVP-0017",
@@ -14364,7 +15716,13 @@
       "is_external": false,
       "sub_ref": "第二項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          24,
+          30
+        ]
+      ]
     },
     {
       "source": "GEVP-0017",
@@ -14373,7 +15731,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          31,
+          37
+        ]
+      ]
     },
     {
       "source": "GEVP-0022",
@@ -14382,7 +15746,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          117,
+          123
+        ]
+      ]
     },
     {
       "source": "GARP-0010",
@@ -14391,7 +15761,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          160,
+          163
+        ],
+        [
+          198,
+          201
+        ]
+      ]
     },
     {
       "source": "GARP-0010",
@@ -14400,7 +15780,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          164,
+          167
+        ],
+        [
+          202,
+          205
+        ]
+      ]
     },
     {
       "source": "GARP-0013",
@@ -14409,7 +15799,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          3,
+          10
+        ]
+      ]
     },
     {
       "source": "GARP-0013",
@@ -14418,7 +15814,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          3,
+          10
+        ]
+      ]
     },
     {
       "source": "GARP-0013",
@@ -14427,7 +15829,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          3,
+          10
+        ]
+      ]
     },
     {
       "source": "GARP-0013",
@@ -14436,7 +15844,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          3,
+          10
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0004",
@@ -14445,7 +15859,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0008",
@@ -14454,7 +15874,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          10
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0008",
@@ -14463,7 +15889,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          10
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0008",
@@ -14472,7 +15904,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          10
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0015",
@@ -14481,7 +15919,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          179,
+          194
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0015",
@@ -14490,7 +15934,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          179,
+          194
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0015",
@@ -14499,7 +15949,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          179,
+          194
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0019",
@@ -14508,7 +15964,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          3
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0019",
@@ -14517,7 +15979,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          3
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0023",
@@ -14526,7 +15994,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          37
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0023",
@@ -14535,7 +16009,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          37
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0023",
@@ -14544,7 +16024,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          37
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0024",
@@ -14553,7 +16039,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          32
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0027",
@@ -14562,7 +16054,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          11
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0027",
@@ -14571,7 +16069,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          11
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0027",
@@ -14580,7 +16084,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          11
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0027",
@@ -14589,7 +16099,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          11
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0028",
@@ -14598,7 +16114,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          9,
+          20
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0028",
@@ -14607,7 +16129,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          9,
+          20
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0028",
@@ -14616,7 +16144,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          9,
+          20
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0028",
@@ -14625,7 +16159,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          28,
+          34
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0033",
@@ -14634,7 +16174,13 @@
       "is_external": false,
       "sub_ref": "第一項第一款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          8
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0044",
@@ -14643,7 +16189,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          187,
+          192
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0052",
@@ -14652,7 +16204,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          354,
+          357
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0070",
@@ -14661,7 +16219,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          34,
+          36
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0070",
@@ -14670,7 +16234,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          157,
+          160
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0071",
@@ -14679,7 +16249,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          12,
+          14
+        ],
+        [
+          22,
+          24
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0075",
@@ -14688,7 +16268,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          34,
+          39
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0075",
@@ -14697,7 +16283,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          40,
+          45
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0075",
@@ -14706,7 +16298,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          83,
+          88
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0077",
@@ -14715,7 +16313,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          24,
+          29
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0077",
@@ -14724,7 +16328,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          41
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0077",
@@ -14733,7 +16343,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          41
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0077",
@@ -14742,7 +16358,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          41
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0077",
@@ -14751,7 +16373,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          41
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0077",
@@ -14760,7 +16388,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          30,
+          41
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0081",
@@ -14769,7 +16403,13 @@
       "is_external": false,
       "sub_ref": "第一項第一款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          11
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0086",
@@ -14778,7 +16418,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0107",
@@ -14787,7 +16433,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          5,
+          12
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0107",
@@ -14796,7 +16448,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          5,
+          12
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0107",
@@ -14805,7 +16463,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          5,
+          12
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0107",
@@ -14814,7 +16478,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          41,
+          43
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0108",
@@ -14823,7 +16493,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          7
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0108",
@@ -14832,7 +16508,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          7
+        ]
+      ]
     },
     {
       "source": "ACCOUNT-0108",
@@ -14841,7 +16523,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          7
+        ]
+      ]
     },
     {
       "source": "SETTLE-0016",
@@ -14850,7 +16538,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          25,
+          28
+        ]
+      ]
     },
     {
       "source": "SETTLE-0016",
@@ -14859,7 +16553,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          25,
+          28
+        ]
+      ]
     },
     {
       "source": "SETTLE-0020",
@@ -14868,7 +16568,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          7,
+          9
+        ]
+      ]
     },
     {
       "source": "PAM-0021",
@@ -14877,7 +16583,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          103,
+          108
+        ]
+      ]
     },
     {
       "source": "PAM-0024",
@@ -14886,7 +16598,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          337,
+          342
+        ]
+      ]
     },
     {
       "source": "PAM-0026",
@@ -14895,7 +16613,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          59,
+          64
+        ]
+      ]
     },
     {
       "source": "PAM-0030",
@@ -14904,7 +16628,13 @@
       "is_external": false,
       "sub_ref": "第四款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          100,
+          108
+        ]
+      ]
     },
     {
       "source": "SPCP-0010",
@@ -14913,7 +16643,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          52,
+          59
+        ]
+      ]
     },
     {
       "source": "SPCP-0012",
@@ -14922,7 +16658,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          80,
+          85
+        ]
+      ]
     },
     {
       "source": "SPEL-0001",
@@ -14931,7 +16673,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          34,
+          42
+        ]
+      ]
     },
     {
       "source": "SPEL-0003",
@@ -14940,7 +16688,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          205,
+          210
+        ]
+      ]
     },
     {
       "source": "SPELE-0001",
@@ -14949,7 +16703,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          34,
+          42
+        ]
+      ]
     },
     {
       "source": "SPELE-0003",
@@ -14958,7 +16718,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          82,
+          86
+        ]
+      ]
     },
     {
       "source": "SPELE-0003",
@@ -14967,7 +16733,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          222,
+          227
+        ]
+      ]
     },
     {
       "source": "SPELE-0004",
@@ -14976,7 +16748,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          201,
+          206
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -14985,7 +16763,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          341,
+          347
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -14994,7 +16778,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          505,
+          511
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -15003,7 +16793,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          552,
+          557
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -15012,7 +16808,13 @@
       "is_external": true,
       "sub_ref": "第三項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          650,
+          656
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -15021,7 +16823,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          758,
+          761
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -15030,7 +16838,13 @@
       "is_external": true,
       "sub_ref": "第四項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          947,
+          953
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -15039,7 +16853,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          960,
+          963
+        ]
+      ]
     },
     {
       "source": "AORGP-0003",
@@ -15048,7 +16868,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          964,
+          968
+        ]
+      ]
     },
     {
       "source": "FDL-0002",
@@ -15057,7 +16883,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          29,
+          32
+        ]
+      ]
     },
     {
       "source": "FDL-0002",
@@ -15066,7 +16898,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          91,
+          97
+        ]
+      ]
     },
     {
       "source": "FDL-0003",
@@ -15075,7 +16913,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          19,
+          24
+        ]
+      ]
     },
     {
       "source": "FDL-0003",
@@ -15084,7 +16928,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          371,
+          378
+        ]
+      ]
     },
     {
       "source": "FPLE-0002",
@@ -15093,7 +16943,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          21,
+          24
+        ]
+      ]
     },
     {
       "source": "FPLE-0002",
@@ -15102,7 +16958,13 @@
       "is_external": true,
       "sub_ref": "第二項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          55,
+          61
+        ]
+      ]
     },
     {
       "source": "FPLE-0003",
@@ -15111,7 +16973,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          19,
+          24
+        ]
+      ]
     },
     {
       "source": "FPLE-0003",
@@ -15120,7 +16988,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          405,
+          412
+        ]
+      ]
     },
     {
       "source": "FPLR-0002",
@@ -15129,7 +17003,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          45,
+          48
+        ]
+      ]
     },
     {
       "source": "FPLR-0002",
@@ -15138,7 +17018,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          49,
+          52
+        ]
+      ]
     },
     {
       "source": "FPLR-0003",
@@ -15147,7 +17033,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          49,
+          54
+        ]
+      ]
     },
     {
       "source": "FPLR-0004",
@@ -15156,7 +17048,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          62,
+          67
+        ]
+      ]
     },
     {
       "source": "SUPE-0010",
@@ -15165,7 +17063,17 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          718,
+          725
+        ],
+        [
+          2522,
+          2529
+        ]
+      ]
     },
     {
       "source": "SUPE-0012",
@@ -15174,7 +17082,13 @@
       "is_external": false,
       "sub_ref": "第一項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          654,
+          660
+        ]
+      ]
     },
     {
       "source": "SUPE-0012",
@@ -15183,7 +17097,29 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1440,
+          1445
+        ],
+        [
+          1692,
+          1697
+        ],
+        [
+          1787,
+          1792
+        ],
+        [
+          2502,
+          2507
+        ],
+        [
+          3509,
+          3514
+        ]
+      ]
     },
     {
       "source": "SUPE-0013",
@@ -15192,7 +17128,21 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          295,
+          300
+        ],
+        [
+          579,
+          584
+        ],
+        [
+          746,
+          751
+        ]
+      ]
     },
     {
       "source": "SUPE-0014",
@@ -15201,7 +17151,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          390,
+          395
+        ],
+        [
+          636,
+          641
+        ]
+      ]
     },
     {
       "source": "SUPE-0014",
@@ -15210,7 +17170,13 @@
       "is_external": false,
       "sub_ref": "第七款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          736,
+          743
+        ]
+      ]
     },
     {
       "source": "SUPE-0015",
@@ -15219,7 +17185,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          258,
+          263
+        ]
+      ]
     },
     {
       "source": "SUPE-0015",
@@ -15228,7 +17200,13 @@
       "is_external": false,
       "sub_ref": "第七款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          351,
+          358
+        ]
+      ]
     },
     {
       "source": "SUPE-0015",
@@ -15237,7 +17215,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          420,
+          424
+        ]
+      ]
     },
     {
       "source": "SUPE-0016",
@@ -15246,7 +17230,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          158,
+          162
+        ]
+      ]
     },
     {
       "source": "SUPE-0018",
@@ -15255,7 +17245,13 @@
       "is_external": false,
       "sub_ref": "第七款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          572,
+          579
+        ]
+      ]
     },
     {
       "source": "SUPE-0020",
@@ -15264,7 +17260,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          126,
+          130
+        ]
+      ]
     },
     {
       "source": "SUPE-0021",
@@ -15273,7 +17275,13 @@
       "is_external": false,
       "sub_ref": "第七款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          344,
+          351
+        ]
+      ]
     },
     {
       "source": "SUPE-0022",
@@ -15282,7 +17290,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          14,
+          17
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15291,7 +17305,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          21,
+          26
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15300,7 +17320,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          48,
+          53
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15309,7 +17335,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          119,
+          126
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15318,7 +17350,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          229,
+          234
+        ],
+        [
+          309,
+          314
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15327,7 +17369,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15336,7 +17384,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15345,7 +17399,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15354,7 +17414,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15363,7 +17429,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15372,7 +17444,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15381,7 +17459,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0023",
@@ -15390,7 +17474,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          409,
+          418
+        ]
+      ]
     },
     {
       "source": "SUPE-0024",
@@ -15399,7 +17489,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          129,
+          134
+        ]
+      ]
     },
     {
       "source": "SUPE-0026",
@@ -15408,7 +17504,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          161,
+          165
+        ]
+      ]
     },
     {
       "source": "SUPE-0026",
@@ -15417,7 +17519,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          265,
+          269
+        ]
+      ]
     },
     {
       "source": "SUPE-0026",
@@ -15426,7 +17534,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          270,
+          274
+        ]
+      ]
     },
     {
       "source": "SUPE-0026",
@@ -15435,7 +17549,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          275,
+          279
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15444,7 +17564,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          719,
+          723
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15453,7 +17579,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          838,
+          845
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15462,7 +17594,13 @@
       "is_external": false,
       "sub_ref": "第一項第九款",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1127,
+          1136
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15471,7 +17609,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1528,
+          1531
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15480,7 +17624,17 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1578,
+          1582
+        ],
+        [
+          1627,
+          1631
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15489,7 +17643,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1684,
+          1688
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15498,7 +17658,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1689,
+          1693
+        ]
+      ]
     },
     {
       "source": "SUPE-0027",
@@ -15507,7 +17673,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          1694,
+          1698
+        ]
+      ]
     },
     {
       "source": "SUPE-0029",
@@ -15516,7 +17688,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          28,
+          33
+        ]
+      ]
     },
     {
       "source": "SUPE-0030",
@@ -15525,7 +17703,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          13,
+          18
+        ]
+      ]
     },
     {
       "source": "SUPE-0032",
@@ -15534,7 +17718,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          16,
+          21
+        ]
+      ]
     },
     {
       "source": "SUPE-0032",
@@ -15543,7 +17733,13 @@
       "is_external": true,
       "sub_ref": "第一項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          27,
+          34
+        ]
+      ]
     },
     {
       "source": "SUPE-0032",
@@ -15552,7 +17748,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          53,
+          58
+        ]
+      ]
     },
     {
       "source": "SUPE-0033",
@@ -15561,7 +17763,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          29,
+          34
+        ]
+      ]
     },
     {
       "source": "SUPE-0040",
@@ -15570,7 +17778,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          293,
+          298
+        ]
+      ]
     },
     {
       "source": "SUPE-0041",
@@ -15579,7 +17793,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          60,
+          63
+        ]
+      ]
     },
     {
       "source": "SUPE-0041",
@@ -15588,7 +17808,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          64,
+          67
+        ]
+      ]
     },
     {
       "source": "SUPE-0041",
@@ -15597,7 +17823,13 @@
       "is_external": true,
       "sub_ref": "第四項",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          117,
+          123
+        ]
+      ]
     },
     {
       "source": "SUPE-0042",
@@ -15606,7 +17838,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          32,
+          37
+        ]
+      ]
     },
     {
       "source": "SUPE-0042",
@@ -15615,7 +17853,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          41,
+          45
+        ]
+      ]
     },
     {
       "source": "SUPE-0043",
@@ -15624,7 +17868,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          47,
+          52
+        ]
+      ]
     },
     {
       "source": "SUPE-0043",
@@ -15633,7 +17883,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          69,
+          77
+        ]
+      ]
     },
     {
       "source": "SUPE-0045",
@@ -15642,7 +17898,13 @@
       "is_external": true,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          91,
+          96
+        ]
+      ]
     },
     {
       "source": "SUPE-0045",
@@ -15651,7 +17913,13 @@
       "is_external": false,
       "sub_ref": "第三項",
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          113,
+          121
+        ]
+      ]
     },
     {
       "source": "BUDGET-0033",
@@ -15660,7 +17928,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "BUDGET-0054",
@@ -15669,7 +17943,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          12,
+          17
+        ]
+      ]
     },
     {
       "source": "BUDGET-0054",
@@ -15678,7 +17958,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          111,
+          116
+        ]
+      ]
     },
     {
       "source": "BUDGET-0057",
@@ -15687,7 +17973,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "BUDGET-0058",
@@ -15696,7 +17988,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          54,
+          57
+        ]
+      ]
     },
     {
       "source": "BUDGET-0058",
@@ -15705,7 +18003,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          54,
+          57
+        ]
+      ]
     },
     {
       "source": "BUDGET-0058",
@@ -15714,7 +18018,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          54,
+          57
+        ]
+      ]
     },
     {
       "source": "BUDGET-0061",
@@ -15723,7 +18033,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          91,
+          96
+        ]
+      ]
     },
     {
       "source": "BUDGET-0069",
@@ -15732,7 +18048,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          16,
+          21
+        ]
+      ]
     },
     {
       "source": "BUDGET-0074",
@@ -15741,7 +18063,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          5
+        ]
+      ]
     },
     {
       "source": "BUDGET-0080",
@@ -15750,7 +18078,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          0,
+          2
+        ]
+      ]
     },
     {
       "source": "BUDGET-0081",
@@ -15759,7 +18093,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          16,
+          21
+        ]
+      ]
     },
     {
       "source": "BUDGET-0084",
@@ -15768,7 +18108,13 @@
       "is_external": false,
       "sub_ref": "第一款",
       "confidence": 1.0,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          26,
+          31
+        ]
+      ]
     },
     {
       "source": "BUDGET-0087",
@@ -15777,7 +18123,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          21,
+          26
+        ]
+      ]
     },
     {
       "source": "BUDGET-0088",
@@ -15786,7 +18138,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          52,
+          63
+        ]
+      ]
     },
     {
       "source": "BUDGET-0088",
@@ -15795,7 +18153,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          52,
+          63
+        ]
+      ]
     },
     {
       "source": "BUDGET-0088",
@@ -15804,7 +18168,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.9,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          52,
+          63
+        ]
+      ]
     },
     {
       "source": "BUDGET-0088",
@@ -15813,7 +18183,13 @@
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
-      "needs_review": false
+      "needs_review": false,
+      "spans": [
+        [
+          152,
+          157
+        ]
+      ]
     }
   ],
   "aliases": {

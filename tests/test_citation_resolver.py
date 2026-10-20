@@ -338,3 +338,10 @@ def test_point_not_inherited_from_article_law():
     assert edges[1]["is_external"] is False
     # Named right before -> that rule's point
     assert parse_citations("依各機關單位預算執行要點第五點", "BDA", 4)[0]["target"] == "MOPE-0005"
+
+
+def test_citation_span():
+    """span covers the citation text (incl. 第X項) in the normalized text."""
+    text = "依預算法第六十二條第二項及前條規定"
+    spans = [text[a:b] for a, b in (e["span"] for e in parse_citations(text, "BUDGET", 10))]
+    assert spans == ["第六十二條第二項", "前條"]

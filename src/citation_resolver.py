@@ -521,6 +521,8 @@ def parse_citations(
 
                 edges.append({
                     "source": source_id,
+                    # Where the citation (incl. 第X項) sits in the normalized text
+                    "span": [match.start(), last_end],
                     "target": target_id,
                     "kind": "absolute",
                     "is_external": is_external,
@@ -570,6 +572,8 @@ def parse_citations(
 
             edges.append({
                 "source": source_id,
+                # Where the citation (incl. 第X項) sits in the normalized text
+                "span": [match.start(), last_end],
                 "target": target_id,
                 "kind": "absolute",
                 "is_external": is_external,
@@ -656,6 +660,8 @@ def parse_citations(
 
                 edges.append({
                     "source": source_id,
+                    # Where the citation (incl. 第X項) sits in the normalized text
+                    "span": [match.start(), last_end],
                     "target": target_id,
                     "kind": "relative",
                     "is_external": False,

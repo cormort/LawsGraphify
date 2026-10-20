@@ -12,6 +12,21 @@ from citation_resolver import extract_short_names, parse_citations, load_aliases
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def original_offsets(text):
+    """Maps each normalized-text index to its index in the original text.
+
+    normalize_text works character by character for statute text (full-width
+    -> half-width), so offsets map 1:1 or 1:n. Returns None if that ever fails,
+    and the caller then drops the spans rather than linking the wrong words.
+    """
+    starts = []
+    for i, char in enumerate(text):
+        starts.extend([i] * len(normalize_text(char)))
+    if len(starts) != len(normalize_text(text)):
+        return None
+    return starts + [len(text)]
+
+
 def build_graph():
     # 1. Load aliases and map law names to codes
     name_to_code = load_aliases()
@@ -89,13 +104,20 @@ def build_graph():
                 parsed_edges = parse_citations(text, current_law_code=law_code, current_article_no=curr_coord,
                                                article_order=article_order,
                                                local_aliases=short_names)
-                # An article citing the same target twice is still one edge
-                seen = set()
+                # An article citing the same target twice is still one edge;
+                # every place it is cited is kept in "spans" (original text)
+                offsets = original_offsets(text)
+                merged = {}
                 for edge in parsed_edges:
+                    start, end = edge.pop("span")
                     key = (edge["target"], edge["sub_ref"], edge["kind"])
-                    if key not in seen:
-                        seen.add(key)
-                        edges.append(edge)
+                    if key not in merged:
+                        merged[key] = {**edge, "spans": []}
+                        edges.append(merged[key])
+                    if offsets:
+                        span = [offsets[start], offsets[end - 1] + 1]
+                        if span not in merged[key]["spans"]:
+                            merged[key]["spans"].append(span)
 
         except Exception as e:
             print(f" Error processing file {filename}: {e}")
