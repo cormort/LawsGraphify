@@ -1,0 +1,70 @@
+# Weekly: re-fetch the laws, rebuild, test, commit if the text changed, deploy.
+# Also deploys web/ to Pages on every push to main.
+name: Update laws and deploy
+
+on:
+  schedule:
+    - cron: "0 18 * * 0"   # 每週一 02:00（台灣時間）
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  update:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml pytest
+
+      - name: Fetch laws (法務部 + 主計總處)
+        run: python src/fetch_laws.py --refresh
+      - name: Build graph
+        run: python src/graph_builder.py
+      - name: Test
+        run: python -m pytest -q
+
+      - name: Commit if the law text changed
+        run: |
+          git add data/laws_json
+          if git diff --cached --quiet -- data/laws_json; then
+            echo "法規條文沒有變動，不更新。" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          { echo "### 有變動的法規"; echo '```'; git diff --cached --stat -- data/laws_json; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          git add data web/laws_graph.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "法規資料自動更新 $(date +%F)"
+          git push
+
+  deploy:
+    needs: update
+    # Runs after a successful update, or on its own for a push (update is skipped)
+    if: ${{ !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main   # include the commit the update job may have just pushed
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v4

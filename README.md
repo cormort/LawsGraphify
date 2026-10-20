@@ -36,11 +36,18 @@ LawsGraphify/
 └── run_server.py               # 本機預覽：python3 run_server.py
 ```
 
-線上版由 `gh-pages` 分支提供（內容就是 `web/`）。更新資料後重新發布：
+### 自動更新與部署（GitHub Actions）
 
-```bash
-git subtree push --prefix web origin gh-pages
-```
+[`.github/workflows/update.yml`](.github/workflows/update.yml)：
+
+- **每週一 02:00（台灣時間）**：重新下載法務部資料、重抓主計總處行政規則 → 重建圖譜 → 跑測試 →
+  **只有條文真的變動才 commit** → 部署到 GitHub Pages。測試沒過就不部署。
+- **push 到 main**：直接部署 `web/`。
+- 也可以在 GitHub 的 Actions 頁籤按「Run workflow」立即更新。
+- 主計總處某部抓不到時沿用舊條文，並在執行結果顯示黃色警告；排程失敗時 GitHub 會寄信通知。
+
+**每年要人工處理的一件事**：新年度的編製辦法、要點發布後，改 `config/law_aliases.yaml` 裡帶年度的那幾行
+（名稱與代碼），commit 後排程會抓新版；`fetch_laws.py` 會列出不再需要的舊年度檔案，移除即可。
 
 ---
 
