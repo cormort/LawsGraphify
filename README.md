@@ -1,0 +1,197 @@
+# LawsGraphify：法規引用查詢
+
+**線上版：<https://cormort.github.io/LawsGraphify/>**
+
+輸入一條法規條文，列出所有引用它的條文；只輸入法規名稱，列出這部法規被引用的每一條。
+用途是修法衝擊分析（「預算法第 62 條要修，哪些辦法、要點引用到它？」）與找出失效的引用。
+
+收錄範圍是歲計、會計相關法規共 58 部：法律與命令來自[法務部全國法規資料庫](https://law.moj.gov.tw/)開放資料，
+要點、注意事項等行政規則來自[行政院主計總處主管法規共用系統](https://law.dgbas.gov.tw/)。
+引用關係由程式自動解析，可能有誤，正式用途請以法規原文為準。
+
+核心是一個純函式的引用解析器：支援全形轉換、中文數字、別名與「以下簡稱」、作用域延續（遇句號、「本法／本要點」重設）、
+範圍與並列展開、前條／次條、之N 子條文、「第X點」，以及信心度與需複核旗標。
+
+## 專案結構
+
+```text
+LawsGraphify/
+├── config/law_aliases.yaml     # 法規名稱 → 代碼；external 清單為只被引用、不抓全文的法規
+├── src/
+│   ├── citation_resolver.py    # 引用解析器
+│   ├── fetch_laws.py           # 抓法規全文（法務部 → 主計總處）
+│   └── graph_builder.py        # 解析全部條文，產生 laws_graph.json
+├── data/laws_json/             # 各法規條文（fetch_laws.py 產生）
+├── web/
+│   ├── index.html              # 條文引用查詢頁
+│   ├── graph.html, app.js      # 關聯圖
+│   └── laws_graph.json         # 圖譜資料
+├── tests/test_citation_resolver.py
+└── run_server.py               # 本機預覽：python3 run_server.py
+```
+
+線上版由 `gh-pages` 分支提供（內容就是 `web/`）。更新資料後重新發布：
+
+```bash
+git subtree push --prefix web origin gh-pages
+```
+
+---
+
+## 快速開始
+
+### 1. 環境準備
+
+本解析器需要 `PyYAML` 套件來讀取設定檔：
+
+```bash
+pip install pyyaml pytest
+```
+
+### 2. 使用範例
+
+```python
+from src.citation_resolver import parse_citations
+
+# 模擬在《決算法》(SETTLE) 第 10 條的內文中，解析以下參考文獻：
+text = "依預算法第六十條及第六十二條規定，並依會計法第二十一條及第六十條辦理"
+edges = parse_citations(text, current_law_code="SETTLE", current_article_no="0010")
+
+for edge in edges:
+    print(edge)
+```
+
+**輸出結果（JSON/Dict 陣列）**：
+
+```python
+[
+    # "預算法第六十條" -> 跨法規明確命中，信心度 1.0
+    {
+        'source': 'SETTLE-0010',
+        'target': 'BUDGET-0060',
+        'kind': 'absolute',
+        'is_external': True,
+        'external': True,
+        'sub_ref': None,
+        'confidence': 1.0,
+        'needs_review': False
+    },
+    # "及第六十二條" -> 繼承前者的預算法 (BUDGET)，屬並列展開，信心度 0.9
+    {
+        'source': 'SETTLE-0010',
+        'target': 'BUDGET-0062',
+        'kind': 'absolute',
+        'is_external': True,
+        'external': True,
+        'sub_ref': None,
+        'confidence': 0.9,
+        'needs_review': False
+    },
+    # "會計法第二十一條" -> 跨法規明確命中，信心度 1.0
+    {
+        'source': 'SETTLE-0010',
+        'target': 'ACCOUNT-0021',
+        'kind': 'absolute',
+        'is_external': True,
+        'external': True,
+        'sub_ref': None,
+        'confidence': 1.0,
+        'needs_review': False
+    },
+    # "及第六十條" -> 繼承前者的會計法 (ACCOUNT)，屬並列展開，信心度 0.9
+    {
+        'source': 'SETTLE-0010',
+        'target': 'ACCOUNT-0060',
+        'kind': 'absolute',
+        'is_external': True,
+        'external': True,
+        'sub_ref': None,
+        'confidence': 0.9,
+        'needs_review': False
+    }
+]
+```
+
+---
+
+### 3. 更新法規資料與圖譜
+
+```bash
+python3 src/fetch_laws.py            # 用本機快取的法務部資料（chlaw.json / chorder.json）
+python3 src/fetch_laws.py --refresh  # 重新下載法務部資料、重爬主計總處索引
+python3 src/graph_builder.py         # 重建 data/ 與 web/ 的 laws_graph.json
+```
+
+- 先從法務部全國法規資料庫（法律、命令）找，找不到的行政規則（要點、注意事項…）再到主計總處主管法規共用系統（law.dgbas.gov.tw）的歲計、會計分類抓，每次請求間隔 1 秒。
+- `config/law_aliases.yaml` 的 `external` 清單裡的法規只當被引用對象，不抓全文。
+- 行政規則以「點」編號，存成 `第 N 點`；「第X點」的引用和「第X條」一樣解析（前面沒緊接法規名稱時，指向本文件）。
+
+## 核心 API 簽名與參數說明
+
+### `parse_citations(text, current_law_code, current_article_no=None, article_order=None)`
+
+#### 參數
+
+*   `text` (str): 要解析的輸入字串，包含法條交叉引用。
+*   `current_law_code` (str): 當前法規的標準大寫代碼 (例如 `"BUDGET"`, `"ACCOUNT"`)。
+*   `current_article_no` (int | str | None): 當前所在的法條條號 (例如 `62`, `"62-001"`, `"六十二之一"`)，用於計算相對引用（如「前條」）。
+
+#### 回傳值
+
+回傳 `list[dict]`。每個 dictionary 代表一條產生的引用關係邊 (Edge)，包含以下欄位：
+
+| 欄位名稱 | 型態 | 說明 |
+| :--- | :--- | :--- |
+| `source` | str | 來源節點 ID，格式為 `{當前法規代碼}-{當前條號補零4位}[-{之N補零3位}]`。 |
+| `target` | str \| None | 目標節點 ID，格式為 `{目標法規代碼}-{目標條號補零4位}[-{之N補零3位}]`。若無法對應或未命中法規，則為 `None`。 |
+| `kind` | str | 引用類型。`"absolute"`（絕對引用，如第十條）或 `"relative"`（相對引用，如前條）。 |
+| `is_external` / `external` | bool | 是否為跨法規引用。若目標法規代碼與當前不同，或目標相同但字面上顯式提到了該法規名稱 (例如在會計法中寫「會計法第二十一條」)，則為 `True`；純內部引用 (如「第十條」) 則為 `False`。 |
+| `sub_ref` | str \| None | 條級別以下的細部引用內容（如項、款、目，例如 `"第二項"`、`"第一款第一目"`），未指定時為 `None`。 |
+| `confidence` | float | 解析信心度（0.0 至 1.0）。 |
+| `needs_review` | bool | 是否需要人工複核。 |
+
+---
+
+## 信心度與需複核旗標規則表
+
+解析器依據以下規則計算 `confidence` 及 `needs_review`：
+
+| 引用情境 | 信心度 (`confidence`) | 需複核 (`needs_review`) | 說明 |
+| :--- | :--- | :--- | :--- |
+| **跨法規明確命中** | `1.0` | `False` | 顯式提及法規名稱，且該名稱存在於 `law_aliases.yaml` 中。 |
+| **本法絕對引用** | `0.95` | `False` | 未指定法規名稱的絕對條號引用（如「第十條」）。 |
+| **範圍 / 並列展開** | `0.9` | `False` | 範圍（至）或並列清單（及、、）所展開的子引用項目。 |
+| **相對引用 (可計算)** | `1.0` | `False` | 可推算出來的相對條次（如「前條」、「次條」、「前二條」）。 |
+| **子條文往後的相對引用** | `0.7` | `True` | 如第六十二條之一的「次條」，可能是之二或第六十三條，暫取第六十三條。 |
+| **相對引用超出範圍** | `0.3` | `True` | 推算結果小於等於 0，或大於該法規在系統中註記的最大條數。 |
+| **疑似法規名但未命中** | `0.0` | `True` | 偵測到疑似法規名稱 (以法/辦法/條例等結尾)，但不在 `law_aliases.yaml` 內。此時 `target` 為 `None`。 |
+
+---
+
+## 如何更新 Law Alias Map
+
+法規名稱與代碼的映射定義在 [config/law_aliases.yaml](config/law_aliases.yaml) 檔案中。
+
+### 格式說明
+
+設定檔支援兩種結構，解析器在載入時會自動進行建立雙向映射：
+
+1.  **鍵值對映射 (單一別名)**：
+    ```yaml
+    aliases:
+      憲法: CONST
+      預算法: BUDGET
+    ```
+2.  **清單對照 (多個別名映射至同一個代碼)**：
+    ```yaml
+    aliases:
+      BUDGET:
+        - 預算法
+        - 預算規程
+    ```
+
+若要新增法規：
+1. 開啟 `config/law_aliases.yaml`。
+2. 採用**大寫英文縮寫**做為唯一的法規代碼。
+3. 將對應的中文全稱或簡稱加入對照。
+4. 儲存檔案即可，解析器在下次呼叫時會自動載入最新別名。

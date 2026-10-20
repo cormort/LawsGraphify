@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laws Graphify - 法規交叉引用知識圖譜</title>
+    <meta name="description" content="互動式中華民國法規交叉引用圖譜，視覺化憲法、預算法、決算法、會計法及特種基金法規之條文關聯性。">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%233b5bdb%22/%3E%3Cpath d=%22M9 8h9a5 5 0 0 1 0 10h-4v6H9z%22 fill=%22white%22/%3E%3C/svg%3E">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Vanilla CSS Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- D3.js Library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar: Controls & Stats -->
+        <aside class="sidebar-left">
+            <header class="app-header">
+                <div class="logo">
+                    <span class="logo-icon">🔗</span>
+                    <h1>Laws Graphify</h1>
+                </div>
+                <p class="subtitle">法規交叉引用知識圖譜 · <a href="index.html" style="color: inherit;">← 條文引用查詢</a></p>
+            </header>
+
+            <!-- KPI Card Grid -->
+            <section class="kpi-container">
+                <div class="kpi-card">
+                    <span class="kpi-val" id="kpi-nodes">0</span>
+                    <span class="kpi-label">條文節點</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-val" id="kpi-edges">0</span>
+                    <span class="kpi-label">引用關係邊</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-val" id="kpi-laws">0</span>
+                    <span class="kpi-label">收錄法規</span>
+                </div>
+                <div class="kpi-card highlight">
+                    <span class="kpi-val" id="kpi-review">0</span>
+                    <span class="kpi-label">需人工複核</span>
+                </div>
+            </section>
+
+            <!-- Search and Filters Section -->
+            <section class="filters-container">
+                <div class="filter-group">
+                    <label for="search-input">搜尋條文內容或條號</label>
+                    <div class="search-wrapper">
+                        <input type="text" id="search-input" placeholder="例如: 預算法第六十二條、決算...">
+                        <button id="clear-search" class="clear-btn">&times;</button>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>篩選法規範疇</label>
+                    <div class="checkbox-list" id="law-filters">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label>引用屬性篩選</label>
+                    <div class="toggle-list">
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-external" checked>
+                            <span class="slider"></span>
+                            <span class="switch-label">跨法規引用 (is_external)</span>
+                        </label>
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-internal" checked>
+                            <span class="slider"></span>
+                            <span class="switch-label">本法內部引用 (internal)</span>
+                        </label>
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-needs-review">
+                            <span class="slider warning"></span>
+                            <span class="switch-label warning-text">僅顯示需人工複核 (confidence < 1)</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="sidebar-footer">
+                <p>資料來源：中華民國全國法規資料庫</p>
+                <p>純前端渲染環境</p>
+            </footer>
+        </aside>
+
+        <!-- Main Workspace: The Graph Visualization -->
+        <main class="main-workspace" id="graph-workspace">
+            <!-- Canvas HUD Controls -->
+            <div class="hud-controls">
+                <button id="zoom-in" title="放大">+</button>
+                <button id="zoom-out" title="縮小">−</button>
+                <button id="zoom-fit" title="最適大小">⛶</button>
+            </div>
+            
+            <!-- Graph Container -->
+            <div class="svg-container" id="svg-container">
+                <!-- SVG element generated dynamically by D3 -->
+            </div>
+
+            <!-- Empty State Legend overlay -->
+            <div class="legend-overlay">
+                <div class="legend-title">圖例說明</div>
+                <div class="legend-items" id="legend-items">
+                    <!-- Dynamically populated based on loaded laws -->
+                </div>
+                <div class="legend-divider"></div>
+                <div class="legend-types">
+                    <div class="legend-type"><span class="line-style solid"></span>絕對引用 (absolute)</div>
+                    <div class="legend-type"><span class="line-style dashed"></span>相對引用 (relative)</div>
+                    <div class="legend-type"><span class="node-style warning-ring"></span>需人工複核 (needs_review)</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar Right: Inspector Panel -->
+        <aside class="sidebar-right collapsed" id="inspector-panel">
+            <button class="close-inspector-btn" id="close-inspector" title="關閉控制面板">&times;</button>
+            <div class="inspector-content">
+                <div class="inspector-header">
+                    <span class="law-badge" id="insp-law-badge">CONST</span>
+                    <h2 id="insp-title">條文標題</h2>
+                    <p class="law-fullname" id="insp-law-fullname">中華民國憲法</p>
+                </div>
+                
+                <div class="inspector-section">
+                    <h3>法條本文</h3>
+                    <div class="article-text-container">
+                        <p id="insp-text" class="article-text">點擊圖譜中的任何節點以檢視詳細法條內容與交叉引用關係。</p>
+                    </div>
+                </div>
+
+                <div class="inspector-section tabs">
+                    <div class="tab-headers">
+                        <button class="tab-btn active" data-tab="outgoing">向外引用 (<span id="insp-out-count">0</span>)</button>
+                        <button class="tab-btn" data-tab="incoming">被此引用 (<span id="insp-in-count">0</span>)</button>
+                    </div>
+
+                    <div class="tab-content active" id="tab-outgoing">
+                        <ul class="citation-list" id="insp-outgoing-list">
+                            <!-- Outgoing reference list -->
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="tab-incoming">
+                        <ul class="citation-list" id="insp-incoming-list">
+                            <!-- Incoming reference list -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Script Entrypoint -->
+    <script src="app.js"></script>
+</body>
+</html>

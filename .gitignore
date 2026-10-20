@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases (large JSONs)
+chlaw.json
+chorder.json
+
+# Cloned helper repositories & scratch directories
+temp_corpus/
+fund-law-api/
+scratch/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Local Claude Code settings
+.claude/
