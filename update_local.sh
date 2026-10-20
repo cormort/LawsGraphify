@@ -14,8 +14,9 @@ LOG="$HOME/Library/Logs/lawsgraphify-update.log"
 
 if [[ "${1:-}" == "--install" ]]; then
     # A python3 that has PyYAML; launchd gets this directory first on PATH
-    for py in $(which -a python3); do
-        if "$py" -c "import yaml, pytest" 2>/dev/null; then PYDIR="$(dirname "$py")"; break; fi
+    # Homebrew paths listed too: an ssh session's PATH usually lacks them
+    for py in $(which -a python3) /opt/homebrew/bin/python3 /usr/local/bin/python3; do
+        if [[ -x "$py" ]] && "$py" -c "import yaml, pytest" 2>/dev/null; then PYDIR="$(dirname "$py")"; break; fi
     done
     [[ -n "${PYDIR:-}" ]] || { echo "No python3 with pyyaml + pytest found (pip install pyyaml pytest)"; exit 1; }
     cat > "$PLIST" <<PLIST
