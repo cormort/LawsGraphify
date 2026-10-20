@@ -46,19 +46,33 @@ if [[ "${1:-}" == "--uninstall" ]]; then
     exit 0
 fi
 
-notify() { osascript -e "display notification \"$1\" with title \"隨身法典資料更新\"" 2>/dev/null || true; }
-trap 'notify "更新失敗，請看 ~/Library/Logs/lawsgraphify-update.log"' ERR
+# Telegram through this machine's Hermes (its home channel); macOS banner if that fails
+TITLE="隨身法典資料更新"
+HERMES="${HERMES:-$HOME/.hermes/hermes-agent/.hermes/bin/hermes}"
+notify() {
+    [[ -x "$HERMES" ]] && "$HERMES" send -q -t telegram -s "$TITLE" "$1" 2>/dev/null && return
+    osascript -e "display notification \"${1//\"/\'}\" with title \"$TITLE\"" 2>/dev/null || true
+}
+trap 'notify "❌ 更新失敗：$BASH_COMMAND（第 $LINENO 行）。紀錄：$LOG"' ERR
 
 echo "=== $(date '+%F %T') ==="
 # Never touch work in progress
 if ! git diff --quiet || ! git diff --cached --quiet; then
     echo "Working tree has uncommitted changes; skipping this run."
-    notify "略過：專案有未提交的修改"
+    notify "⏭️ 略過：專案有未提交的修改"
     exit 0
 fi
 
 git pull -q --ff-only
-python3 src/fetch_laws.py --refresh
+OUT="$(mktemp)"
+python3 src/fetch_laws.py --refresh 2>&1 | tee "$OUT"
+if grep -q "could not be fetched" "$OUT"; then
+    notify "⚠️ 主計總處有 $(grep -c '^  ! ' "$OUT") 部抓取失敗，沿用舊條文：$(grep '^  ! ' "$OUT" | head -3 | sed 's/^  ! //' | paste -sd '；' -)"
+fi
+if grep -q "no longer targets" "$OUT"; then
+    notify "⚠️ data/laws_json 有不再使用的舊檔（多半是換年度），請移除：$(grep '^  ? ' "$OUT" | sed 's/^  ? //' | paste -sd '、' -)"
+fi
+rm -f "$OUT"
 python3 src/graph_builder.py
 python3 -m pytest -q
 
@@ -68,9 +82,10 @@ if git diff --cached --quiet -- data/laws_json; then
     git reset -q && git checkout -q -- data web  # drop the rebuilt date-only changes
     exit 0
 fi
+CHANGED="$(git diff --cached --name-only -- data/laws_json | sed 's|.*/||; s|\.json$||' | paste -sd '、' -)"
 git diff --cached --stat -- data/laws_json
 git add data web/laws_graph.json
 git commit -q -m "法規資料自動更新（本機）$(date +%F)"
 git push -q
-notify "法規有更新，已推送並部署"
+notify "✅ 法規有更新，已推送並部署：$CHANGED"
 echo "Pushed."
