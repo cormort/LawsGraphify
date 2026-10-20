@@ -482,7 +482,7 @@ async function init() {
     document.getElementById("law-names").innerHTML = laws
         .map(l => `<option value="${escapeHtml(l.name)}">`).join("");
     document.getElementById("data-info").textContent =
-        `${laws.length} 部法規、${nodes.size} 條條文 · 資料建置 ${data.built || ""}`;
+        `${laws.length} 部法規、${nodes.size} 條條文 · 法務部資料 ${data.moj_updated || "—"} · 建置 ${data.built || ""}`;
     runFromHash();
 }
 

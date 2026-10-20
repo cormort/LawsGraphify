@@ -26,6 +26,14 @@ def law_kind(name, source):
     return "命令"
 
 
+def load_meta():
+    path = os.path.join(BASE_DIR, "data", "meta.json")
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return {"moj_updated": json.load(f).get("moj_updated", "")}
+
+
 def original_offsets(text):
     """Maps each normalized-text index to its index in the original text.
 
@@ -156,6 +164,8 @@ def build_graph():
         "aliases": name_to_code,
         "laws": sorted(laws, key=lambda law: (KIND_ORDER.index(law["kind"]), law["name"])),
         "built": date.today().isoformat(),
+        # MOJ open data's own date, written by fetch_laws.py
+        **load_meta(),
     }
 
     # web/ copy is what the dashboard fetches

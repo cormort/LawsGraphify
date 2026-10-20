@@ -6,8 +6,12 @@ Sources, in order:
      that the MOJ data does not carry
 
 Usage:
-  python3 src/fetch_laws.py            # reuse cached MOJ data / DGBAS index
-  python3 src/fetch_laws.py --refresh  # re-download MOJ data, re-crawl DGBAS index
+  python3 src/fetch_laws.py            # reuse cached MOJ data
+  python3 src/fetch_laws.py --refresh  # re-download MOJ data (what the weekly Action runs)
+  python3 src/fetch_laws.py --recrawl  # also rebuild the DGBAS name -> id index
+
+DGBAS rule pages are fetched on every run. If one fails (network, bot check),
+its previous file is kept and the run carries on, so a flaky site never wipes data.
 """
 
 import argparse
@@ -28,6 +32,7 @@ from citation_resolver import chinese_to_arabic, normalize_text
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(BASE_DIR, "data", "laws_json")
 DGBAS_INDEX = os.path.join(BASE_DIR, "data", "dgbas_index.json")
+META = os.path.join(BASE_DIR, "data", "meta.json")
 
 MOJ_URLS = {
     "chlaw": "https://law.moj.gov.tw/api/ch/law/json",
@@ -47,13 +52,17 @@ ROW_PAT = re.compile(r'<td[^>]*class="th"[^>]*>(.*?)</td>\s*<td>(.*?)</td>', re.
 POINT_PAT = re.compile(r"([一二三四五六七八九十百]+)(?:之([一二三四五六七八九十]+))?、")
 
 
+class Blocked(RuntimeError):
+    """The site answered with a bot check instead of content."""
+
+
 def fetch(url: str) -> bytes:
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, context=SSL_CTX, timeout=180) as resp:
         body = resp.read()
     # Stop rather than work around a Cloudflare bot check
     if b"challenge-platform" in body or b"Just a moment" in body:
-        raise SystemExit(f"Blocked by a bot check at {url}; retry later or fetch by hand.")
+        raise Blocked(f"bot check at {url}")
     return body
 
 
@@ -86,9 +95,10 @@ def target_names() -> dict[str, str]:
     return names
 
 
-def load_moj(refresh: bool) -> dict[str, dict]:
-    """Normalized law name -> MOJ law record (法律 wins over 命令 on clashes)."""
-    laws = {}
+def load_moj(refresh: bool) -> tuple[dict[str, dict], str]:
+    """Normalized law name -> MOJ law record (法律 wins over 命令 on clashes),
+    plus the MOJ data's own update date."""
+    laws, updated = {}, ""
     for key, url in MOJ_URLS.items():
         path = os.path.join(BASE_DIR, f"{key}.json")
         if refresh or not os.path.exists(path):
@@ -102,9 +112,10 @@ def load_moj(refresh: bool) -> dict[str, dict]:
             with open(path, encoding="utf-8") as f:
                 data = json.load(f)
         print(f" {key}: {len(data['Laws'])} laws, updated {data.get('UpdateDate')}")
+        updated = updated or str(data.get("UpdateDate", "")).split(" ")[0]  # "2026/6/12 上午 …"
         for law in data["Laws"]:
             laws.setdefault(normalize_text(law["LawName"]), law)
-    return laws
+    return laws, updated
 
 
 def moj_articles(law: dict) -> list[dict]:
@@ -116,9 +127,9 @@ def moj_articles(law: dict) -> list[dict]:
     ]
 
 
-def dgbas_index(refresh: bool) -> dict[str, str]:
+def dgbas_index(recrawl: bool) -> dict[str, str]:
     """Normalized law name -> DGBAS id, crawled from the 歲計/會計 category tree."""
-    if not refresh and os.path.exists(DGBAS_INDEX):
+    if not recrawl and os.path.exists(DGBAS_INDEX):
         with open(DGBAS_INDEX, encoding="utf-8") as f:
             return json.load(f)
 
@@ -171,15 +182,15 @@ def dgbas_articles(law_id: str) -> list[dict]:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--refresh", action="store_true",
-                        help="re-download MOJ data and re-crawl the DGBAS index")
+    parser.add_argument("--refresh", action="store_true", help="re-download MOJ data")
+    parser.add_argument("--recrawl", action="store_true", help="rebuild the DGBAS name -> id index")
     args = parser.parse_args()
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     targets = target_names()
-    moj = load_moj(args.refresh)
-    dgbas = None  # crawled only if some target is missing from MOJ
-    counts, missing, written = {"moj": 0, "dgbas": 0}, [], set()
+    moj, moj_updated = load_moj(args.refresh)
+    dgbas = None  # loaded only if some target is missing from MOJ
+    counts, missing, written, kept = {"moj": 0, "dgbas": 0}, [], set(), []
 
     done_codes = set()
     for name in sorted(targets):
@@ -188,12 +199,23 @@ def main():
         if name in moj:
             law_name, source, articles = moj[name]["LawName"], "moj", moj_articles(moj[name])
         else:
-            dgbas = dgbas if dgbas is not None else dgbas_index(args.refresh)
+            dgbas = dgbas if dgbas is not None else dgbas_index(args.recrawl)
             if name not in dgbas:
                 missing.append(name)
                 continue
-            law_name, source, articles = name, "dgbas", dgbas_articles(dgbas[name])
-            time.sleep(DELAY)
+            try:
+                law_name, source, articles = name, "dgbas", dgbas_articles(dgbas[name])
+            except (OSError, Blocked) as e:  # URLError is an OSError
+                # Keep last run's text rather than dropping the law
+                if os.path.exists(os.path.join(OUTPUT_DIR, f"{name}.json")):
+                    written.add(f"{name}.json")
+                    done_codes.add(targets[name])
+                    kept.append(f"{name} ({e})")
+                else:
+                    missing.append(f"{name} (抓取失敗：{e})")
+                continue
+            finally:
+                time.sleep(DELAY)
             if not any(a["num"] for a in articles):
                 missing.append(f"{name} (DGBAS 無條文，可能只有附件)")
                 continue
@@ -211,6 +233,16 @@ def main():
     print(f"\nMOJ: {counts['moj']}, DGBAS: {counts['dgbas']}, not found: {len(missing)}")
     for name in missing:
         print(f"  ✗ {name}")
+    if kept:
+        print(f"\n{len(kept)} DGBAS law(s) could not be fetched; kept the previous text:")
+        for name in kept:
+            print(f"  ! {name}")
+            if os.environ.get("GITHUB_ACTIONS"):
+                print(f"::warning title=DGBAS 抓取失敗，沿用舊條文::{name}")
+
+    with open(META, "w", encoding="utf-8") as f:
+        json.dump({"moj_updated": moj_updated, "fetched": time.strftime("%Y-%m-%d")},
+                  f, ensure_ascii=False, indent=2)
 
     # Left over from an earlier run (e.g. last year's 編製辦法); graph_builder
     # would still load them, so say so instead of deleting silently

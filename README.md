@@ -124,10 +124,12 @@ for edge in edges:
 
 ```bash
 python3 src/fetch_laws.py            # 用本機快取的法務部資料（chlaw.json / chorder.json）
-python3 src/fetch_laws.py --refresh  # 重新下載法務部資料、重爬主計總處索引
+python3 src/fetch_laws.py --refresh  # 重新下載法務部資料
+python3 src/fetch_laws.py --recrawl  # 另外重建主計總處的法規索引（有新行政規則時）
 python3 src/graph_builder.py         # 重建 data/ 與 web/ 的 laws_graph.json
 ```
 
+- 主計總處的行政規則每次都重抓；某一部抓不到（網路、機器人驗證）就沿用上次的條文，不會清掉資料。
 - 先從法務部全國法規資料庫（法律、命令）找，找不到的行政規則（要點、注意事項…）再到主計總處主管法規共用系統（law.dgbas.gov.tw）的歲計、會計分類抓，每次請求間隔 1 秒。
 - `config/law_aliases.yaml` 的 `external` 清單裡的法規只當被引用對象，不抓全文。
 - 行政規則以「點」編號，存成 `第 N 點`；「第X點」的引用和「第X條」一樣解析（前面沒緊接法規名稱時，指向本文件）。
