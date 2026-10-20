@@ -29,8 +29,10 @@ jobs:
           python-version: "3.12"
       - run: pip install pyyaml pytest
 
-      - name: Fetch laws (法務部 + 主計總處)
-        run: python src/fetch_laws.py --refresh
+      # 法務部 only: law.dgbas.gov.tw answers GitHub's servers with 403, so the
+      # 行政規則 are refreshed from a Mac by update_local.sh
+      - name: Fetch laws (法務部)
+        run: python src/fetch_laws.py --refresh --moj-only
       - name: Build graph
         run: python src/graph_builder.py
       - name: Test

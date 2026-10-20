@@ -40,11 +40,19 @@ LawsGraphify/
 
 [`.github/workflows/update.yml`](.github/workflows/update.yml)：
 
-- **每週一 02:00（台灣時間）**：重新下載法務部資料、重抓主計總處行政規則 → 重建圖譜 → 跑測試 →
+- **每週一 02:00（台灣時間）**：重新下載法務部資料 → 重建圖譜 → 跑測試 →
   **只有條文真的變動才 commit** → 部署到 GitHub Pages。測試沒過就不部署。
+- **主計總處的行政規則由本機更新**：law.dgbas.gov.tw 會以 403 擋掉 GitHub 的主機，所以改由一台 Mac
+  每週一 10:00 執行 [`update_local.sh`](update_local.sh)（launchd 排程；錯過時間會在喚醒後補跑）：
+  抓兩個來源、重建、測試，條文有變才推送，推送後由 Actions 部署。專案有未提交的修改時會跳過，
+  失敗時跳出 macOS 通知，紀錄在 `~/Library/Logs/lawsgraphify-update.log`。
+
+  ```bash
+  ./update_local.sh --install    # 安裝每週排程（--uninstall 移除；不帶參數＝立即跑一次）
+  ```
 - **push 到 main**：直接部署 `web/`。
 - 也可以在 GitHub 的 Actions 頁籤按「Run workflow」立即更新。
-- 主計總處某部抓不到時沿用舊條文，並在執行結果顯示黃色警告；排程失敗時 GitHub 會寄信通知。
+- 主計總處某部抓不到時沿用舊條文並顯示警告；GitHub 排程失敗時會寄信通知。
 
 **每年要人工處理的一件事**：新年度的編製辦法、要點發布後，改 `config/law_aliases.yaml` 裡帶年度的那幾行
 （名稱與代碼），commit 後排程會抓新版；`fetch_laws.py` 會列出不再需要的舊年度檔案，移除即可。

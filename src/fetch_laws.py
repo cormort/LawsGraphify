@@ -9,6 +9,7 @@ Usage:
   python3 src/fetch_laws.py            # reuse cached MOJ data
   python3 src/fetch_laws.py --refresh  # re-download MOJ data (what the weekly Action runs)
   python3 src/fetch_laws.py --recrawl  # also rebuild the DGBAS name -> id index
+  python3 src/fetch_laws.py --refresh --moj-only  # GitHub Action: DGBAS blocks its servers
 
 DGBAS rule pages are fetched on every run. If one fails (network, bot check),
 its previous file is kept and the run carries on, so a flaky site never wipes data.
@@ -184,6 +185,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--refresh", action="store_true", help="re-download MOJ data")
     parser.add_argument("--recrawl", action="store_true", help="rebuild the DGBAS name -> id index")
+    parser.add_argument("--moj-only", action="store_true",
+                        help="leave DGBAS files as they are (update_local.sh refreshes them)")
     args = parser.parse_args()
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -198,6 +201,11 @@ def main():
             continue  # another alias of a law already written (憲法 -> 中華民國憲法)
         if name in moj:
             law_name, source, articles = moj[name]["LawName"], "moj", moj_articles(moj[name])
+        elif args.moj_only:
+            if os.path.exists(os.path.join(OUTPUT_DIR, f"{name}.json")):
+                written.add(f"{name}.json")
+                done_codes.add(targets[name])
+            continue
         else:
             dgbas = dgbas if dgbas is not None else dgbas_index(args.recrawl)
             if name not in dgbas:
