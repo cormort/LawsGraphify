@@ -64,6 +64,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main   # include the commit the update job may have just pushed
+      # Nothing is deployed unless every test passes, the browser tests of the
+      # query page (tests/test_web.py) included
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml pytest playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Test
+        run: python -m pytest -q
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
