@@ -17,13 +17,15 @@ from citation_resolver import extract_short_names, parse_citations, load_aliases
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-KIND_ORDER = ["憲法與法律", "命令", "行政規則"]
+KIND_ORDER = ["憲法與法律", "命令", "特種基金", "行政規則"]
 
 
 def law_kind(name, source):
     """Rough 法律 / 命令 / 行政規則 split for the home page grouping."""
     if source == "dgbas":
         return "行政規則"
+    if name.endswith("收支保管及運用辦法"):
+        return "特種基金"
     if name.endswith(("憲法", "條例", "通則")) or (name.endswith("法") and not name.endswith("辦法")):
         return "憲法與法律"
     return "命令"

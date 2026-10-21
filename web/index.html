@@ -537,7 +537,7 @@ function renderHome() {
     html += `<h3>法規（${laws.length} 部）</h3>`;
     html += kinds.map(kind => {
         const group = laws.filter(l => l.kind === kind);
-        return `<details class="card" open><summary>${escapeHtml(kind)}（${group.length}）</summary>
+        return `<details class="card"${group.length > 50 ? "" : " open"}><summary>${escapeHtml(kind)}（${group.length}）</summary>
             <div class="list">${group.map(l => `<a href="#${encodeURIComponent(l.code)}">
                 <span>${escapeHtml(l.name)}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div></details>`;
     }).join("");
