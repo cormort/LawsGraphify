@@ -580,6 +580,38 @@
    "hash": "5415e90797c7"
   }
  ],
+ "links": [
+  {
+   "code": "FRTT",
+   "name": "中央各機關(含事業機構)派赴國外進修、研究、實習人員補助項目及數額表",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL020312"
+  },
+  {
+   "code": "FOLIET",
+   "name": "中央政府各機關派赴國外各地區出差人員生活費日支數額表",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL028084"
+  },
+  {
+   "code": "CHLIET",
+   "name": "中央政府各機關派赴大陸地區、香港及澳門出差人員生活費日支數額表",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000696"
+  },
+  {
+   "code": "OEDTL",
+   "name": "原始憑證留存代辦、受委託機關(構)、學校或民間團體明細表",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000827"
+  },
+  {
+   "code": "EWRT",
+   "name": "各機關員工待遇給與相關事項預算執行之權責分工表",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032659"
+  },
+  {
+   "code": "ZBPM",
+   "name": "落實零基預算精神強化預算編製作業精進措施",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000864"
+  }
+ ],
  "built": "2026-10-21",
  "moj_updated": "2026/10/8"
 }

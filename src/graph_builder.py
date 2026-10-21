@@ -52,6 +52,23 @@ def write_law_files(graph, out_dir):
         json.dump({**index, "laws": laws}, f, ensure_ascii=False, indent=1)
 
 
+def attachment_only(name_to_code, laws):
+    """Targets DGBAS lists but has no article text for (tables published only as
+    attachments): the query page links to the original page instead."""
+    path = os.path.join(BASE_DIR, "data", "dgbas_index.json")
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as f:
+        dgbas = json.load(f)
+    have = {law["code"] for law in laws}
+    links = {}
+    for name, code in name_to_code.items():
+        if code not in have and name in dgbas:
+            links.setdefault(code, {"code": code, "name": name,
+                                    "url": f"https://law.dgbas.gov.tw/LawContent.aspx?id={dgbas[name]}"})
+    return sorted(links.values(), key=lambda link: link["name"])
+
+
 def load_meta():
     path = os.path.join(BASE_DIR, "data", "meta.json")
     if not os.path.exists(path):
@@ -189,6 +206,7 @@ def build_graph():
         # name -> code, so the query page understands 憲法 / 政府採購法 etc.
         "aliases": name_to_code,
         "laws": sorted(laws, key=lambda law: (KIND_ORDER.index(law["kind"]), law["name"])),
+        "links": attachment_only(name_to_code, laws),
         "built": date.today().isoformat(),
         # MOJ open data's own date, written by fetch_laws.py
         **load_meta(),
