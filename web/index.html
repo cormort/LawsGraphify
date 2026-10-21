@@ -102,6 +102,14 @@ a.cite.focus { background: var(--mark); border-radius: 3px; text-decoration: non
 .list a { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); text-decoration: none; color: var(--text); }
 .list > :first-child { border-top: 0; padding-top: 0; }
 .list .count { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
+.fav-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 24px 0 8px; }
+.fav-head h3 { margin: 0; }
+.fav-head .tools .tool { min-height: 30px; font-size: 13px; }
+.fav-group { padding: 10px 0; border-top: 1px solid var(--border); }
+.fav-group:first-child { border-top: 0; padding-top: 0; }
+.fav-group > a { font-weight: 600; text-decoration: none; }
+.fav-group .badges { margin-top: 6px; }
+.fav-group .badge { font-size: 0.85em; padding: 4px 10px; }
 details > summary { cursor: pointer; list-style: none; font-weight: 600; padding: 4px 0; }
 details > summary::-webkit-details-marker { display: none; }
 details > summary::before { content: "▸ "; color: var(--muted); }
@@ -282,8 +290,9 @@ function linkify(node, focusId) {
     return html + escapeHtml(text.slice(pos));
 }
 
-function starButton(id) {
-    const on = store.get("favs", []).includes(id);
+// List views pass favs in, so a long law reads storage once
+function starButton(id, favs = store.get("favs", [])) {
+    const on = favs.includes(id);
     return `<button class="star" type="button" data-fav="${escapeHtml(id)}" aria-pressed="${on}"
         aria-label="${on ? "取消收藏" : "加入收藏"}">${on ? "★" : "☆"}</button>`;
 }
@@ -313,12 +322,50 @@ function rememberRecent(id) {
 
 // --- Views ---
 
+function known(id) { return nodes.has(id) || lawOrder.has(id); }
+
+// Favourites grouped by law: laws in the order first starred, articles in article order
+function renderFavs(favs) {
+    const groups = new Map();
+    for (const id of favs) {
+        const code = /-\d{4}/.test(id) ? codeOf(id) : id;
+        if (!groups.has(code)) groups.set(code, []);
+        if (id !== code) groups.get(code).push(id);
+    }
+    return `<div class="card">${[...groups].map(([code, ids]) => `<div class="fav-group">${link(code, lawName(code))}
+        ${ids.length ? `<div class="badges">${ids.sort().map(id =>
+            `<a class="badge" href="#${encodeURIComponent(id)}">${escapeHtml(articleLabel(id))}</a>`).join("")}</div>` : ""}</div>`).join("")}</div>`;
+}
+
+// Favourites live only in this browser (Safari may clear them), so they can be copied out and pasted back
+async function exportFavs() {
+    const text = store.get("favs", []).join(" ");
+    try {
+        await navigator.clipboard.writeText(text);
+        alert("已複製收藏，可貼到備忘錄保存；換手機或資料被清除時，用「匯入」貼回來。");
+    } catch {
+        prompt("複製下面這段文字保存，換手機或資料被清除時，用「匯入」貼回來：", text);
+    }
+}
+
+function importFavs() {
+    const text = prompt("貼上之前匯出的收藏：");
+    if (!text) return;
+    const favs = store.get("favs", []);
+    const added = [...new Set(text.normalize("NFKC").trim().split(/[\s,]+/))].filter(id => known(id) && !favs.includes(id));
+    store.set("favs", [...favs, ...added]);
+    alert(`匯入 ${added.length} 筆收藏。`);
+    runFromHash();
+}
+
 function renderHome() {
-    const known = id => nodes.has(id) || lawOrder.has(id);
     const favs = store.get("favs", []).filter(known);
     const recents = store.get("recents", []).filter(known);
     let html = `<p class="muted">點法規看全文，條文中的引用可以點擊跳轉。也可以輸入條號（預算法第62條）或關鍵字（預算法 流用）。</p>`;
-    if (favs.length) html += `<h3>★ 收藏</h3><div class="card list">${favs.map(id => link(id)).join("")}</div>`;
+    html += `<div class="fav-head"><h3>★ 收藏</h3><div class="tools">
+        ${favs.length ? `<button class="tool" type="button" data-fav-io="export">匯出</button>` : ""}
+        <button class="tool" type="button" data-fav-io="import">匯入</button></div></div>`;
+    html += favs.length ? renderFavs(favs) : `<p class="empty">點法規或條文旁的 ☆ 加入收藏。</p>`;
     if (recents.length) html += `<h3>最近查看</h3><div class="card list">${recents.map(id => link(id)).join("")}</div>`;
     const kinds = [...new Set(laws.map(l => l.kind))];
     html += `<h3>法規（${laws.length} 部）</h3>`;
@@ -354,7 +401,7 @@ function renderArticle(q) {
         html += `<p class="muted">這部法規沒有收錄全文，只列出引用它的條文。</p>`;
     }
 
-    const bySource = groupBySource(incoming.get(id) || []);
+    const bySource = groupBySource(incoming.get(id) || []), favs = store.get("favs", []);
     html += `</div><h3>被 ${bySource.length} 條條文引用</h3>`;
     if (!bySource.length) return html + `<p class="empty">沒有其他條文引用這一條。</p>`;
     // Other laws first, then the same law; each in article order
@@ -362,7 +409,7 @@ function renderArticle(q) {
     bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
     return html + bySource.map(group => {
         const src = nodes.get(group[0].source);
-        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${starButton(src.id)}</div></div>
+        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${starButton(src.id, favs)}</div></div>
             <p class="text">${linkify(src, id)}</p></div>`;
     }).join("");
 }
@@ -372,6 +419,7 @@ function renderFullText(code) {
     const ids = lawOrder.get(code);
     const cited = ids.filter(id => citerCount(id)).length;
     const chapters = ids.filter(id => nodes.get(id).chapter);
+    const favs = store.get("favs", []);
     rememberRecent(code);
 
     let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2>${starButton(code)}</div>
@@ -390,7 +438,7 @@ function renderFullText(code) {
         const chapter = node.chapter ? `<div class="chapter" id="ch-${escapeHtml(id)}">${escapeHtml(node.chapter)}</div>` : "";
         return `${chapter}<article class="law-article${n ? " is-cited" : ""}" id="a-${escapeHtml(id)}">
             <div class="hit-head">${link(id, node.article_zh)}<div class="badges">
-                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${starButton(id)}</div></div>
+                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${starButton(id, favs)}</div></div>
             <p class="text">${linkify(node)}</p></article>`;
     }).join("");
     return html + `</div>`;
@@ -413,11 +461,12 @@ function renderSearch(q) {
         const t = nodes.get(id).norm;
         return q.include.every(w => t.includes(w)) && !q.exclude.some(w => t.includes(w));
     });
+    const favs = store.get("favs", []);
     const where = q.code ? `《${lawName(q.code)}》` : "全部法規";
     let html = `<h3>在${escapeHtml(where)}中找到 ${hits.length} 條「${escapeHtml(q.include.join(" "))}」${q.exclude.length ? `（排除 ${escapeHtml(q.exclude.join("、"))}）` : ""}</h3>`;
     if (!hits.length) return html + `<p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
     html += hits.slice(0, MAX_RESULTS).map(id =>
-        `<div class="card"><div class="hit-head">${link(id)}${starButton(id)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
+        `<div class="card"><div class="hit-head">${link(id)}${starButton(id, favs)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
     ).join("");
     if (hits.length > MAX_RESULTS) html += `<p class="muted">只顯示前 ${MAX_RESULTS} 條，請加關鍵字縮小範圍。</p>`;
     return html;
@@ -572,6 +621,8 @@ document.addEventListener("click", e => {
         store.set("favs", favs.includes(id) ? favs.filter(x => x !== id) : [id, ...favs]);
         fav.outerHTML = starButton(id);
     }
+    const favIo = e.target.closest("[data-fav-io]");
+    if (favIo) favIo.dataset.favIo === "export" ? exportFavs() : importFavs();
     const scroll = e.target.closest("[data-scroll]");
     if (scroll) document.getElementById(scroll.dataset.scroll)?.scrollIntoView();  // instant: laws are long
     const font = e.target.closest("[data-font]");
