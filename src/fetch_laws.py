@@ -82,6 +82,30 @@ def article_nums(article_no: str) -> tuple[int, int | None]:
     return 0, None
 
 
+YEAR = "○"  # in a target name: the 年度, filled in with the latest one published
+
+
+def resolve_years(targets: dict[str, str], names) -> list[str]:
+    """Replaces each code's "○" names in targets with the published name of the
+    latest year among them ("中華民國○年度總決算編製要點" -> "…一百十四年度…").
+    Returns the templates that matched nothing."""
+    templates = {}
+    for name in [n for n in targets if YEAR in n]:
+        templates.setdefault(targets.pop(name), []).append(name)
+    unmatched = []
+    for code, names_of_code in templates.items():
+        found = []
+        for template in names_of_code:
+            head, _, tail = template.partition(YEAR)
+            pat = re.compile(re.escape(head) + r"([零一二三四五六七八九十百]+|\d+)" + re.escape(tail) + "$")
+            found += [(chinese_to_arabic(m.group(1)), n) for n in names if (m := pat.match(n))]
+        if found:
+            targets[max(found)[1]] = code
+        else:
+            unmatched += names_of_code
+    return unmatched
+
+
 def target_names() -> dict[str, str]:
     """Normalized law name -> code, for every alias not marked external."""
     with open(os.path.join(BASE_DIR, "config", "law_aliases.yaml"), encoding="utf-8") as f:
@@ -194,6 +218,9 @@ def main():
     moj, moj_updated = load_moj(args.refresh)
     dgbas = None  # loaded only if some target is missing from MOJ
     counts, missing, written, kept = {"moj": 0, "dgbas": 0}, [], set(), []
+    if any(YEAR in name for name in targets):
+        dgbas = dgbas_index(args.recrawl)
+        missing += resolve_years(targets, [*moj, *dgbas])
 
     done_codes = set()
     for name in sorted(targets):
@@ -229,7 +256,7 @@ def main():
                 continue
 
         with open(os.path.join(OUTPUT_DIR, f"{law_name}.json"), "w", encoding="utf-8") as f:
-            json.dump({"name": law_name, "source": source, "content": articles},
+            json.dump({"name": law_name, "code": targets[name], "source": source, "content": articles},
                       f, ensure_ascii=False, indent=2)
         counts[source] += 1
         written.add(f"{law_name}.json")
@@ -237,7 +264,7 @@ def main():
         print(f" -> [{source}] {law_name} ({len(articles)} articles)")
 
     # Drop names whose law was written under another alias
-    missing = [n for n in missing if targets[n.split(" (")[0]] not in done_codes]
+    missing = [n for n in missing if targets.get(n.split(" (")[0]) not in done_codes]
     print(f"\nMOJ: {counts['moj']}, DGBAS: {counts['dgbas']}, not found: {len(missing)}")
     for name in missing:
         print(f"  ✗ {name}")
@@ -252,9 +279,17 @@ def main():
         json.dump({"moj_updated": moj_updated, "fetched": time.strftime("%Y-%m-%d")},
                   f, ensure_ascii=False, indent=2)
 
-    # Left over from an earlier run (e.g. last year's 編製辦法); graph_builder
-    # would still load them, so say so instead of deleting silently
+    # Left over from an earlier run. Last year's version of a law written this run
+    # (same code) is replaced; anything else graph_builder would still load, so
+    # say so instead of deleting silently
     stale = sorted(set(os.listdir(OUTPUT_DIR)) - written)
+    for name in list(stale):
+        with open(os.path.join(OUTPUT_DIR, name), encoding="utf-8") as f:
+            code = json.load(f).get("code")
+        if code in done_codes:
+            os.remove(os.path.join(OUTPUT_DIR, name))
+            stale.remove(name)
+            print(f"  - {name} (superseded by a newer year)")
     if stale:
         print(f"\n{len(stale)} file(s) in {OUTPUT_DIR} are no longer targets; move or delete them:")
         for name in stale:

@@ -18427,6 +18427,7 @@
     "中央政府總預算案未能依限完成時預算執行之補充規定": "TBSCR",
     "中央政府總預算附屬單位預算準用預算法第54條補充規定": "TBSUB54",
     "TBSUB54": "TBSUB54",
+    "修正中央政府總預算附屬單位預算及其分預算準用預算法第54條中「新興資本支出」、「新增計畫」、「已獲授權之原訂計畫」及「上年度執行數」之定義,自112年1月1日起適用": "TBSUB54",
     "財團法人依法預算須送立法院之預算編製注意事項": "FPLE",
     "FPLE": "FPLE",
     "財團法人預算未獲立法院審議通過時之執行注意事項": "FPLR",
@@ -18437,10 +18438,10 @@
     "TBPE": "TBPE",
     "行政法人依法預算須送立法院之預算編製注意事項": "SPELE",
     "SPELE": "SPELE",
-    "中華民國一百十六年度中央政府總預算編製辦法": "FY2027GBPP",
-    "FY2027GBPP": "FY2027GBPP",
-    "中華民國一百十六年度中央政府總預算附屬單位預算編製辦法": "FY2027GSUBPP",
-    "FY2027GSUBPP": "FY2027GSUBPP",
+    "國營事業長期計畫與年度預算配合作業實施要點": "SOLTP",
+    "SOLTP": "SOLTP",
+    "各類事業費率、受益費及規費編列年度預算處理原則": "FEEBP",
+    "FEEBP": "FEEBP",
     "中央政府特種基金管理準則": "CSMF",
     "CSMF": "CSMF",
     "中央各機關對地方政府補助款之撥款原則": "CAGDAP",
@@ -18459,13 +18460,6 @@
     "ZBPM": "ZBPM",
     "中央政府總預算附屬單位預算半年結算報告編製要點": "FY2026GSUBHYR",
     "FY2026GSUBHYR": "FY2026GSUBHYR",
-    "中華民國一百十四年度總決算編製要點": "FY2025SET",
-    "FY2025SET": "FY2025SET",
-    "中華民國一百十四年度總決算附屬單位決算編製要點": "FY2025SUBSET",
-    "FY2025SUBSET": "FY2025SUBSET",
-    "中華民國一百十五年度總預算半年結算報告編製要點": "FY2026GHYR",
-    "FY2026GHYR": "FY2026GHYR",
-    "中華民國一百十五年度總預算附屬單位預算半年結算報告編製要點": "FY2026GSUBHYR",
     "中央政府總決算審核報告案審查程序": "CSEAP",
     "CSEAP": "CSEAP",
     "財團法人依法決算須送立法院或監察院之決算編製注意事項": "FDL",
@@ -18476,10 +18470,6 @@
     "SPEL": "SPEL",
     "中央對直轄市與縣(市)政府計畫及預算考核要點": "CACGP",
     "CACGP": "CACGP",
-    "中華民國一百十六年度直轄市及縣(市)總預算編製要點": "FY2027LCGBPP",
-    "FY2027LCGBPP": "FY2027LCGBPP",
-    "中華民國一百十六年度直轄市及縣(市)總預算附屬單位預算編製要點": "FY2027LCGSUBPP",
-    "FY2027LCGSUBPP": "FY2027LCGSUBPP",
     "行政院組織改造期間經費處理原則": "AORGP",
     "AORGP": "AORGP",
     "國內出差旅費報支要點": "DTRP",
@@ -18545,7 +18535,22 @@
     "政府內部控制監督作業要點": "GICS",
     "GICS": "GICS",
     "政府內部控制聲明書簽署作業要點": "GICSD",
-    "GICSD": "GICSD"
+    "GICSD": "GICSD",
+    "中華民國一百十六年度直轄市及縣(市)總預算編製要點": "FY2027LCGBPP",
+    "FY2027LCGBPP": "FY2027LCGBPP",
+    "中華民國一百十六年度中央政府總預算編製辦法": "FY2027GBPP",
+    "FY2027GBPP": "FY2027GBPP",
+    "中華民國一百十五年度總預算半年結算報告編製要點": "FY2026GHYR",
+    "FY2026GHYR": "FY2026GHYR",
+    "中華民國一百十四年度總決算編製要點": "FY2025SET",
+    "FY2025SET": "FY2025SET",
+    "中華民國一百十五年度總預算附屬單位預算半年結算報告編製要點": "FY2026GSUBHYR",
+    "中華民國一百十四年度總決算附屬單位決算編製要點": "FY2025SUBSET",
+    "FY2025SUBSET": "FY2025SUBSET",
+    "中華民國一百十六年度直轄市及縣(市)總預算附屬單位預算編製要點": "FY2027LCGSUBPP",
+    "FY2027LCGSUBPP": "FY2027LCGSUBPP",
+    "中華民國一百十六年度中央政府總預算附屬單位預算編製辦法": "FY2027GSUBPP",
+    "FY2027GSUBPP": "FY2027GSUBPP"
   },
   "laws": [
     {
@@ -18914,6 +18919,11 @@
       "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000696"
     },
     {
+      "code": "TBSUB54",
+      "name": "修正中央政府總預算附屬單位預算及其分預算準用預算法第54條中「新興資本支出」、「新增計畫」、「已獲授權之原訂計畫」及「上年度執行數」之定義,自112年1月1日起適用",
+      "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001021"
+    },
+    {
       "code": "OEDTL",
       "name": "原始憑證留存代辦、受委託機關(構)、學校或民間團體明細表",
       "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000827"
@@ -18922,6 +18932,16 @@
       "code": "EWRT",
       "name": "各機關員工待遇給與相關事項預算執行之權責分工表",
       "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032659"
+    },
+    {
+      "code": "FEEBP",
+      "name": "各類事業費率、受益費及規費編列年度預算處理原則",
+      "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000552"
+    },
+    {
+      "code": "SOLTP",
+      "name": "國營事業長期計畫與年度預算配合作業實施要點",
+      "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL041662"
     },
     {
       "code": "ZBPM",

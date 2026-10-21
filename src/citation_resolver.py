@@ -112,6 +112,8 @@ def load_aliases() -> dict[str, str]:
             
             aliases_data = data["aliases"]
             for key, val in aliases_data.items():
+                if "○" in key:
+                    continue  # 年度 template; graph_builder adds the year's real name
                 if isinstance(val, str):
                     # Direct mapping: Name -> Code (e.g., 憲法: CONST)
                     _aliases_map[normalize_text(key)] = val

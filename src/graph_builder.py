@@ -101,6 +101,16 @@ def build_graph():
         print(f"Directory {laws_dir} does not exist. Please run the download script first.")
         return
 
+    # Files name their code; register each real name (this year's 編製辦法 is
+    # configured as "中華民國○年度…") so citations of it resolve
+    for filename in os.listdir(laws_dir):
+        if filename.endswith(".json"):
+            with open(os.path.join(laws_dir, filename), encoding="utf-8") as f:
+                law_data = json.load(f)
+            if law_data.get("code"):
+                name_to_code[normalize_text(law_data["name"])] = law_data["code"]
+                name_to_code[law_data["code"]] = law_data["code"]
+
     nodes = []
     edges = []
     laws = []
@@ -118,7 +128,7 @@ def build_graph():
                 law_data = json.load(f)
 
             law_name = law_data.get("name", "")
-            law_code = name_to_code.get(normalize_text(law_name))
+            law_code = law_data.get("code") or name_to_code.get(normalize_text(law_name))
 
             if not law_code:
                 # Fall back to the name itself so unmapped laws never collide

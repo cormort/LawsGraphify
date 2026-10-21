@@ -81,12 +81,16 @@ fi
 
 git pull -q --ff-only
 OUT="$(mktemp)"
-python3 src/fetch_laws.py --refresh 2>&1 | tee "$OUT"
+# The first run of a month also re-crawls DGBAS's name index, so a new 年度
+# version of a "○年度" target gets found
+RECRAWL=""
+if (( 10#$(date +%d) <= 7 )); then RECRAWL="--recrawl"; fi
+python3 src/fetch_laws.py --refresh $RECRAWL 2>&1 | tee "$OUT"
 if grep -q "could not be fetched" "$OUT"; then
     notify "⚠️ 主計總處有 $(grep -c '^  ! ' "$OUT") 部抓取失敗，沿用舊條文：$(grep '^  ! ' "$OUT" | head -3 | sed 's/^  ! //' | paste -sd '；' -)"
 fi
 if grep -q "no longer targets" "$OUT"; then
-    notify "⚠️ data/laws_json 有不再使用的舊檔（多半是換年度），請移除：$(grep '^  ? ' "$OUT" | sed 's/^  ? //' | paste -sd '、' -)"
+    notify "⚠️ data/laws_json 有不再使用的舊檔，請確認後移除：$(grep '^  ? ' "$OUT" | sed 's/^  ? //' | paste -sd '、' -)"
 fi
 rm -f "$OUT"
 python3 src/graph_builder.py
