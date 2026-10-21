@@ -132,6 +132,10 @@ details.card[open] > summary { margin-bottom: 8px; }
 .chapter { margin: 18px 0 4px; font-weight: 700; color: var(--accent); scroll-margin-top: 140px; }
 .chapter:first-child { margin-top: 0; }
 #full-text.only-cited .law-article:not(.is-cited), #full-text.only-cited .chapter { display: none; }
+#full-text.only-own .law-article:not(.is-own), #full-text.only-own .chapter { display: none; }
+.badge.own { background: var(--warn-soft); color: var(--warn); }
+.fund-facts { margin-top: 10px; }
+.fund-facts p { margin: 4px 0; }
 .controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-top: 10px; font-size: 0.9em; }
 .jump { display: flex; align-items: center; gap: 6px; margin: 0; }
 .jump input { width: 4.5em; font-size: 16px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); }
@@ -658,9 +662,10 @@ function similarity(a, b) {
     for (const p of a) if (b.has(p)) shared++;
     return shared / (a.size + b.size - shared || 1);
 }
-function renderSimilar(node, favs) {
+// Each other fund's closest article, best first
+function closest(node, funds = fundCodes()) {
     const mine = pairs(node);
-    const best = [...fundCodes()].filter(code => code !== node.law_code).map(code => {
+    return [...funds].filter(code => code !== node.law_code).map(code => {
         let top = { score: 0 };
         for (const id of lawOrder.get(code) || []) {
             const score = similarity(mine, pairs(nodes.get(id)));
@@ -668,6 +673,10 @@ function renderSimilar(node, favs) {
         }
         return top;
     }).filter(t => t.id).sort((a, b) => b.score - a.score);
+}
+
+function renderSimilar(node, favs) {
+    const best = closest(node);
     const same = best.filter(t => t.score >= SAME).length;
     const summary = same ? `另有 ${same} 個基金有相同規定（相似度 90% 以上）`
         : best[0]?.score >= OWN ? "其他基金有類似但不相同的規定" : "本基金特有：其他基金沒有相似度 50% 以上的規定";
@@ -676,9 +685,40 @@ function renderSimilar(node, favs) {
             <div class="text">${formatText(nodes.get(t.id))}</div></div>`).join("");
 }
 
+// A fund regulation's usual parts, for the jump buttons (article 1, the purpose, is skipped)
+const FUND_PARTS = [["來源", /來源/], ["用途", /用途/], ["保管", /存儲|保管及運用應/], ["管理會", /管理會/],
+    ["預算決算", /預算之?編製|決算/], ["會計", /會計(事務|制度)/], ["賸餘", /賸餘|短絀/], ["結束", /結束|裁撤/]];
+
+// For a fund law: 主管機關, jump buttons, and each article's standing among the funds
+function fundOverview(code, ids) {
+    const funds = fundCodes();
+    if (!funds.has(code)) return null;
+    const text = ids.map(id => nodes.get(id).text).join("");
+    const authority = text.match(/以([^，。、；（]{2,25}?)(?:（[^）]*）)?為主管機關/)?.[1];
+    const jumps = FUND_PARTS.map(([name, pat]) => [name, ids.slice(1).find(id => pat.test(nodes.get(id).text))]).filter(j => j[1]);
+    const standing = new Map(ids.map(id => {
+        const best = closest(nodes.get(id), funds);
+        return [id, { same: best.filter(t => t.score >= SAME).length, own: !(best[0]?.score >= OWN) }];
+    }));
+    const own = ids.filter(id => standing.get(id).own).length;
+    const html = `<div class="fund-facts">
+        ${authority ? `<p>主管機關：${escapeHtml(authority)}</p>` : ""}
+        <p class="muted">${own} ${unit(code)}為本基金特有，其餘與其他基金相同或類似。</p>
+        ${jumps.length ? `<div class="chips">${jumps.map(([name, id]) => `<button class="tool" type="button" data-scroll="a-${escapeHtml(id)}">${name}</button>`).join("")}</div>` : ""}</div>`;
+    return { html, standing };
+}
+
+function standingBadge(id, s) {
+    if (!s) return "";
+    const href = `#${encodeURIComponent(id)}`;
+    return s.own ? `<a class="badge own" href="${href}">本基金特有</a>`
+        : s.same ? `<a class="badge" href="${href}">與 ${s.same} 個基金相同</a>` : "";
+}
+
 // Whole law: table of contents, jump box, full text with live citations
 function renderFullText(code) {
     const ids = lawOrder.get(code);
+    const fund = fundOverview(code, ids);
     const cited = ids.filter(id => citerCount(id)).length;
     const chapters = ids.filter(id => nodes.get(id).chapter);
     const favs = store.get("favs", []);
@@ -689,7 +729,8 @@ function renderFullText(code) {
         <div class="controls">
             <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)}</form>
             <label><input type="checkbox" id="only-cited"> 只看被引用的</label>
-        </div>`;
+            ${fund ? `<label><input type="checkbox" id="only-own"> 只看本基金特有</label>` : ""}
+        </div>${fund ? fund.html : ""}`;
     if (chapters.length) {
         html += `<details class="toc"><summary>目錄（${chapters.length} 章）</summary>
             ${chapters.map(id => `<button type="button" data-scroll="ch-${escapeHtml(id)}">${escapeHtml(nodes.get(id).chapter)}</button>`).join("")}</details>`;
@@ -701,8 +742,9 @@ function renderFullText(code) {
         const node = nodes.get(id), n = citerCount(id);
         const chapter = node.chapter ? `<div class="chapter" id="ch-${escapeHtml(id)}">${escapeHtml(node.chapter)}</div>` : "";
         current = node.chapter || current;
-        return `${chapter}<article class="law-article${n ? " is-cited" : ""}" id="a-${escapeHtml(id)}" data-chapter="${escapeHtml(current)}">
-            <div class="hit-head">${link(id, node.article_zh)}<div class="badges">${amendedBadge(id, changes)}
+        const s = fund?.standing.get(id);
+        return `${chapter}<article class="law-article${n ? " is-cited" : ""}${s?.own ? " is-own" : ""}" id="a-${escapeHtml(id)}" data-chapter="${escapeHtml(current)}">
+            <div class="hit-head">${link(id, node.article_zh)}<div class="badges">${amendedBadge(id, changes)}${standingBadge(id, s)}
                 ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${starButton(id, favs)}</div></div>
             <div class="text">${formatText(node)}</div></article>`;
     }).join("");
@@ -944,8 +986,8 @@ document.addEventListener("click", e => {
 });
 
 document.addEventListener("change", e => {
-    if (e.target.id === "only-cited") {
-        document.getElementById("full-text").classList.toggle("only-cited", e.target.checked);
+    if (e.target.id === "only-cited" || e.target.id === "only-own") {
+        document.getElementById("full-text").classList.toggle(e.target.id, e.target.checked);
         updateScrubber();
     }
 });
