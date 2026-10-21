@@ -87,7 +87,7 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 .star[aria-pressed="true"] { color: #f2b705; }
 .hit-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 .hit-head > a:first-child { font-weight: 600; text-decoration: none; }
-.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 #update-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 16px 0; }
 #update-bar[hidden] { display: none; }
 #update-bar span { flex: 1 1 12em; }
@@ -362,7 +362,7 @@ function renderArticle(q) {
     bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
     return html + bySource.map(group => {
         const src = nodes.get(group[0].source);
-        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}</div></div>
+        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${starButton(src.id)}</div></div>
             <p class="text">${linkify(src, id)}</p></div>`;
     }).join("");
 }
@@ -389,8 +389,8 @@ function renderFullText(code) {
         const node = nodes.get(id), n = citerCount(id);
         const chapter = node.chapter ? `<div class="chapter" id="ch-${escapeHtml(id)}">${escapeHtml(node.chapter)}</div>` : "";
         return `${chapter}<article class="law-article${n ? " is-cited" : ""}" id="a-${escapeHtml(id)}">
-            <div class="hit-head">${link(id, node.article_zh)}
-                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}</div>
+            <div class="hit-head">${link(id, node.article_zh)}<div class="badges">
+                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${starButton(id)}</div></div>
             <p class="text">${linkify(node)}</p></article>`;
     }).join("");
     return html + `</div>`;
@@ -417,7 +417,7 @@ function renderSearch(q) {
     let html = `<h3>在${escapeHtml(where)}中找到 ${hits.length} 條「${escapeHtml(q.include.join(" "))}」${q.exclude.length ? `（排除 ${escapeHtml(q.exclude.join("、"))}）` : ""}</h3>`;
     if (!hits.length) return html + `<p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
     html += hits.slice(0, MAX_RESULTS).map(id =>
-        `<div class="card"><div class="hit-head">${link(id)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
+        `<div class="card"><div class="hit-head">${link(id)}${starButton(id)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
     ).join("");
     if (hits.length > MAX_RESULTS) html += `<p class="muted">只顯示前 ${MAX_RESULTS} 條，請加關鍵字縮小範圍。</p>`;
     return html;
