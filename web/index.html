@@ -141,6 +141,18 @@ details.card[open] > summary { margin-bottom: 8px; }
     background: var(--surface); color: var(--text); font-size: 18px; box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
     display: none;
 }
+/* Full text: scrubber on the right edge; --f is the position, 0 (first article) to 1 (last) */
+#scrubber { position: fixed; right: 0; top: 150px; bottom: 76px; width: 32px; z-index: 6; touch-action: none; --f: 0; }
+#scrubber::before { content: ""; position: absolute; right: 8px; top: 0; bottom: 0; width: 3px; border-radius: 2px; background: var(--border); }
+#scrubber .thumb, #scrubber .bubble { position: absolute; top: calc(20px + (100% - 40px) * var(--f)); transform: translateY(-50%); }
+#scrubber .thumb { right: 5px; width: 9px; height: 40px; border-radius: 5px; background: var(--accent); opacity: 0.55; }
+#scrubber .bubble {
+    right: 34px; padding: 4px 12px; border-radius: 8px; white-space: nowrap;
+    background: var(--accent); color: var(--surface); font-size: 15px; font-weight: 600;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.2); opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+#scrubber.show .bubble, #scrubber.drag .bubble { opacity: 1; transition: none; }
+#scrubber.drag .thumb { opacity: 1; }
 footer { padding: 0 16px max(24px, env(safe-area-inset-bottom)); font-size: 13px; color: var(--muted); }
 footer a { color: var(--muted); }
 .offline-pill { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
@@ -177,6 +189,7 @@ footer a { color: var(--muted); }
        · <a href="graph.html">關聯圖</a> · <a href="https://github.com/cormort/LawsGraphify">原始碼</a></p>
 </footer>
 <button id="to-top" type="button" aria-label="回到頂端">↑</button>
+<div id="scrubber" hidden aria-hidden="true"><div class="thumb"></div><div class="bubble"></div></div>
 
 <script>
 let nodes = new Map();      // id -> node
@@ -616,6 +629,7 @@ function runFromHash() {
     document.getElementById("q").value = !q ? "" : q.type === "article"
         ? label(nodeId(q.code, q.main, q.sub)) : q.type === "law" ? lawName(q.code) : raw;
     window.scrollTo(0, scrollPositions.get(location.hash) || 0);
+    updateScrubber();
 }
 
 // --- Data & wiring ---
@@ -752,7 +766,10 @@ document.addEventListener("click", e => {
 });
 
 document.addEventListener("change", e => {
-    if (e.target.id === "only-cited") document.getElementById("full-text").classList.toggle("only-cited", e.target.checked);
+    if (e.target.id === "only-cited") {
+        document.getElementById("full-text").classList.toggle("only-cited", e.target.checked);
+        updateScrubber();
+    }
 });
 
 // "跳至 N 條" inside a law's full text
@@ -780,6 +797,62 @@ document.getElementById("theme-btn").addEventListener("click", () => {
     if (next) document.documentElement.dataset.theme = next; else delete document.documentElement.dataset.theme;
     store.set("theme", next);
 });
+
+// Full text: the scrubber shows which article is at the top of the screen, and
+// dragging it jumps article by article (equal share each, however long)
+const scrubber = document.getElementById("scrubber");
+const SCRUB_LINE = 141;  // just below .law-article's scroll-margin-top, where a jump lands
+let scrubTimer = null;
+
+function scrubList() {
+    return [...document.querySelectorAll("#full-text .law-article")].filter(el => el.offsetParent);
+}
+
+function showScrub(list, i) {
+    scrubber.style.setProperty("--f", list.length > 1 ? i / (list.length - 1) : 0);
+    scrubber.querySelector(".bubble").textContent = list[i].querySelector(".hit-head a").textContent;
+}
+
+function updateScrubber() {
+    const list = scrubList();
+    scrubber.hidden = list.length <= 5;
+    if (scrubber.hidden || scrubber.classList.contains("drag")) return;
+    scrubber.style.top = document.querySelector(".topbar").offsetHeight + 12 + "px";
+    let i = 0;  // last article whose top has passed the line (binary search)
+    for (let lo = 0, hi = list.length - 1; lo <= hi;) {
+        const mid = (lo + hi) >> 1;
+        if (list[mid].getBoundingClientRect().top <= SCRUB_LINE) { i = mid; lo = mid + 1; } else hi = mid - 1;
+    }
+    // At the very bottom the last articles can't reach the line
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) i = list.length - 1;
+    showScrub(list, i);
+}
+
+function scrubTo(e) {
+    const list = scrubList(), rect = scrubber.getBoundingClientRect();
+    const f = Math.min(1, Math.max(0, (e.clientY - rect.top - 20) / (rect.height - 40)));
+    const i = Math.round(f * (list.length - 1));
+    list[i].scrollIntoView();
+    showScrub(list, i);
+}
+
+scrubber.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    scrubber.setPointerCapture(e.pointerId);
+    scrubber.classList.add("drag");
+    scrubTo(e);
+});
+scrubber.addEventListener("pointermove", e => { if (scrubber.classList.contains("drag")) scrubTo(e); });
+for (const type of ["pointerup", "pointercancel"]) {
+    scrubber.addEventListener(type, () => scrubber.classList.remove("drag"));
+}
+window.addEventListener("scroll", () => {
+    if (scrubber.hidden) return;
+    updateScrubber();
+    scrubber.classList.add("show");
+    clearTimeout(scrubTimer);
+    scrubTimer = setTimeout(() => scrubber.classList.remove("show"), 1000);
+}, { passive: true });
 
 const toTop = document.getElementById("to-top");
 window.addEventListener("scroll", () => { toTop.style.display = window.scrollY > 600 ? "block" : "none"; }, { passive: true });
