@@ -217,3 +217,24 @@ def test_attachment_names_link_to_the_original(page):
     }""")
     assert result["named"] > 0
     assert result["unlinked"] == []
+
+
+def test_back_button_returns_to_where_a_link_was_followed(page):
+    go(page, "預算法")
+    assert page.locator("#back").is_hidden() or page.locator("#back").inner_text() == "← 首頁"
+    page.evaluate("document.getElementById('a-BUDGET-0033').scrollIntoView()")
+    y = page.evaluate("scrollY")
+    page.locator("#a-BUDGET-0033 a.cite").first.click()
+    page.wait_for_function("document.getElementById('back').textContent === '← 預算法'")
+    target = page.evaluate("location.hash")
+
+    page.locator(".hit-head > a").first.click()  # a second hop, to an article citing this one
+    page.wait_for_function("document.getElementById('back').textContent.startsWith('← 預算法 第')")
+    page.reload()  # the way back survives a reload
+    page.wait_for_selector("#back:not([hidden])")
+    page.click("#back")
+    page.wait_for_function(f"location.hash === {json.dumps(target)}")
+    page.click("#back")
+    page.wait_for_function("location.hash === '#' + encodeURIComponent('預算法')")
+    page.wait_for_function(f"Math.abs(scrollY - {y}) < 2")
+    assert page.locator("#full-text").count() == 1

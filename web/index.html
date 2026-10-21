@@ -155,6 +155,12 @@ details.card[open] > summary { margin-bottom: 8px; }
 #scrubber .bubble small { display: block; font-size: 12px; font-weight: 400; opacity: 0.85; }
 #scrubber.show .bubble, #scrubber.drag .bubble { opacity: 1; transition: none; }
 #scrubber.drag .thumb { opacity: 1; }
+#back {
+    position: fixed; left: 16px; bottom: max(16px, env(safe-area-inset-bottom)); z-index: 5;
+    max-width: calc(100vw - 96px); min-height: 44px; padding: 0 16px; border-radius: 22px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--accent); font-size: 15px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.15); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 footer { padding: 0 16px max(24px, env(safe-area-inset-bottom)); font-size: 13px; color: var(--muted); }
 footer a { color: var(--muted); }
 .offline-pill { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
@@ -191,6 +197,7 @@ footer a { color: var(--muted); }
        · <a href="graph.html">關聯圖</a> · <a href="https://github.com/cormort/LawsGraphify">原始碼</a></p>
 </footer>
 <button id="to-top" type="button" aria-label="回到頂端">↑</button>
+<button id="back" type="button" hidden></button>
 <div id="scrubber" hidden aria-hidden="true"><div class="thumb"></div><div class="bubble"></div></div>
 
 <script>
@@ -204,7 +211,10 @@ let lawUrl = new Map();     // code -> DGBAS page, where an article's attachment
 let nameToCode = {};        // normalized name -> code
 let codeToName = {};        // code -> display name
 let sortedNames = [];       // names, longest first
-const scrollPositions = new Map();  // hash -> scrollY, restored on back
+// hash -> scrollY, restored on back; kept for the tab's session so a reload keeps it
+let savedPositions = [];
+try { savedPositions = JSON.parse(sessionStorage.getItem("scroll")) || []; } catch (e) {}
+const scrollPositions = new Map(savedPositions);
 
 const MAX_RESULTS = 200;
 
@@ -658,16 +668,33 @@ function render(raw, marks) {
     return q;
 }
 
+// "預算法 第 32 條" rather than the internal id a link carried
+function queryLabel(q, raw) {
+    return !q ? "" : q.type === "article" ? label(nodeId(q.code, q.main, q.sub)) : q.type === "law" ? lawName(q.code) : raw;
+}
+
 function runFromHash() {
     const [path, mark] = location.hash.slice(1).split("?mark=");
     const raw = decodeURIComponent(path);
     const q = render(raw, mark ? decodeURIComponent(mark).split(" ") : []);
-    // Show "預算法 第 32 條" rather than the internal id a link carried
-    document.getElementById("q").value = !q ? "" : q.type === "article"
-        ? label(nodeId(q.code, q.main, q.sub)) : q.type === "law" ? lawName(q.code) : raw;
+    document.getElementById("q").value = queryLabel(q, raw);
     window.scrollTo(0, scrollPositions.get(location.hash) || 0);
     updateScrubber();
+    updateBack();
 }
+
+// "← 預算法" back to where a link was followed from. Each history entry keeps the
+// hash it was reached from, so the button follows the phone's own back and still
+// works after a reload; a home-screen app on iPhone has no back button of its own.
+const back = document.getElementById("back");
+function updateBack() {
+    const from = history.state?.from;
+    back.hidden = from === undefined;
+    if (back.hidden) return;
+    const raw = decodeURIComponent(from.slice(1).split("?mark=")[0]);
+    back.textContent = "← " + (queryLabel(parseQuery(raw), raw) || "首頁");
+}
+back.addEventListener("click", () => history.back());
 
 // --- Data & wiring ---
 
@@ -791,7 +818,10 @@ document.getElementById("query-form").addEventListener("submit", e => {
 });
 
 window.addEventListener("hashchange", e => {
-    scrollPositions.set(new URL(e.oldURL).hash, window.scrollY);
+    const from = new URL(e.oldURL).hash;
+    scrollPositions.set(from, window.scrollY);
+    try { sessionStorage.setItem("scroll", JSON.stringify([...scrollPositions])); } catch (e) {}
+    if (!history.state) history.replaceState({ from }, "");  // a new entry, not back / forward
     runFromHash();
 });
 
