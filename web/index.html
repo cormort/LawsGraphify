@@ -594,7 +594,7 @@ function renderArticle(q, marks) {
     }
 
     const bySource = groupBySource(incoming.get(id) || []), favs = store.get("favs", []);
-    html += `</div><h3>被 ${bySource.length} 條條文引用</h3>`;
+    html += `</div>${target && fundCodes().has(q.code) ? renderSimilar(target, favs) : ""}<h3>被 ${bySource.length} 條條文引用</h3>`;
     if (!bySource.length) return html + `<p class="empty">沒有其他條文引用這一條。</p>`;
     // Other laws first, then the same law; each in article order
     const own = sid => sid.startsWith(q.code + "-");
@@ -604,6 +604,42 @@ function renderArticle(q, marks) {
         return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${starButton(src.id, favs)}</div></div>
             <div class="text">${formatText(src, id)}</div></div>`;
     }).join("");
+}
+
+// Fund regulations are mostly written from one template. For a fund article, say
+// whether it is the common wording or the fund's own, and show the closest
+// article of each other fund. Similarity: shared character pairs (Jaccard).
+const SAME = 0.9, OWN = 0.5, SIMILAR_SHOWN = 5;
+const pairCache = new Map();
+function fundCodes() { return new Set(laws.filter(l => l.kind === FUND_KIND).map(l => l.code)); }
+function pairs(node) {
+    if (!pairCache.has(node.id)) {
+        const t = node.norm.replace(/本基金|本辦法|\s/g, "");
+        pairCache.set(node.id, new Set(Array.from({ length: t.length - 1 }, (_, i) => t.slice(i, i + 2))));
+    }
+    return pairCache.get(node.id);
+}
+function similarity(a, b) {
+    let shared = 0;
+    for (const p of a) if (b.has(p)) shared++;
+    return shared / (a.size + b.size - shared || 1);
+}
+function renderSimilar(node, favs) {
+    const mine = pairs(node);
+    const best = [...fundCodes()].filter(code => code !== node.law_code).map(code => {
+        let top = { score: 0 };
+        for (const id of lawOrder.get(code) || []) {
+            const score = similarity(mine, pairs(nodes.get(id)));
+            if (score > top.score) top = { id, score };
+        }
+        return top;
+    }).filter(t => t.id).sort((a, b) => b.score - a.score);
+    const same = best.filter(t => t.score >= SAME).length;
+    const summary = same ? `另有 ${same} 個基金有相同規定（相似度 90% 以上）`
+        : best[0]?.score >= OWN ? "其他基金有類似但不相同的規定" : "本基金特有：其他基金沒有相似度 50% 以上的規定";
+    return `<h3>其他基金的類似規定</h3><p class="muted">${summary}</p>` + best.slice(0, SIMILAR_SHOWN).filter(t => t.score >= 0.3).map(t =>
+        `<div class="card"><div class="hit-head">${link(t.id)}<div class="badges"><span class="badge">相似 ${Math.round(t.score * 100)}%</span>${starButton(t.id, favs)}</div></div>
+            <div class="text">${formatText(nodes.get(t.id))}</div></div>`).join("");
 }
 
 // Whole law: table of contents, jump box, full text with live citations
