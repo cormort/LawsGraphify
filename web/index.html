@@ -113,6 +113,7 @@ a.cite.focus { background: var(--mark); border-radius: 3px; text-decoration: non
 
 /* Lists: laws, favourites, recents, cited articles */
 .list a { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); text-decoration: none; color: var(--text); }
+.list a[hidden] { display: none; }
 .list > :first-child { border-top: 0; padding-top: 0; }
 .list .count { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
@@ -325,10 +326,10 @@ function renderSection(key) {
     const sec = SECTIONS[key], list = laws.filter(l => l.kind === sec.kind);
     if (sec.sort) list.sort(sec.sort);
     return `<h2>${sec.title}</h2><p class="muted">${sec.note(list.length)}</p>
-        <form class="section-search" data-section="${key}"><input name="n" type="search" enterkeyhint="search" placeholder="在${sec.where}中搜尋" aria-label="在${sec.where}中搜尋"><button class="tool" type="submit">搜尋</button></form>
+        <form class="section-search" data-section="${key}"><input name="n" type="search" enterkeyhint="search" placeholder="名稱篩選，按搜尋找條文內容" aria-label="篩選名稱，或在${sec.where}中搜尋條文"><button class="tool" type="submit">搜尋</button></form>
         ${sec.topics.length ? `<div class="chips">${sec.topics.map(t => `<a class="tool" href="#${encodeURIComponent(key + " " + t)}">${t}</a>`).join("")}</div>` : ""}
         <h3>${sec.where}（${list.length}）</h3>
-        <div class="card list">${list.map(l => `<a href="#${encodeURIComponent(l.code)}">
+        <div class="card list" id="section-list">${list.map(l => `<a href="#${encodeURIComponent(l.code)}">
             <span>${escapeHtml(sec.short(l))}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div>`;
 }
 
@@ -960,6 +961,9 @@ async function init() {
         if (name !== code && (!codeToName[code] || name.length > codeToName[code].length)) codeToName[code] = name;
     }
     data.nodes.forEach(n => { codeToName[n.law_code] = n.law_name; });
+    // "住宅基金" opens 住宅基金收支保管及運用辦法
+    laws.filter(l => l.kind === FUND_KIND && l.name.endsWith("收支保管及運用辦法"))
+        .forEach(l => { nameToCode[l.name.slice(0, -"收支保管及運用辦法".length)] ??= l.code; });
     sortedNames = Object.keys(nameToCode).sort((a, b) => b.length - a.length);
 
     document.getElementById("law-names").innerHTML = laws
@@ -1004,6 +1008,15 @@ document.addEventListener("click", e => {
         document.documentElement.style.setProperty("--fs", size + "px");
         store.set("fontSize", size);
     }
+});
+
+// Typing in a section's box narrows its list by name; 搜尋 searches the article text
+document.addEventListener("input", e => {
+    if (!e.target.closest(".section-search")) return;
+    const words = e.target.value.normalize("NFKC").replace(/台/g, "臺").split(/\s+/).filter(Boolean);
+    document.querySelectorAll("#section-list a").forEach(a => {
+        a.hidden = !words.every(w => a.firstElementChild.textContent.includes(w));
+    });
 });
 
 document.addEventListener("change", e => {
