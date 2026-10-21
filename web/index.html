@@ -261,8 +261,30 @@ function terms(text) {
     };
 }
 
-// Article text with each citation as a link; citations of focusId are marked
-function linkify(node, focusId) {
+// [start, end) of every occurrence of words in node.norm (same offsets as node.text), in order
+function hitRanges(node, words) {
+    const ranges = [];
+    for (const w of words.filter(Boolean)) {
+        for (let i = node.norm.indexOf(w); i >= 0; i = node.norm.indexOf(w, i + w.length)) ranges.push([i, i + w.length]);
+    }
+    return ranges.sort((x, y) => x[0] - y[0]);
+}
+
+// Escaped text[a, b) with the parts inside ranges wrapped in <mark>
+function marked(text, a, b, ranges) {
+    let html = "", pos = a;
+    for (const [s, e] of ranges) {
+        const from = Math.max(s, pos), to = Math.min(e, b);
+        if (from >= to) continue;
+        html += escapeHtml(text.slice(pos, from)) + `<mark>${escapeHtml(text.slice(from, to))}</mark>`;
+        pos = to;
+    }
+    return html + escapeHtml(text.slice(pos, b));
+}
+
+// Article text with each citation as a link; citations of focusId are linked
+// with a highlight, and the given ranges (search terms) are marked
+function linkify(node, focusId, ranges = []) {
     const text = node.text || "";
     const bySpan = new Map();  // "a,b" -> targets (a range has several)
     for (const e of outgoing.get(node.id) || []) {
@@ -275,8 +297,8 @@ function linkify(node, focusId) {
     let html = "", pos = 0;
     for (const { a, b, targets } of [...bySpan.values()].sort((x, y) => x.a - y.a)) {
         if (a < pos) continue;  // overlapping span: keep the first
-        html += escapeHtml(text.slice(pos, a));
-        const words = escapeHtml(text.slice(a, b));
+        html += marked(text, pos, a, ranges);
+        const words = marked(text, a, b, ranges);
         const known = targets.filter(Boolean);
         if (!known.length) {
             html += `<span class="cite-unresolved" title="引用的法規未收錄">${words}</span>`;
@@ -287,7 +309,7 @@ function linkify(node, focusId) {
         }
         pos = b;
     }
-    return html + escapeHtml(text.slice(pos));
+    return html + marked(text, pos, text.length, ranges);
 }
 
 // List views pass favs in, so a long law reads storage once
@@ -378,7 +400,7 @@ function renderHome() {
     return html;
 }
 
-function renderArticle(q) {
+function renderArticle(q, marks) {
     const id = nodeId(q.code, q.main, q.sub);
     const target = nodes.get(id);
     const lawHasText = lawOrder.has(q.code);
@@ -393,7 +415,7 @@ function renderArticle(q) {
     html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? starButton(id) : ""}</div>`;
     if (target) {
         if (target.chapter) html += `<p class="muted">${escapeHtml(target.chapter)}</p>`;
-        html += `<p class="text">${linkify(target)}</p>`;
+        html += `<p class="text">${linkify(target, null, hitRanges(target, marks))}</p>`;
         rememberRecent(id);
     } else if (lawHasText) {
         html += `<div class="warn">資料中沒有這一條（可能已刪除、改條號，或條號輸入錯誤）。${incoming.has(id) ? "下面的引用可能已經失效。" : ""}</div>`;
@@ -465,8 +487,10 @@ function renderSearch(q) {
     const where = q.code ? `《${lawName(q.code)}》` : "全部法規";
     let html = `<h3>在${escapeHtml(where)}中找到 ${hits.length} 條「${escapeHtml(q.include.join(" "))}」${q.exclude.length ? `（排除 ${escapeHtml(q.exclude.join("、"))}）` : ""}</h3>`;
     if (!hits.length) return html + `<p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
+    // The keywords ride along to the article page, which marks them too
+    const mark = "?mark=" + encodeURIComponent(q.include.join(" "));
     html += hits.slice(0, MAX_RESULTS).map(id =>
-        `<div class="card"><div class="hit-head">${link(id)}${starButton(id, favs)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
+        `<div class="card"><div class="hit-head"><a href="#${encodeURIComponent(id)}${mark}">${escapeHtml(label(id))}</a>${starButton(id, favs)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
     ).join("");
     if (hits.length > MAX_RESULTS) html += `<p class="muted">只顯示前 ${MAX_RESULTS} 條，請加關鍵字縮小範圍。</p>`;
     return html;
@@ -477,27 +501,23 @@ function snippet(node, words) {
     const text = node.text;  // same length as node.norm
     const first = Math.min(...words.map(w => node.norm.indexOf(w)).filter(i => i >= 0));
     const start = Math.max(0, first - 60), end = Math.min(text.length, first + 100);
-    let html = (start ? "…" : "") + escapeHtml(text.slice(start, end)) + (end < text.length ? "…" : "");
-    for (const w of words) {
-        const escaped = escapeHtml(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        html = html.replace(new RegExp(escaped, "g"), "<mark>$&</mark>");
-    }
-    return html;
+    return (start ? "…" : "") + marked(text, start, end, hitRanges(node, words)) + (end < text.length ? "…" : "");
 }
 
-function render(raw) {
+function render(raw, marks) {
     const result = document.getElementById("result");
     const q = parseQuery(raw);
     if (!q) result.innerHTML = renderHome();
-    else if (q.type === "article") result.innerHTML = renderArticle(q);
+    else if (q.type === "article") result.innerHTML = renderArticle(q, marks);
     else if (q.type === "law") result.innerHTML = lawOrder.has(q.code) ? renderFullText(q.code) : renderCitedList(q.code);
     else result.innerHTML = renderSearch(q);
     return q;
 }
 
 function runFromHash() {
-    const raw = decodeURIComponent(location.hash.slice(1));
-    const q = render(raw);
+    const [path, mark] = location.hash.slice(1).split("?mark=");
+    const raw = decodeURIComponent(path);
+    const q = render(raw, mark ? decodeURIComponent(mark).split(" ") : []);
     // Show "預算法 第 32 條" rather than the internal id a link carried
     document.getElementById("q").value = !q ? "" : q.type === "article"
         ? label(nodeId(q.code, q.main, q.sub)) : q.type === "law" ? lawName(q.code) : raw;
