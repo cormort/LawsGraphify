@@ -64,13 +64,13 @@ NON_LAW_PREFIXES = ("應", "依", "未", "得", "之", "及", "或", "與", "並
 # Group 2 (single): 第X條[之Y] / 第X點
 # Group 3 (relative): 前條, 次條, 後條, 前二條, 前N條, 後N條
 REF_REGEX = re.compile(
-    r"(?P<range>第(?P<r_start_main>[一二三四五六七八九十百千0-9]+)[條點]"
+    r"(?P<range>第(?P<r_start_main>[零一二三四五六七八九十百千0-9]+)[條點]"
     r"(?:之(?P<r_start_sub>[一二三四五六七八九十0-9]+))?"
     r"\s*至\s*"
-    r"第?(?P<r_end_main>[一二三四五六七八九十百千0-9]+)[條點]"
+    r"第?(?P<r_end_main>[零一二三四五六七八九十百千0-9]+)[條點]"
     r"(?:之(?P<r_end_sub>[一二三四五六七八九十0-9]+))?)"
     r"|"
-    r"(?P<single>第(?P<s_main>[一二三四五六七八九十百千0-9]+)[條點]"
+    r"(?P<single>第(?P<s_main>[零一二三四五六七八九十百千0-9]+)[條點]"
     r"(?:之(?P<s_sub>[一二三四五六七八九十0-9]+))?)"
     r"|"
     r"(?P<relative>(?P<rel_type>前條|次條|後條|前二條"

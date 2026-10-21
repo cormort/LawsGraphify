@@ -12928,6 +12928,21 @@
       ]
     },
     {
+      "source": "CNDR-0019",
+      "target": "GPA-0105",
+      "kind": "absolute",
+      "is_external": true,
+      "sub_ref": "第一項第二款",
+      "confidence": 1.0,
+      "needs_review": false,
+      "spans": [
+        [
+          87,
+          99
+        ]
+      ]
+    },
+    {
       "source": "CACGSB-0001",
       "target": "TFA-0030",
       "kind": "absolute",
@@ -14685,11 +14700,56 @@
     },
     {
       "source": "CONST-0111",
-      "target": "CONST-0110",
+      "target": "CONST-0107",
       "kind": "absolute",
       "is_external": false,
       "sub_ref": null,
       "confidence": 0.95,
+      "needs_review": false,
+      "spans": [
+        [
+          1,
+          7
+        ]
+      ]
+    },
+    {
+      "source": "CONST-0111",
+      "target": "CONST-0108",
+      "kind": "absolute",
+      "is_external": false,
+      "sub_ref": null,
+      "confidence": 0.9,
+      "needs_review": false,
+      "spans": [
+        [
+          8,
+          14
+        ]
+      ]
+    },
+    {
+      "source": "CONST-0111",
+      "target": "CONST-0109",
+      "kind": "absolute",
+      "is_external": false,
+      "sub_ref": null,
+      "confidence": 0.9,
+      "needs_review": false,
+      "spans": [
+        [
+          15,
+          21
+        ]
+      ]
+    },
+    {
+      "source": "CONST-0111",
+      "target": "CONST-0110",
+      "kind": "absolute",
+      "is_external": false,
+      "sub_ref": null,
+      "confidence": 0.9,
       "needs_review": false,
       "spans": [
         [
@@ -15828,6 +15888,36 @@
         [
           117,
           123
+        ]
+      ]
+    },
+    {
+      "source": "GEVEP-0005",
+      "target": "ACCOUNT-0109",
+      "kind": "absolute",
+      "is_external": true,
+      "sub_ref": null,
+      "confidence": 1.0,
+      "needs_review": false,
+      "spans": [
+        [
+          206,
+          212
+        ]
+      ]
+    },
+    {
+      "source": "GARP-0002",
+      "target": "ACCOUNT-0109",
+      "kind": "absolute",
+      "is_external": true,
+      "sub_ref": null,
+      "confidence": 1.0,
+      "needs_review": false,
+      "spans": [
+        [
+          64,
+          70
         ]
       ]
     },
@@ -17935,6 +18025,21 @@
         [
           41,
           45
+        ]
+      ]
+    },
+    {
+      "source": "SUPE-0042",
+      "target": "ACCOUNT-0106",
+      "kind": "absolute",
+      "is_external": true,
+      "sub_ref": null,
+      "confidence": 1.0,
+      "needs_review": false,
+      "spans": [
+        [
+          49,
+          55
         ]
       ]
     },

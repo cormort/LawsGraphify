@@ -232,6 +232,14 @@ def test_chinese_numeral_hundred_ten():
     assert edges[0]["target"] == "CONST-0110"
 
 
+def test_chinese_numeral_with_zero():
+    """"一百零九" is 109; 零 must not stop the article number."""
+    edges = parse_citations("依會計法第一百零九條規定", "GARP", 2)
+    assert [e["target"] for e in edges] == ["ACCOUNT-0109"]
+    edges = parse_citations("除第一百零七條、第一百零八條外", "CONST", 111)
+    assert [e["target"] for e in edges] == ["CONST-0107", "CONST-0108"]
+
+
 def test_fullwidth_paren_alias():
     """Aliases with full-width （） must match NFKC-normalized text."""
     edges = parse_citations("中央對直轄市及縣（市）政府補助辦法第三條", "BUDGET", 1)
