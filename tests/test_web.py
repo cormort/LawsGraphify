@@ -9,6 +9,7 @@ import http.server
 import json
 import os
 import re
+import shutil
 import threading
 from urllib.parse import quote
 
@@ -24,11 +25,16 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def serve(directory):
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(QuietHandler, directory=directory))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return server, f"http://127.0.0.1:{server.server_port}/"
+
+
 @pytest.fixture(scope="module")
 def base_url():
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(QuietHandler, directory=WEB))
-    threading.Thread(target=server.serve_forever, daemon=True).start()
-    yield f"http://127.0.0.1:{server.server_port}/"
+    server, url = serve(WEB)
+    yield url
     server.shutdown()
 
 
@@ -238,3 +244,36 @@ def test_back_button_returns_to_where_a_link_was_followed(page):
     page.wait_for_function("location.hash === '#' + encodeURIComponent('預算法')")
     page.wait_for_function(f"Math.abs(scrollY - {y}) < 2")
     assert page.locator("#full-text").count() == 1
+
+
+def test_new_version_offers_a_reload(browser, tmp_path):
+    """After a deploy the phone first shows its cached page; sw.js fetches the new
+    one, notices the difference and the page offers to reload into it."""
+    site = tmp_path / "web"
+    shutil.copytree(WEB, site)
+    server, url = serve(site)
+    context = browser.new_context()  # service worker on
+    page = context.new_page()
+    try:
+        page.goto(url + "#")
+        page.wait_for_selector("details")
+        page.evaluate("navigator.serviceWorker.ready")
+        page.reload()  # now answered by the service worker
+        page.wait_for_selector("details")
+        assert page.evaluate("!!navigator.serviceWorker.controller")
+        assert page.locator("#app-update").is_hidden()  # same page: nothing to offer
+
+        index = site / "index.html"
+        index.write_text(index.read_text(encoding="utf-8").replace("原始碼</a>", "原始碼</a> v2"), encoding="utf-8")
+        later = os.path.getmtime(index) + 60  # the test server's Last-Modified has 1 s resolution
+        os.utime(index, (later, later))
+        page.reload()
+        page.wait_for_selector("#app-update:not([hidden])")
+        assert "v2" not in page.locator("footer").inner_text()  # still the cached page
+        with page.expect_navigation():
+            page.click("#app-reload")
+        page.wait_for_selector("details")
+        assert "v2" in page.locator("footer").inner_text()
+    finally:
+        context.close()
+        server.shutdown()

@@ -17,16 +17,34 @@ self.addEventListener("activate", event => {
         .then(() => self.clients.claim()));
 });
 
+// The page being opened may not exist yet when the fresh copy arrives (a fast
+// network), so wait for it; without resultingClientId, tell every open page
+async function tellUpdated(clientId) {
+    for (let tries = 0; clientId && tries < 50; tries++) {
+        const client = await self.clients.get(clientId);
+        if (client) return client.postMessage("app-updated");
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    for (const client of await self.clients.matchAll({ type: "window" })) client.postMessage("app-updated");
+}
+
 self.addEventListener("fetch", event => {
     const url = new URL(event.request.url);
     if (event.request.method !== "GET" || url.origin !== location.origin || url.pathname.includes("/laws/")) return;
     event.respondWith(caches.open(CACHE).then(async cache => {
         const cached = await cache.match(event.request, { ignoreSearch: true });
+        const before = event.request.mode === "navigate" && cached?.clone();  // cached itself goes to the page
         // no-cache: always ask the server (a cheap 304 when unchanged), so the
         // HTTP cache cannot hand back a stale copy after a deploy
         const fresh = fetch(url.href, { cache: "no-cache" })
-            .then(response => {
-                if (response.ok) cache.put(url.pathname, response.clone());
+            .then(async response => {
+                if (response.ok) {
+                    // The page answered from the cache is out of date: tell it
+                    if (before && await before.text() !== await response.clone().text()) {
+                        await tellUpdated(event.resultingClientId);
+                    }
+                    await cache.put(url.pathname, response.clone());
+                }
                 return response;
             })
             .catch(() => cached || Response.error());

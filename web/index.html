@@ -94,9 +94,9 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 .hit-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 .hit-head > a:first-child { font-weight: 600; text-decoration: none; }
 .badges { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-#update-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 16px 0; }
-#update-bar[hidden] { display: none; }
-#update-bar span { flex: 1 1 12em; }
+#update-bar, #app-update { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 16px 0; }
+#update-bar[hidden], #app-update[hidden] { display: none; }
+#update-bar span, #app-update span { flex: 1 1 12em; }
 .badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; text-decoration: none; }
 .badge.review { background: var(--warn-soft); color: var(--warn); }
 .badge.amended { background: var(--mark); color: var(--text); }
@@ -187,6 +187,8 @@ footer a { color: var(--muted); }
     </div>
 </header>
 
+<div id="app-update" class="warn" role="alert" hidden><span>網站已更新。</span>
+    <button type="button" id="app-reload">重新載入</button></div>
 <div id="update-bar" class="warn" role="alert" hidden><span></span>
     <button type="button" id="update-yes">下載</button> <button type="button" id="update-no">稍後</button></div>
 <main id="result" aria-live="polite"><p class="empty">資料載入中…</p></main>
@@ -974,6 +976,11 @@ function showOnline() {
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").then(() => navigator.serviceWorker.ready).then(showOnline).catch(() => {});
     navigator.serviceWorker.addEventListener("controllerchange", showOnline);
+    // sw.js fetched a newer page than the one showing; it is cached, so a reload is instant
+    navigator.serviceWorker.addEventListener("message", e => {
+        if (e.data === "app-updated") document.getElementById("app-update").hidden = false;
+    });
+    document.getElementById("app-reload").addEventListener("click", () => location.reload());
 }
 window.addEventListener("online", showOnline);
 window.addEventListener("offline", showOnline);
