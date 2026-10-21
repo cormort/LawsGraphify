@@ -118,9 +118,9 @@ a.cite.focus { background: var(--mark); border-radius: 3px; text-decoration: non
 .list .count { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
 .chips a { display: inline-flex; align-items: center; text-decoration: none; }
-.fav-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 24px 0 8px; }
-.fav-head h3 { margin: 0; }
-.fav-head .tools .tool { min-height: 30px; font-size: 13px; }
+.fav-head, .section-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 24px 0 8px; }
+.fav-head h3, .section-head h3 { margin: 0; }
+.fav-head .tools .tool, .section-head .tool { min-height: 30px; font-size: 13px; }
 .fav-group { padding: 10px 0; border-top: 1px solid var(--border); }
 .fav-group:first-child { border-top: 0; padding-top: 0; }
 .fav-group > a { font-weight: 600; text-decoration: none; }
@@ -233,6 +233,8 @@ try { savedPositions = JSON.parse(sessionStorage.getItem("scroll")) || []; } cat
 const scrollPositions = new Map(savedPositions);
 
 const MAX_RESULTS = 200;
+let exportable = null;      // the current view's articles: {name, ids()}, for 匯出
+const EXPORT_BUTTON = `<button class="tool" type="button" data-export>匯出</button>`;
 
 // localStorage can throw (private mode) or be empty; the app works without it
 const store = {
@@ -544,6 +546,30 @@ function renderFavs(favs) {
 }
 
 // Favourites live only in this browser (Safari may clear them), so they can be copied out and pasted back
+// The view's articles as a CSV that Excel opens (BOM for the Chinese); phones get
+// the share sheet (save to Files, LINE, mail), computers a download
+async function exportView() {
+    const { name, ids } = exportable;
+    const page = location.href.split("#")[0];
+    const rows = [["法規", "條次", "條文", "連結"],
+        ...ids().map(id => { const n = nodes.get(id); return [n.law_name, n.article_zh, n.text, `${page}#${id}`]; })];
+    const csv = "\ufeff" + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\r\n");
+    const file = new File([csv], `${name.replace(/[\\/:*?"<>|]/g, "_")}.csv`, { type: "text/csv" });
+    if (matchMedia("(pointer: coarse)").matches && navigator.canShare?.({ files: [file] })) {
+        try {
+            await navigator.share({ files: [file] });
+            return;
+        } catch (e) {
+            if (e.name === "AbortError") return;  // closed the share sheet
+        }
+    }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(file);
+    a.download = file.name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
 // "預算法第 62 條：…" for pasting into a document
 // "預算法第62條之1", the way a 公文 cites it
 function citation(node) {
@@ -649,11 +675,13 @@ function renderArticle(q, marks) {
     }
 
     const bySource = groupBySource(incoming.get(id) || []), favs = store.get("favs", []);
-    html += `</div>${target && fundCodes().has(q.code) ? renderSimilar(target, favs) : ""}<h3>被 ${bySource.length} 條條文引用</h3>`;
-    if (!bySource.length) return html + `<p class="empty">沒有其他條文引用這一條。</p>`;
+    const similar = target && fundCodes().has(q.code) ? renderSimilar(target, favs) : "";
+    if (!bySource.length) return html + `</div>${similar}<h3>被 0 條條文引用</h3><p class="empty">沒有其他條文引用這一條。</p>`;
+    html += `</div>${similar}<div class="section-head"><h3>被 ${bySource.length} 條條文引用</h3>${EXPORT_BUTTON}</div>`;
     // Other laws first, then the same law; each in article order
     const own = sid => sid.startsWith(q.code + "-");
     bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
+    exportable = { name: `引用 ${label(id)} 的條文`, ids: () => bySource.map(group => group[0].source) };
     return html + bySource.map(group => {
         const src = nodes.get(group[0].source);
         return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${copyButton(src.id)}${starButton(src.id, favs)}</div></div>
@@ -740,8 +768,10 @@ function renderFullText(code) {
     const chapters = ids.filter(id => nodes.get(id).chapter);
     const favs = store.get("favs", []);
     rememberRecent(code);
+    // The articles showing, whichever filter (只看被引用的, a fund's own) is on
+    exportable = { name: lawName(code), ids: () => scrubList().map(el => el.id.slice(2)) };
 
-    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2>${starButton(code)}</div>${abolishedNote(code)}${lawDates(code)}
+    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2><div class="tools">${EXPORT_BUTTON}${starButton(code)}</div></div>${abolishedNote(code)}${lawDates(code)}
         <p class="muted">共 ${ids.length} ${unit(code)}，${cited} ${unit(code)}被其他條文引用</p>
         <div class="controls">
             <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)}</form>
@@ -791,8 +821,10 @@ function renderSearch(q) {
     });
     const favs = store.get("favs", []);
     const where = q.code ? `《${lawName(q.code)}》` : q.section ? SECTIONS[q.section].where : "全部法規";
-    let html = `<h3>在${escapeHtml(where)}中找到 ${hits.length} 條「${escapeHtml(q.include.join(" "))}」${q.exclude.length ? `（排除 ${escapeHtml(q.exclude.join("、"))}）` : ""}</h3>`;
-    if (!hits.length) return html + `<p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
+    const title = `在${where}中找到 ${hits.length} 條「${q.include.join(" ")}」${q.exclude.length ? `（排除 ${q.exclude.join("、")}）` : ""}`;
+    if (!hits.length) return `<h3>${escapeHtml(title)}</h3><p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
+    exportable = { name: `搜尋 ${q.code ? lawName(q.code) : q.section ? SECTIONS[q.section].where : ""} ${q.include.join(" ")}`.replace(/\s+/g, " "), ids: () => hits };
+    let html = `<div class="section-head"><h3>${escapeHtml(title)}</h3>${EXPORT_BUTTON}</div>`;
     // The keywords ride along to the article page, which marks them too
     const mark = "?mark=" + encodeURIComponent(q.include.join(" "));
     html += hits.slice(0, MAX_RESULTS).map(id =>
@@ -812,6 +844,7 @@ function snippet(node, words) {
 
 function render(raw, marks) {
     const result = document.getElementById("result");
+    exportable = null;
     const q = parseQuery(raw);
     if (!q) result.innerHTML = renderHome();
     else if (q.type === "article") result.innerHTML = renderArticle(q, marks);
@@ -997,6 +1030,7 @@ document.addEventListener("click", e => {
     }
     const favIo = e.target.closest("[data-fav-io]");
     if (favIo) favIo.dataset.favIo === "export" ? exportFavs() : importFavs();
+    if (e.target.closest("[data-export]") && exportable) exportView();
     const copy = e.target.closest("[data-copy]");
     if (copy) copyArticle(copy);
     const scroll = e.target.closest("[data-scroll]");

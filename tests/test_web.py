@@ -4,8 +4,10 @@ Skipped where Playwright is not installed (the Mac mini's update run). The GitHu
 deploy job installs it and runs these first, so a broken page is never deployed.
 """
 
+import csv
 import functools
 import http.server
+import io
 import json
 import os
 import re
@@ -277,3 +279,34 @@ def test_new_version_offers_a_reload(browser, tmp_path):
     finally:
         context.close()
         server.shutdown()
+
+
+def exported_rows(page):
+    """Clicks 匯出 and parses the downloaded CSV."""
+    with page.expect_download() as download:
+        page.click("[data-export]")
+    data = open(download.value.path(), encoding="utf-8").read()
+    assert data.startswith("﻿")  # so Excel reads the Chinese
+    return list(csv.reader(io.StringIO(data[1:])))
+
+
+def test_export_results_as_csv(page):
+    go(page, "流用 預備金")
+    found = int(re.search(r"找到 (\d+) 條", page.locator("h3").first.inner_text()).group(1))
+    rows = exported_rows(page)
+    assert rows[0] == ["法規", "條次", "條文", "連結"]
+    assert len(rows) == found + 1
+    assert all("流用" in r[2] and "預備金" in r[2] for r in rows[1:])
+    assert rows[1][3].endswith("#" + page.locator(".hit-head a").first.get_attribute("href").split("#")[1].split("?")[0])
+
+    go(page, "預算法第62條")
+    cited = int(re.search(r"被 (\d+) 條", page.locator(".section-head h3").inner_text()).group(1))
+    assert len(exported_rows(page)) == cited + 1
+
+    go(page, "預算法")
+    total = page.locator("#full-text .law-article").count()
+    assert len(exported_rows(page)) == total + 1
+    page.check("#only-cited")
+    shown = page.locator("#full-text .law-article.is-cited").count()
+    assert 0 < shown < total
+    assert len(exported_rows(page)) == shown + 1
