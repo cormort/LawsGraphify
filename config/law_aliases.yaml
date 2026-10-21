@@ -108,3 +108,12 @@ aliases:
 
 # 只當被引用對象、不抓全文的外部法規代碼（src/fetch_laws.py 會略過）
 external: [DPPA, CIVIL, FDA, TFA, LGA, GPA, AUDIT, AUDITER, ACA, FOUNDA, PPIER, PEPA, EYORG, FOIA]
+
+# 不在法務部、主計總處系統的法規（行政院、人事總處、立法院發布）：不抓全文，
+# 首頁「沒有收錄條文，連到原文」列出，連到主管機關的原文
+links:
+  OIPO: https://www.ey.gov.tw/Page/8F768BC511A94C5D/f9d28292-215e-44a3-aab1-450c9bfa7133
+  OICP: https://www.ey.gov.tw/Page/8F768BC511A94C5D/aef06e06-a900-47dc-b143-e6eb2ed2a0cf
+  CPT: https://www.dgpa.gov.tw/information?pid=7971&uid=109
+  LPT: https://www.dgpa.gov.tw/FileConversion?filename=dgpa/files/201801/1e15732a-091f-4194-a9e3-e7a4c67d6e5e.docx&nfix=pdf&name=%E8%AC%9B%E5%BA%A7%E9%90%98%E9%BB%9E%E8%B2%BB%E6%94%AF%E7%B5%A6%E8%A1%A8.docx
+  CSEAP: https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=20934&pid=171755

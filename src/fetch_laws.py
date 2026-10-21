@@ -107,10 +107,10 @@ def resolve_years(targets: dict[str, str], names) -> list[str]:
 
 
 def target_names() -> dict[str, str]:
-    """Normalized law name -> code, for every alias not marked external."""
+    """Normalized law name -> code, for every alias not marked external or linked."""
     with open(os.path.join(BASE_DIR, "config", "law_aliases.yaml"), encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
-    external = set(cfg.get("external") or [])
+    external = set(cfg.get("external") or []) | set(cfg.get("links") or {})  # links: elsewhere, not fetched
     names = {}
     for key, val in cfg["aliases"].items():
         pairs = [(key, val)] if isinstance(val, str) else [(n, key) for n in val]

@@ -10,6 +10,8 @@ import os
 import re
 from datetime import date
 import json
+
+import yaml
 from citation_resolver import extract_short_names, parse_citations, load_aliases, normalize_text
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -64,14 +66,22 @@ def dgbas_index():
         return json.load(f)
 
 
+def configured_links():
+    """Code -> URL from law_aliases.yaml's links: laws published elsewhere (行政院,
+    人事總處, 立法院) that are linked rather than fetched."""
+    with open(os.path.join(BASE_DIR, "config", "law_aliases.yaml"), encoding="utf-8") as f:
+        return yaml.safe_load(f).get("links") or {}
+
+
 def attachment_only(name_to_code, laws, dgbas):
-    """Targets DGBAS lists but has no article text for (tables published only as
-    attachments): the query page links to the original page instead."""
+    """Targets with no article text the query page links to the original of
+    instead: DGBAS rules published only as attachments, and configured links."""
     have = {law["code"] for law in laws}
-    links = {}
+    links, elsewhere = {}, configured_links()
     for name, code in name_to_code.items():
-        if code not in have and name in dgbas:
-            links.setdefault(code, {"code": code, "name": name, "url": DGBAS_PAGE + dgbas[name]})
+        url = elsewhere.get(code) or (DGBAS_PAGE + dgbas[name] if name in dgbas else None)
+        if code not in have and url:
+            links.setdefault(code, {"code": code, "name": name, "url": url})
     return sorted(links.values(), key=lambda link: link["name"])
 
 

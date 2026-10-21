@@ -647,6 +647,11 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000696"
   },
   {
+   "code": "CSEAP",
+   "name": "中央政府總決算審核報告案審查程序",
+   "url": "https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=20934&pid=171755"
+  },
+  {
    "code": "TBSUB54",
    "name": "修正中央政府總預算附屬單位預算及其分預算準用預算法第54條中「新興資本支出」、「新增計畫」、「已獲授權之原訂計畫」及「上年度執行數」之定義,自112年1月1日起適用",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001021"
@@ -675,6 +680,26 @@
    "code": "ZBPM",
    "name": "落實零基預算精神強化預算編製作業精進措施",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000864"
+  },
+  {
+   "code": "OIPO",
+   "name": "行政院及所屬各級機關因公派員出國案件編審要點",
+   "url": "https://www.ey.gov.tw/Page/8F768BC511A94C5D/f9d28292-215e-44a3-aab1-450c9bfa7133"
+  },
+  {
+   "code": "OICP",
+   "name": "行政院及所屬各級機關因公派員赴大陸地區案件編審要點",
+   "url": "https://www.ey.gov.tw/Page/8F768BC511A94C5D/aef06e06-a900-47dc-b143-e6eb2ed2a0cf"
+  },
+  {
+   "code": "LPT",
+   "name": "講座鐘點費支給表",
+   "url": "https://www.dgpa.gov.tw/FileConversion?filename=dgpa/files/201801/1e15732a-091f-4194-a9e3-e7a4c67d6e5e.docx&nfix=pdf&name=%E8%AC%9B%E5%BA%A7%E9%90%98%E9%BB%9E%E8%B2%BB%E6%94%AF%E7%B5%A6%E8%A1%A8.docx"
+  },
+  {
+   "code": "CPT",
+   "name": "軍公教人員兼職費支給表",
+   "url": "https://www.dgpa.gov.tw/information?pid=7971&uid=109"
   }
  ],
  "built": "2026-10-21",

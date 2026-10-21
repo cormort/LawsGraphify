@@ -199,7 +199,7 @@ let incoming = new Map();   // target id -> [edge]
 let outgoing = new Map();   // source id -> [edge]
 let lawOrder = new Map();   // code -> [article ids in order]
 let laws = [];              // [{code, name, kind, count}]
-let links = new Map();      // code -> {name, url}: attachment-only, linked to the original
+let links = new Map();      // code -> {name, url}: no article text, linked to the original
 let lawUrl = new Map();     // code -> DGBAS page, where an article's attachments are
 let nameToCode = {};        // normalized name -> code
 let codeToName = {};        // code -> display name
@@ -530,7 +530,7 @@ function renderHome() {
                 <span>${escapeHtml(l.name)}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div></details>`;
     }).join("");
     if (links.size) {
-        html += `<details class="card"><summary>只有附件，連到主計總處原文（${links.size}）</summary>
+        html += `<details class="card"><summary>沒有收錄條文，連到原文（${links.size}）</summary>
             <div class="list">${[...links.values()].map(originalLink).join("")}</div></details>`;
     }
     return html;
@@ -613,7 +613,7 @@ function renderCitedList(code) {
     const cited = [...incoming.keys()].filter(id => id.startsWith(code + "-")).sort();
     const link = links.get(code);
     return `<div class="card"><h2>${escapeHtml(lawName(code))}</h2>
-        ${link ? `<p class="muted">這部在主計總處只有附件，沒有條文可收錄，請看原文：</p><div class="list">${originalLink(link)}</div>`
+        ${link ? `<p class="muted">這部沒有收錄條文（只有附件，或不在法務部、主計總處的系統），請看原文：</p><div class="list">${originalLink(link)}</div>`
                : `<p class="muted">這部法規沒有收錄全文，以下是被引用的條文。</p>`}</div>`
         + (cited.length ? `<div class="card list">${cited.map(id => `<a href="#${encodeURIComponent(id)}">
             <span>${escapeHtml(articleLabel(id))}</span><span class="count">${citerCount(id)} 處</span></a>`).join("")}</div>` : "");
