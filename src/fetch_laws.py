@@ -16,6 +16,7 @@ its previous file is kept and the run carries on, so a flaky site never wipes da
 """
 
 import argparse
+import hashlib
 import html
 import io
 import json
@@ -139,8 +140,19 @@ def load_moj(refresh: bool) -> tuple[dict[str, dict], str]:
         print(f" {key}: {len(data['Laws'])} laws, updated {data.get('UpdateDate')}")
         updated = updated or str(data.get("UpdateDate", "")).split(" ")[0]  # "2026/6/12 上午 …"
         for law in data["Laws"]:
-            laws.setdefault(normalize_text(law["LawName"]), law)
+            if not law.get("LawAbandonNote"):  # "廢": abolished, so not collected
+                laws.setdefault(normalize_text(law["LawName"]), law)
     return laws, updated
+
+
+FUND_SUFFIX = "收支保管及運用辦法"
+
+
+def fund_targets(moj: dict[str, dict]) -> dict[str, str]:
+    """Every current 特種基金 收支保管及運用辦法 in MOJ data -> code. The code comes
+    from the name's hash, so a new fund never changes the codes of the others."""
+    return {name: "F" + hashlib.sha1(law["LawName"].encode()).hexdigest()[:6].upper()
+            for name, law in moj.items() if name.endswith(FUND_SUFFIX)}
 
 
 def moj_articles(law: dict) -> list[dict]:
@@ -216,6 +228,7 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     targets = target_names()
     moj, moj_updated = load_moj(args.refresh)
+    targets = {**fund_targets(moj), **targets}  # config wins if it names one itself
     dgbas = None  # loaded only if some target is missing from MOJ
     counts, missing, written, kept = {"moj": 0, "dgbas": 0}, [], set(), []
     if any(YEAR in name for name in targets):
@@ -290,6 +303,10 @@ def main():
             os.remove(os.path.join(OUTPUT_DIR, name))
             stale.remove(name)
             print(f"  - {name} (superseded by a newer year)")
+        elif name.endswith(FUND_SUFFIX + ".json"):
+            os.remove(os.path.join(OUTPUT_DIR, name))
+            stale.remove(name)
+            print(f"  - {name} (no longer in MOJ's current regulations)")
     if stale:
         print(f"\n{len(stale)} file(s) in {OUTPUT_DIR} are no longer targets; move or delete them:")
         for name in stale:

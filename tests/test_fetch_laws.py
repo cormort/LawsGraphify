@@ -6,7 +6,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 
-from fetch_laws import DGBAS_INDEX, resolve_years, target_names  # noqa: E402
+from fetch_laws import DGBAS_INDEX, fund_targets, resolve_years, target_names  # noqa: E402
 
 
 def test_latest_year_wins():
@@ -55,3 +55,13 @@ def test_configured_templates_against_dgbas_index():
     assert by_code["UBPE"] == "各機關一百十六年度單位預算案編製應行注意辦理事項"
     assert by_code["BPRIN"] == "一百十六年度中央及地方政府預算籌編原則"
     assert by_code["LYRES"].startswith("中央政府各機關執行立法院審查中華民國一百十三年度")
+
+
+def test_fund_regulations_found_with_stable_codes():
+    moj = {"住宅基金收支保管及運用辦法": {"LawName": "住宅基金收支保管及運用辦法"},
+           "預算法": {"LawName": "預算法"}}
+    codes = fund_targets(moj)
+    assert list(codes) == ["住宅基金收支保管及運用辦法"]
+    # Same code as when the 82 were first listed by hand, so favourites keep working
+    assert codes["住宅基金收支保管及運用辦法"] == "F" + __import__("hashlib").sha1(
+        "住宅基金收支保管及運用辦法".encode()).hexdigest()[:6].upper()
