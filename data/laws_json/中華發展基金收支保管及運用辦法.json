@@ -2,6 +2,8 @@
   "name": "中華發展基金收支保管及運用辦法",
   "code": "FC2CD3F",
   "source": "moj",
+  "published": "1994-01-14",
+  "abolished": "2015-12-09",
   "content": [
     {
       "num": 1,
@@ -93,6 +95,5 @@
       "zh": "第 15 條",
       "article": "本辦法自發布日施行。"
     }
-  ],
-  "abolished": "2015-12-09"
+  ]
 }

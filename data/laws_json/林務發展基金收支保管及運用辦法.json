@@ -2,6 +2,8 @@
   "name": "林務發展基金收支保管及運用辦法",
   "code": "F9ABB18",
   "source": "moj",
+  "published": "2000-12-22",
+  "abolished": "2007-09-10",
   "content": [
     {
       "num": 1,
@@ -75,6 +77,5 @@
       "zh": "第 12 條",
       "article": "本辦法自發布日施行。"
     }
-  ],
-  "abolished": "2007-09-10"
+  ]
 }

@@ -2,6 +2,8 @@
   "name": "農業平準基金收支保管及運用辦法",
   "code": "F8D9B2E",
   "source": "moj",
+  "published": "1998-09-07",
+  "abolished": "2001-07-04",
   "content": [
     {
       "num": 1,
@@ -63,6 +65,5 @@
       "zh": "第 10 條",
       "article": "本辦法自發布日施行。"
     }
-  ],
-  "abolished": "2001-07-04"
+  ]
 }

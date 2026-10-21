@@ -6,7 +6,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 
-from fetch_laws import DGBAS_INDEX, fund_targets, resolve_years, target_names  # noqa: E402
+from fetch_laws import DGBAS_INDEX, dgbas_dates, fund_targets, moj_dates, resolve_years, target_names  # noqa: E402
 
 
 def test_latest_year_wins():
@@ -65,3 +65,12 @@ def test_fund_regulations_found_with_stable_codes():
     # Same code as when the 82 were first listed by hand, so favourites keep working
     assert codes["住宅基金收支保管及運用辦法"] == "F" + __import__("hashlib").sha1(
         "住宅基金收支保管及運用辦法".encode()).hexdigest()[:6].upper()
+
+
+def test_dates():
+    law = {"LawHistories": "1.中華民國二十一年九月二十四日國民政府制定公布全文\r\n2.中華民國一百十年六月九日總統令修正公布",
+           "LawModifiedDate": "20210609"}
+    assert moj_dates(law) == {"published": "1932-09-24", "amended": "2021-06-09"}
+    assert moj_dates({**law, "LawAbandonNote": "廢"}) == {"published": "1932-09-24"}
+    page = "<td>公發布日：</td><td> 民國 100 年 03 月 29 日</td> 修正日期： 民國 110 年 05 月 07 日 系統更新日期： 114.12.30"
+    assert dgbas_dates(page) == {"published": "2011-03-29", "amended": "2021-05-07"}

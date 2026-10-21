@@ -173,8 +173,9 @@ def build_graph():
                 "kind": "廢止" if law_data.get("abolished") else law_kind(law_name, law_data.get("source")),
                 "count": len(article_order),
             }
-            if law_data.get("abolished"):
-                law["abolished"] = law_data["abolished"]
+            for key in ("published", "amended", "abolished"):
+                if law_data.get(key):
+                    law[key] = law_data[key]
             # The original page, where the attachments an article names can be downloaded
             if law_data.get("source") == "dgbas" and normalize_text(law_name) in dgbas:
                 law["url"] = DGBAS_PAGE + dgbas[normalize_text(law_name)]

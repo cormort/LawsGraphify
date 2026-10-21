@@ -2,6 +2,8 @@
   "name": "造林基金收支保管及運用辦法",
   "code": "F9BFD05",
   "source": "moj",
+  "published": "2000-05-18",
+  "abolished": "2007-09-10",
   "content": [
     {
       "num": 1,
@@ -81,6 +83,5 @@
       "zh": "第 13 條",
       "article": "本辦法自發布日施行。"
     }
-  ],
-  "abolished": "2007-09-10"
+  ]
 }

@@ -2,6 +2,8 @@
   "name": "糧食平準基金收支保管及運用辦法",
   "code": "FC2A17E",
   "source": "moj",
+  "published": "1975-02-14",
+  "abolished": "2001-07-04",
   "content": [
     {
       "num": 1,
@@ -87,6 +89,5 @@
       "zh": "第 14 條",
       "article": "本辦法自發布日施行。"
     }
-  ],
-  "abolished": "2001-07-04"
+  ]
 }

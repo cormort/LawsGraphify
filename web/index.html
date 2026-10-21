@@ -304,7 +304,7 @@ const SECTIONS = {
         kind: "廢止", title: "廢止法規專區", where: "已廢止的規定",
         note: n => `${n} 部已廢止的規定，依廢止日期由新到舊排列，僅供查考；一般搜尋與「被引用」不含這些。`,
         topics: [],
-        short: l => `${l.name}（${l.abolished} 廢止）`,
+        short: l => `${l.name}（${rocDate(l.abolished)}廢止）`,
         sort: (a, b) => b.abolished.localeCompare(a.abolished),
     },
 };
@@ -321,9 +321,21 @@ function renderSection(key) {
             <span>${escapeHtml(sec.short(l))}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div>`;
 }
 
+// "2021-06-09" -> "民國 110 年 6 月 9 日", how the law texts write dates
+function rocDate(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return y ? `民國 ${y - 1911} 年 ${m} 月 ${d} 日` : iso;
+}
+
 function abolishedNote(code) {
     const date = laws.find(l => l.code === code)?.abolished;
-    return date ? `<p class="warn">本規定已於 ${date} 廢止，僅供查考。</p>` : "";
+    return date ? `<p class="warn">本規定已於${rocDate(date)}廢止，僅供查考。</p>` : "";
+}
+
+function lawDates(code) {
+    const law = laws.find(l => l.code === code) || {};
+    const parts = [law.published && `發布 ${rocDate(law.published)}`, law.amended && `最新修正 ${rocDate(law.amended)}`].filter(Boolean);
+    return parts.length ? `<p class="muted">${parts.join(" · ")}</p>` : "";
 }
 
 // "流用 預備金 -特別" -> include all of [流用, 預備金], exclude [特別]
@@ -672,7 +684,7 @@ function renderFullText(code) {
     const favs = store.get("favs", []);
     rememberRecent(code);
 
-    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2>${starButton(code)}</div>${abolishedNote(code)}
+    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2>${starButton(code)}</div>${abolishedNote(code)}${lawDates(code)}
         <p class="muted">共 ${ids.length} ${unit(code)}，${cited} ${unit(code)}被其他條文引用</p>
         <div class="controls">
             <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)}</form>

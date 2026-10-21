@@ -2,6 +2,8 @@
   "name": "文化建設基金收支保管及運用辦法",
   "code": "FB0A17D",
   "source": "moj",
+  "published": "1987-08-26",
+  "abolished": "2006-04-13",
   "content": [
     {
       "num": 1,
@@ -93,6 +95,5 @@
       "zh": "第 15 條",
       "article": "本辦法自發布日施行。"
     }
-  ],
-  "abolished": "2006-04-13"
+  ]
 }

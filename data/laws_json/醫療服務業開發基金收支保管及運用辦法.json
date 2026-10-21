@@ -2,6 +2,8 @@
   "name": "醫療服務業開發基金收支保管及運用辦法",
   "code": "FAE4BDB",
   "source": "moj",
+  "published": "2001-10-19",
+  "abolished": "2006-11-22",
   "content": [
     {
       "num": 1,
@@ -93,6 +95,5 @@
       "zh": "第 15 條",
       "article": "本辦法自發布日施行。"
     }
-  ],
-  "abolished": "2006-11-22"
+  ]
 }

@@ -210,6 +210,8 @@
   "FB7C262": "FB7C262",
   "國立臺北護理學院附設醫院作業基金收支保管及運用辦法": "F048B83",
   "F048B83": "F048B83",
+  "中央各主管機關一百十六年度概算編製應行注意辦理事項": "CMBE",
+  "CMBE": "CMBE",
   "林務發展及造林基金收支保管及運用辦法": "FB2D9A7",
   "FB2D9A7": "FB2D9A7",
   "環境保護基金收支保管及運用辦法": "F05D7C4",
@@ -226,6 +228,8 @@
   "FY2027LCGSUBPP": "FY2027LCGSUBPP",
   "交通作業基金收支保管及運用辦法": "FB683F8",
   "FB683F8": "FB683F8",
+  "中央政府各機關執行立法院審查中華民國一百十三年度中央政府總預算案所作與預算執行有關決議之應行配合注意事項": "LYRES",
+  "LYRES": "LYRES",
   "國立中正文化中心作業基金收支保管及運用辦法": "F5C41DE",
   "F5C41DE": "F5C41DE",
   "中華民國一百十四年度總決算附屬單位決算編製要點": "FY2025SUBSET",
@@ -294,6 +298,8 @@
   "F7719C5": "F7719C5",
   "民航事業作業基金收支保管及運用辦法": "F92A694",
   "F92A694": "F92A694",
+  "各機關一百十六年度單位預算案編製應行注意辦理事項": "UBPE",
+  "UBPE": "UBPE",
   "推廣貿易基金收支保管及運用辦法": "F9677D5",
   "F9677D5": "F9677D5",
   "行政院國家發展基金收支保管及運用辦法": "F3DFC6F",
@@ -450,6 +456,8 @@
   "F988E0A": "F988E0A",
   "國軍醫院附設民眾診療作業基金收支保管及運用辦法": "FCC5B1F",
   "FCC5B1F": "FCC5B1F",
+  "一百十六年度中央及地方政府預算籌編原則": "BPRIN",
+  "BPRIN": "BPRIN",
   "海外經濟合作發展基金收支保管及運用辦法": "F971276",
   "F971276": "F971276",
   "廢一般物品及容器資源回收管理基金收支保管及運用辦法": "F6C661A",
@@ -473,6 +481,7 @@
    "name": "中華民國憲法",
    "kind": "憲法與法律",
    "count": 175,
+   "published": "1947-01-01",
    "hash": "026aa114f81d"
   },
   {
@@ -480,6 +489,8 @@
    "name": "商業會計法",
    "kind": "憲法與法律",
    "count": 87,
+   "published": "1948-01-07",
+   "amended": "2014-06-18",
    "hash": "c4b0334e94c6"
   },
   {
@@ -487,6 +498,8 @@
    "name": "會計法",
    "kind": "憲法與法律",
    "count": 123,
+   "published": "1935-08-14",
+   "amended": "2022-06-15",
    "hash": "86f5cf93308d"
   },
   {
@@ -494,6 +507,8 @@
    "name": "決算法",
    "kind": "憲法與法律",
    "count": 33,
+   "published": "1938-08-09",
+   "amended": "2011-05-25",
    "hash": "7e8df963d231"
   },
   {
@@ -501,6 +516,8 @@
    "name": "預算法",
    "kind": "憲法與法律",
    "count": 101,
+   "published": "1932-09-24",
+   "amended": "2021-06-09",
    "hash": "efe5629bae6e"
   },
   {
@@ -508,6 +525,8 @@
    "name": "中央對各級地方政府重大天然災害救災經費處理辦法",
    "kind": "命令",
    "count": 21,
+   "published": "2009-01-22",
+   "amended": "2022-12-16",
    "hash": "a3feae593bc8"
   },
   {
@@ -515,6 +534,8 @@
    "name": "中央對直轄市及縣（市）政府補助辦法",
    "kind": "命令",
    "count": 18,
+   "published": "2000-09-14",
+   "amended": "2025-08-29",
    "hash": "7a76607d7163"
   },
   {
@@ -522,6 +543,8 @@
    "name": "中央政府中程計畫預算編製辦法",
    "kind": "命令",
    "count": 30,
+   "published": "2001-02-01",
+   "amended": "2014-05-21",
    "hash": "2729ee067516"
   },
   {
@@ -529,6 +552,8 @@
    "name": "中央政府特種基金管理準則",
    "kind": "命令",
    "count": 22,
+   "published": "1982-05-10",
+   "amended": "2021-10-06",
    "hash": "8491baa421c7"
   },
   {
@@ -536,6 +561,8 @@
    "name": "中央政府非營業特種基金裁撤機制辦法",
    "kind": "命令",
    "count": 8,
+   "published": "2019-11-20",
+   "amended": "2021-10-05",
    "hash": "8f9dba2ea499"
   },
   {
@@ -543,6 +570,7 @@
    "name": "中華民國一百十六年度中央政府總預算編製辦法",
    "kind": "命令",
    "count": 37,
+   "published": "2026-05-20",
    "hash": "d66b5febdddd"
   },
   {
@@ -550,6 +578,7 @@
    "name": "中華民國一百十六年度中央政府總預算附屬單位預算編製辦法",
    "kind": "命令",
    "count": 20,
+   "published": "2026-05-18",
    "hash": "e5415a55e8ff"
   },
   {
@@ -557,6 +586,8 @@
    "name": "內部審核處理準則",
    "kind": "命令",
    "count": 29,
+   "published": "1976-07-22",
+   "amended": "2018-05-14",
    "hash": "acd1f220691b"
   },
   {
@@ -564,6 +595,8 @@
    "name": "中央政府債務基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 18,
+   "published": "2000-02-10",
+   "amended": "2025-03-19",
    "hash": "117a9ead98c3"
   },
   {
@@ -571,6 +604,7 @@
    "name": "中央研究院科學研究基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2014-01-03",
    "hash": "0084b700e8df"
   },
   {
@@ -578,6 +612,8 @@
    "name": "中央都市更新基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2008-12-26",
+   "amended": "2018-03-14",
    "hash": "063da69b7563"
   },
   {
@@ -585,6 +621,8 @@
    "name": "中小企業發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "1991-09-27",
+   "amended": "2022-12-13",
    "hash": "42c2ab97bec6"
   },
   {
@@ -592,6 +630,8 @@
    "name": "交通作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 23,
+   "published": "1999-02-22",
+   "amended": "2026-08-07",
    "hash": "e03e5f0205b4"
   },
   {
@@ -599,6 +639,8 @@
    "name": "住宅基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "1978-02-27",
+   "amended": "2017-08-01",
    "hash": "fd2763ec6732"
   },
   {
@@ -606,6 +648,8 @@
    "name": "促進轉型正義基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2022-02-11",
+   "amended": "2024-11-25",
    "hash": "3fb9d9294c8a"
   },
   {
@@ -613,6 +657,8 @@
    "name": "全民健康保險基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "2010-01-05",
+   "amended": "2025-04-02",
    "hash": "1c443cfe7e00"
   },
   {
@@ -620,6 +666,8 @@
    "name": "再生能源發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2009-11-26",
+   "amended": "2024-01-25",
    "hash": "ee2a68d557c7"
   },
   {
@@ -627,6 +675,8 @@
    "name": "勞工保險局作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 10,
+   "published": "2015-10-23",
+   "amended": "2022-04-27",
    "hash": "31b454549b94"
   },
   {
@@ -634,6 +684,8 @@
    "name": "勞工退休基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "1986-09-25",
+   "amended": "2018-05-21",
    "hash": "cb1f5c48deae"
   },
   {
@@ -641,6 +693,7 @@
    "name": "原住民族傳統智慧創作保護共同基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "2015-03-13",
    "hash": "e4dcf2c4552e"
   },
   {
@@ -648,6 +701,8 @@
    "name": "原住民族就業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "2002-04-16",
+   "amended": "2017-11-01",
    "hash": "c001c489287e"
   },
   {
@@ -655,6 +710,8 @@
    "name": "原住民族綜合發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "1999-11-18",
+   "amended": "2025-11-03",
    "hash": "bd4c9166d4cf"
   },
   {
@@ -662,6 +719,7 @@
    "name": "反托拉斯基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2015-11-24",
    "hash": "1e1bb806b65a"
   },
   {
@@ -669,6 +727,8 @@
    "name": "國土永續發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "2017-03-10",
+   "amended": "2023-07-19",
    "hash": "8f13b2f1c278"
   },
   {
@@ -676,6 +736,8 @@
    "name": "國民年金保險基金管理運用及監督辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2008-08-25",
+   "amended": "2018-11-02",
    "hash": "8967a37da9ed"
   },
   {
@@ -683,6 +745,8 @@
    "name": "國民年金法",
    "kind": "特種基金",
    "count": 63,
+   "published": "2007-08-08",
+   "amended": "2020-06-03",
    "hash": "05c51db35d81"
   },
   {
@@ -690,6 +754,8 @@
    "name": "國立大學校院校務基金管理及監督辦法",
    "kind": "特種基金",
    "count": 34,
+   "published": "1999-12-10",
+   "amended": "2021-05-19",
    "hash": "acb4a7c905a0"
   },
   {
@@ -697,6 +763,8 @@
    "name": "國立大學校院校務基金設置條例",
    "kind": "特種基金",
    "count": 17,
+   "published": "1999-02-03",
+   "amended": "2015-02-04",
    "hash": "2361469b488c"
   },
   {
@@ -704,6 +772,8 @@
    "name": "國立成功大學附設醫院作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "1988-05-27",
+   "amended": "2005-08-25",
    "hash": "a84415bd7e9a"
   },
   {
@@ -711,6 +781,8 @@
    "name": "國立文化機構作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2013-01-04",
+   "amended": "2021-05-03",
    "hash": "d8087a5321fb"
   },
   {
@@ -718,6 +790,8 @@
    "name": "國立臺灣大學附設醫院作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "1980-11-17",
+   "amended": "2024-05-21",
    "hash": "462113c87344"
   },
   {
@@ -725,6 +799,7 @@
    "name": "國立陽明大學附設醫院作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2008-08-21",
    "hash": "f0cd1e0eadff"
   },
   {
@@ -732,6 +807,8 @@
    "name": "國軍營舍及設施改建基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 18,
+   "published": "1997-07-26",
+   "amended": "2023-03-22",
    "hash": "c601e0be2944"
   },
   {
@@ -739,6 +816,8 @@
    "name": "國軍生產及服務作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "1999-01-20",
+   "amended": "2025-12-17",
    "hash": "106a87acd615"
   },
   {
@@ -746,6 +825,8 @@
    "name": "國軍老舊眷村改建基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "1997-06-24",
+   "amended": "2014-06-10",
    "hash": "cfa300c05315"
   },
   {
@@ -753,6 +834,8 @@
    "name": "國軍退除役官兵安置基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "1983-07-04",
+   "amended": "2021-11-17",
    "hash": "b983923c0f60"
   },
   {
@@ -760,6 +843,8 @@
    "name": "國防醫學大學軍事教育基金管理及監督辦法",
    "kind": "特種基金",
    "count": 40,
+   "published": "2024-01-11",
+   "amended": "2026-10-01",
    "hash": "ca0cbaeff22b"
   },
   {
@@ -767,6 +852,8 @@
    "name": "土壤及地下水污染整治基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "2001-06-11",
+   "amended": "2024-04-08",
    "hash": "fa6ec936dead"
   },
   {
@@ -774,6 +861,8 @@
    "name": "學產基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 14,
+   "published": "2000-02-02",
+   "amended": "2024-12-13",
    "hash": "bfc6eb4d6f87"
   },
   {
@@ -781,6 +870,8 @@
    "name": "家庭暴力及性侵害防治基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2015-12-24",
+   "amended": "2017-06-28",
    "hash": "8dc66a0e5dc5"
   },
   {
@@ -788,6 +879,8 @@
    "name": "實施平均地權基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 14,
+   "published": "2021-11-10",
+   "amended": "2026-06-10",
    "hash": "c4f9aef7b427"
   },
   {
@@ -795,6 +888,8 @@
    "name": "就業安定基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 18,
+   "published": "1992-09-18",
+   "amended": "2026-01-02",
    "hash": "5455356926bb"
   },
   {
@@ -802,6 +897,8 @@
    "name": "建築物無障礙設備與設施改善基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "1998-09-15",
+   "amended": "2018-01-19",
    "hash": "64f78c3e76a9"
   },
   {
@@ -809,6 +906,8 @@
    "name": "推廣貿易基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "1993-11-08",
+   "amended": "2023-12-12",
    "hash": "f016eaebf9b9"
   },
   {
@@ -816,6 +915,8 @@
    "name": "故宮文物藝術發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "1975-01-09",
+   "amended": "2026-09-14",
    "hash": "e85d9986409f"
   },
   {
@@ -823,6 +924,7 @@
    "name": "文化發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "2022-12-28",
    "hash": "81e66ce81eef"
   },
   {
@@ -830,6 +932,8 @@
    "name": "新住民發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "2004-11-30",
+   "amended": "2025-03-21",
    "hash": "168a80bcba32"
   },
   {
@@ -837,6 +941,8 @@
    "name": "新市鎮開發基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "1993-07-16",
+   "amended": "2013-05-31",
    "hash": "31d3f2db2dc3"
   },
   {
@@ -844,6 +950,8 @@
    "name": "有線廣播電視事業發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 19,
+   "published": "2001-06-28",
+   "amended": "2021-09-27",
    "hash": "510212c2b235"
   },
   {
@@ -851,6 +959,8 @@
    "name": "林務發展及造林基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "2005-05-12",
+   "amended": "2006-10-30",
    "hash": "fd7169594e7c"
   },
   {
@@ -858,6 +968,8 @@
    "name": "核子事故緊急應變基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "2005-05-13",
+   "amended": "2023-12-29",
    "hash": "b7727aeab1bc"
   },
   {
@@ -865,6 +977,8 @@
    "name": "核能發電後端營運基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "1999-02-12",
+   "amended": "2022-01-10",
    "hash": "35316026d0ce"
   },
   {
@@ -872,6 +986,8 @@
    "name": "榮民醫療作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "1997-09-15",
+   "amended": "2024-05-21",
    "hash": "02089656fa16"
   },
   {
@@ -879,6 +995,8 @@
    "name": "毒品防制基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "2018-10-11",
+   "amended": "2023-09-28",
    "hash": "398e18feb7dd"
   },
   {
@@ -886,6 +1004,8 @@
    "name": "水污染防治基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2014-08-12",
+   "amended": "2023-12-19",
    "hash": "52aab169fe1f"
   },
   {
@@ -893,6 +1013,8 @@
    "name": "水資源作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 14,
+   "published": "2001-09-14",
+   "amended": "2017-10-31",
    "hash": "cb2b3f060545"
   },
   {
@@ -900,6 +1022,8 @@
    "name": "法務部矯正機關作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "1979-07-21",
+   "amended": "2024-01-16",
    "hash": "9e95a0986143"
   },
   {
@@ -907,6 +1031,7 @@
    "name": "海洋污染防治基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 15,
+   "published": "2024-11-15",
    "hash": "80b1b5233d19"
   },
   {
@@ -914,6 +1039,8 @@
    "name": "溫室氣體管理基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2016-01-30",
+   "amended": "2026-09-14",
    "hash": "33eb98940b76"
   },
   {
@@ -921,6 +1048,8 @@
    "name": "漁業發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "1971-05-13",
+   "amended": "2011-05-12",
    "hash": "a31ffccf6b81"
   },
   {
@@ -928,6 +1057,8 @@
    "name": "營建建設基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "1998-09-28",
+   "amended": "2021-02-20",
    "hash": "20d93aad0ce1"
   },
   {
@@ -935,6 +1066,8 @@
    "name": "環境保護基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 14,
+   "published": "2019-11-06",
+   "amended": "2024-01-18",
    "hash": "2ee4241317d6"
   },
   {
@@ -942,6 +1075,8 @@
    "name": "環境教育基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2010-12-23",
+   "amended": "2023-11-30",
    "hash": "bdcf354742be"
   },
   {
@@ -949,6 +1084,8 @@
    "name": "產業園區開發管理基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "1991-10-07",
+   "amended": "2023-11-23",
    "hash": "c6fda2d703a3"
   },
   {
@@ -956,6 +1093,8 @@
    "name": "石油基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2001-11-26",
+   "amended": "2024-01-25",
    "hash": "ec0886bdf5a7"
   },
   {
@@ -963,6 +1102,8 @@
    "name": "研發及產業訓儲替代役基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2007-10-31",
+   "amended": "2024-07-16",
    "hash": "7f6002090481"
   },
   {
@@ -970,6 +1111,8 @@
    "name": "私立高級中等以上學校退場基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2017-06-05",
+   "amended": "2023-02-22",
    "hash": "1e93d04918b0"
   },
   {
@@ -977,6 +1120,8 @@
    "name": "科學園區管理局作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "1981-10-29",
+   "amended": "2022-10-18",
    "hash": "7195cb011a7e"
   },
   {
@@ -984,6 +1129,8 @@
    "name": "科技產業園區作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "1974-08-15",
+   "amended": "2023-11-23",
    "hash": "a8132c89c394"
   },
   {
@@ -991,6 +1138,8 @@
    "name": "空氣污染防制基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "1995-07-05",
+   "amended": "2023-12-12",
    "hash": "e4250c0e6465"
   },
   {
@@ -998,6 +1147,8 @@
    "name": "管制藥品製藥工廠作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2001-09-27",
+   "amended": "2013-12-19",
    "hash": "71e31b0a0288"
   },
   {
@@ -1005,6 +1156,8 @@
    "name": "經濟作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "1998-09-07",
+   "amended": "2022-12-13",
    "hash": "d10087ac7033"
   },
   {
@@ -1012,6 +1165,8 @@
    "name": "經濟特別收入基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "2003-12-22",
+   "amended": "2022-12-13",
    "hash": "43df12c2100a"
   },
   {
@@ -1019,6 +1174,8 @@
    "name": "考選業務基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2009-11-30",
+   "amended": "2015-01-28",
    "hash": "22884036e54e"
   },
   {
@@ -1026,6 +1183,8 @@
    "name": "能源研究發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "1982-01-18",
+   "amended": "2024-01-25",
    "hash": "9e6f15d438a3"
   },
   {
@@ -1033,6 +1192,8 @@
    "name": "航港建設基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "2003-12-23",
+   "amended": "2020-05-13",
    "hash": "468af04dd953"
   },
   {
@@ -1040,6 +1201,8 @@
    "name": "花東地區永續發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2012-01-03",
+   "amended": "2016-11-09",
    "hash": "0261529cc7ba"
   },
   {
@@ -1047,6 +1210,8 @@
    "name": "菸害防制及衛生保健基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2008-08-21",
+   "amended": "2017-06-28",
    "hash": "668a8c126ad5"
   },
   {
@@ -1054,6 +1219,8 @@
    "name": "行政院國家發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 19,
+   "published": "2005-10-21",
+   "amended": "2014-06-13",
    "hash": "4561fca5dce7"
   },
   {
@@ -1061,6 +1228,8 @@
    "name": "行政院國家科學技術發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 18,
+   "published": "1971-06-23",
+   "amended": "2022-10-26",
    "hash": "d1068f80cfdb"
   },
   {
@@ -1068,6 +1237,7 @@
    "name": "衛生福利特別收入基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "2017-06-28",
    "hash": "703b8c56e5c0"
   },
   {
@@ -1075,6 +1245,8 @@
    "name": "資源回收管理基金信託基金部分收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "1998-08-12",
+   "amended": "2024-01-10",
    "hash": "597d6eca216d"
   },
   {
@@ -1082,6 +1254,8 @@
    "name": "資源回收管理基金非營業基金部分收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "1998-10-01",
+   "amended": "2024-01-15",
    "hash": "84810a4a891d"
   },
   {
@@ -1089,6 +1263,8 @@
    "name": "軍事教育條例",
    "kind": "特種基金",
    "count": 25,
+   "published": "1999-07-14",
+   "amended": "2016-11-09",
    "hash": "95d25d985b91"
   },
   {
@@ -1096,6 +1272,8 @@
    "name": "農業作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "2003-12-24",
+   "amended": "2023-12-29",
    "hash": "ad91e208dd11"
   },
   {
@@ -1103,6 +1281,8 @@
    "name": "農業天然災害救助基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 14,
+   "published": "2001-04-26",
+   "amended": "2006-10-30",
    "hash": "22d6396b4cb7"
   },
   {
@@ -1110,6 +1290,8 @@
    "name": "農業特別收入基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 14,
+   "published": "1998-09-07",
+   "amended": "2016-02-05",
    "hash": "733cd6990f7b"
   },
   {
@@ -1117,6 +1299,8 @@
    "name": "農業發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "1983-01-14",
+   "amended": "2012-03-03",
    "hash": "6b30596c4a62"
   },
   {
@@ -1124,6 +1308,8 @@
    "name": "農產品受進口損害救助基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "1990-09-24",
+   "amended": "2003-12-17",
    "hash": "b0f375a6560d"
   },
   {
@@ -1131,6 +1317,7 @@
    "name": "農田水利事業作業基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 13,
+   "published": "2020-10-29",
    "hash": "15502f5403b4"
   },
   {
@@ -1138,6 +1325,8 @@
    "name": "通訊傳播監督管理基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2006-12-29",
+   "amended": "2022-10-13",
    "hash": "8cf2c1c2832e"
   },
   {
@@ -1145,6 +1334,8 @@
    "name": "運動發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2009-12-01",
+   "amended": "2020-12-23",
    "hash": "f3ac3fe57629"
   },
   {
@@ -1152,6 +1343,8 @@
    "name": "醫療發展基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 12,
+   "published": "1991-06-28",
+   "amended": "2017-06-28",
    "hash": "a3eb111b3da2"
   },
   {
@@ -1159,6 +1352,8 @@
    "name": "醫療藥品基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 16,
+   "published": "2000-02-29",
+   "amended": "2011-06-27",
    "hash": "dfe3d7737f78"
   },
   {
@@ -1166,6 +1361,8 @@
    "name": "金融監督管理基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 11,
+   "published": "2004-04-21",
+   "amended": "2018-01-04",
    "hash": "ff423e7fb15e"
   },
   {
@@ -1173,13 +1370,35 @@
    "name": "離島建設基金收支保管及運用辦法",
    "kind": "特種基金",
    "count": 17,
+   "published": "2001-03-16",
+   "amended": "2017-10-30",
    "hash": "5b528af7736e"
+  },
+  {
+   "code": "BPRIN",
+   "name": "一百十六年度中央及地方政府預算籌編原則",
+   "kind": "行政規則",
+   "count": 6,
+   "published": "2026-05-13",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001106",
+   "hash": "322d4eea38c7"
+  },
+  {
+   "code": "CMBE",
+   "name": "中央各主管機關一百十六年度概算編製應行注意辦理事項",
+   "kind": "行政規則",
+   "count": 21,
+   "published": "2026-05-20",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001111",
+   "hash": "3f2454bde304"
   },
   {
    "code": "CMPB",
    "name": "中央各主管機關規劃中程計畫與概算編審作業應行辦理事項",
    "kind": "行政規則",
    "count": 7,
+   "published": "2002-11-13",
+   "amended": "2023-05-02",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL029858",
    "hash": "3e16631b660e"
   },
@@ -1188,6 +1407,8 @@
    "name": "中央各機關對地方政府補助款之撥款原則",
    "kind": "行政規則",
    "count": 6,
+   "published": "2019-10-03",
+   "amended": "2025-11-11",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000944",
    "hash": "6db834d7b946"
   },
@@ -1196,6 +1417,8 @@
    "name": "中央對各級地方政府支用災害準備金審查原則",
    "kind": "行政規則",
    "count": 7,
+   "published": "2005-12-15",
+   "amended": "2023-12-18",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL038111",
    "hash": "7a44b7d8a96c"
   },
@@ -1204,6 +1427,8 @@
    "name": "中央對直轄市與縣(市)政府計畫及預算考核要點",
    "kind": "行政規則",
    "count": 11,
+   "published": "2000-11-13",
+   "amended": "2025-12-31",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL024380",
    "hash": "152171521ecf"
   },
@@ -1212,14 +1437,27 @@
    "name": "中央政府各機關單位預算分配注意事項",
    "kind": "行政規則",
    "count": 10,
+   "published": "2003-12-15",
+   "amended": "2026-10-20",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032660",
    "hash": "a6e22c4a2598"
+  },
+  {
+   "code": "LYRES",
+   "name": "中央政府各機關執行立法院審查中華民國一百十三年度中央政府總預算案所作與預算執行有關決議之應行配合注意事項",
+   "kind": "行政規則",
+   "count": 7,
+   "published": "2024-02-21",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001065",
+   "hash": "07c590283c03"
   },
   {
    "code": "CSFPP",
    "name": "中央政府各機關學校出席費及稿費支給要點",
    "kind": "行政規則",
    "count": 9,
+   "published": "2000-12-05",
+   "amended": "2026-07-23",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL000752",
    "hash": "f09460a9624e"
   },
@@ -1228,6 +1466,8 @@
    "name": "中央政府各機關學校購置及租賃公務車輛作業要點",
    "kind": "行政規則",
    "count": 12,
+   "published": "2014-12-16",
+   "amended": "2020-03-20",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000786",
    "hash": "5157bb7db488"
   },
@@ -1236,6 +1476,8 @@
    "name": "中央政府各機關對民間團體及個人補(捐)助預算執行應注意事項",
    "kind": "行政規則",
    "count": 9,
+   "published": "2005-01-27",
+   "amended": "2021-05-10",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL033828",
    "hash": "a6e16a5ab43d"
   },
@@ -1244,6 +1486,8 @@
    "name": "中央政府總預算案未能依限完成時預算執行之補充規定",
    "kind": "行政規則",
    "count": 5,
+   "published": "2001-12-18",
+   "amended": "2026-08-26",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032657",
    "hash": "eed9ceb50dc1"
   },
@@ -1252,6 +1496,7 @@
    "name": "中央政府非營業特種基金對地方政府補助計畫之撥款原則",
    "kind": "行政規則",
    "count": 6,
+   "published": "2023-08-01",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001043",
    "hash": "48bf1018595b"
   },
@@ -1260,6 +1505,8 @@
    "name": "中央政府非營業特種基金賸餘解庫及短絀填補注意事項",
    "kind": "行政規則",
    "count": 8,
+   "published": "2000-05-31",
+   "amended": "2018-06-15",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL033121",
    "hash": "18904bc41c8b"
   },
@@ -1268,6 +1515,7 @@
    "name": "中華民國一百十五年度總預算半年結算報告編製要點",
    "kind": "行政規則",
    "count": 18,
+   "published": "2026-06-03",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001113",
    "hash": "717e3cda9e99"
   },
@@ -1276,6 +1524,7 @@
    "name": "中華民國一百十五年度總預算附屬單位預算半年結算報告編製要點",
    "kind": "行政規則",
    "count": 17,
+   "published": "2026-06-04",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001114",
    "hash": "21877f42c63a"
   },
@@ -1284,22 +1533,25 @@
    "name": "中華民國一百十六年度直轄市及縣(市)總預算編製要點",
    "kind": "行政規則",
    "count": 39,
+   "published": "2026-05-14",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001108",
-   "hash": "1b36f86479d0"
+   "hash": "05a090196350"
   },
   {
    "code": "FY2027LCGSUBPP",
    "name": "中華民國一百十六年度直轄市及縣(市)總預算附屬單位預算編製要點",
    "kind": "行政規則",
    "count": 23,
+   "published": "2026-05-14",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001107",
-   "hash": "f324dcb5cff8"
+   "hash": "8453cea21377"
   },
   {
    "code": "FY2025SET",
    "name": "中華民國一百十四年度總決算編製要點",
    "kind": "行政規則",
    "count": 46,
+   "published": "2025-11-07",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001100",
    "hash": "5ea2c2ab17d9"
   },
@@ -1308,6 +1560,7 @@
    "name": "中華民國一百十四年度總決算附屬單位決算編製要點",
    "kind": "行政規則",
    "count": 27,
+   "published": "2025-11-05",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001099",
    "hash": "f811da5753c1"
   },
@@ -1316,6 +1569,8 @@
    "name": "主計業務創新變革精進評審及獎勵要點",
    "kind": "行政規則",
    "count": 9,
+   "published": "2013-06-13",
+   "amended": "2022-03-24",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000722",
    "hash": "acc8eba121db"
   },
@@ -1324,6 +1579,8 @@
    "name": "信託基金決算編製注意事項",
    "kind": "行政規則",
    "count": 4,
+   "published": "2011-08-23",
+   "amended": "2022-07-19",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000647",
    "hash": "af4c14acc4f2"
   },
@@ -1332,14 +1589,27 @@
    "name": "信託基金預算編製注意事項",
    "kind": "行政規則",
    "count": 5,
+   "published": "2010-04-13",
+   "amended": "2021-04-15",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000202",
    "hash": "9e70f8c57dca"
+  },
+  {
+   "code": "UBPE",
+   "name": "各機關一百十六年度單位預算案編製應行注意辦理事項",
+   "kind": "行政規則",
+   "count": 16,
+   "published": "2026-08-13",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001118",
+   "hash": "28a325eb0e82"
   },
   {
    "code": "MOPE",
    "name": "各機關單位預算執行要點",
    "kind": "行政規則",
    "count": 55,
+   "published": "2001-01-04",
+   "amended": "2025-12-10",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017587",
    "hash": "8d7d9214d4cb"
   },
@@ -1348,6 +1618,8 @@
    "name": "各機關派員參加國內各項訓練或講習費用補助要點",
    "kind": "行政規則",
    "count": 8,
+   "published": "2001-08-28",
+   "amended": "2022-04-14",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017586",
    "hash": "6165ad7f196c"
   },
@@ -1356,6 +1628,8 @@
    "name": "各級地方政府訂定災害搶險搶修開口契約應行注意事項",
    "kind": "行政規則",
    "count": 10,
+   "published": "2006-01-09",
+   "amended": "2021-01-20",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL038882",
    "hash": "262ebb6d7cc2"
   },
@@ -1364,6 +1638,8 @@
    "name": "國內出差旅費報支要點",
    "kind": "行政規則",
    "count": 16,
+   "published": "2001-01-15",
+   "amended": "2024-05-16",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017585",
    "hash": "1dd96cb39d5a"
   },
@@ -1372,6 +1648,8 @@
    "name": "國外出差旅費報支要點",
    "kind": "行政規則",
    "count": 23,
+   "published": "2001-01-17",
+   "amended": "2025-05-13",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017584",
    "hash": "895b03202525"
   },
@@ -1380,6 +1658,8 @@
    "name": "國營事業機構營業盈餘解庫注意事項",
    "kind": "行政規則",
    "count": 7,
+   "published": "1982-06-26",
+   "amended": "2019-06-12",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL033707",
    "hash": "2fe01df693ab"
   },
@@ -1388,14 +1668,28 @@
    "name": "國營事業逾期欠款債權催收款及呆帳處理有關會計事務補充規定",
    "kind": "行政規則",
    "count": 13,
+   "published": "1995-09-21",
+   "amended": "2012-07-12",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017690",
    "hash": "4f68a771f889"
+  },
+  {
+   "code": "SOLTP",
+   "name": "國營事業長期計畫與年度預算配合作業實施要點",
+   "kind": "行政規則",
+   "count": 16,
+   "published": "1980-08-25",
+   "amended": "2011-05-19",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL041662",
+   "hash": "70de392cbdfe"
   },
   {
    "code": "GICS",
    "name": "政府內部控制監督作業要點",
    "kind": "行政規則",
    "count": 22,
+   "published": "2015-07-17",
+   "amended": "2022-09-12",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000807",
    "hash": "7cfa623c5554"
   },
@@ -1404,6 +1698,8 @@
    "name": "政府內部控制聲明書簽署作業要點",
    "kind": "行政規則",
    "count": 11,
+   "published": "2016-12-30",
+   "amended": "2021-01-05",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000854",
    "hash": "d262afe2d4fa"
   },
@@ -1412,6 +1708,8 @@
    "name": "政府公共建設計畫先期作業實施要點",
    "kind": "行政規則",
    "count": 14,
+   "published": "2000-07-18",
+   "amended": "2023-07-18",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL023317",
    "hash": "94997621e3cf"
   },
@@ -1420,6 +1718,8 @@
    "name": "政府各種會計制度設計應行注意事項",
    "kind": "行政規則",
    "count": 17,
+   "published": "2000-12-04",
+   "amended": "2018-05-08",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017689",
    "hash": "a075b54b34da"
   },
@@ -1428,6 +1728,8 @@
    "name": "政府支出憑證處理要點",
    "kind": "行政規則",
    "count": 24,
+   "published": "2001-11-22",
+   "amended": "2021-01-11",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017556",
    "hash": "c98e488ca91c"
   },
@@ -1436,6 +1738,7 @@
    "name": "政府支出會計憑證電子化處理要點",
    "kind": "行政規則",
    "count": 10,
+   "published": "2016-09-10",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000844",
    "hash": "6470151379a3"
   },
@@ -1444,6 +1747,7 @@
    "name": "政府會計憑證保管調案及銷毀應行注意事項",
    "kind": "行政規則",
    "count": 13,
+   "published": "2016-03-10",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000826",
    "hash": "6a5aa3765cfe"
   },
@@ -1452,6 +1756,8 @@
    "name": "政府科技發展計畫先期作業實施要點",
    "kind": "行政規則",
    "count": 7,
+   "published": "2001-06-13",
+   "amended": "2023-05-09",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL029948",
    "hash": "9ed9a8ed6b6d"
   },
@@ -1460,6 +1766,8 @@
    "name": "物品管理手冊",
    "kind": "行政規則",
    "count": 43,
+   "published": "2005-06-30",
+   "amended": "2022-09-06",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL036372",
    "hash": "428736ee8342"
   },
@@ -1468,6 +1776,8 @@
    "name": "自償性公共建設預算制度實施方案",
    "kind": "行政規則",
    "count": 16,
+   "published": "2005-12-12",
+   "amended": "2020-09-10",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL038046",
    "hash": "75c83112411d"
   },
@@ -1476,6 +1786,8 @@
    "name": "行政法人依法預算須送立法院之決算編製注意事項",
    "kind": "行政規則",
    "count": 3,
+   "published": "2012-10-17",
+   "amended": "2021-10-21",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000875",
    "hash": "9fab94c9c03d"
   },
@@ -1484,6 +1796,8 @@
    "name": "行政法人依法預算須送立法院之預算編製注意事項",
    "kind": "行政規則",
    "count": 5,
+   "published": "2012-08-07",
+   "amended": "2020-06-09",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000680",
    "hash": "f138f269bb5f"
   },
@@ -1492,6 +1806,8 @@
    "name": "行政院及所屬各機關行動電話通信費處理原則",
    "kind": "行政規則",
    "count": 8,
+   "published": "2006-07-31",
+   "amended": "2014-01-29",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL040061",
    "hash": "8ce24f14abb7"
   },
@@ -1500,6 +1816,8 @@
    "name": "行政院組織改造期間經費處理原則",
    "kind": "行政規則",
    "count": 3,
+   "published": "2010-03-16",
+   "amended": "2022-04-14",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000121",
    "hash": "fc80c0ea869c"
   },
@@ -1508,6 +1826,8 @@
    "name": "財團法人依法決算須送立法院或監察院之決算編製注意事項",
    "kind": "行政規則",
    "count": 7,
+   "published": "2008-07-22",
+   "amended": "2023-08-22",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL046683",
    "hash": "15ba21d938cf"
   },
@@ -1516,6 +1836,8 @@
    "name": "財團法人依法預算須送立法院之預算編製注意事項",
    "kind": "行政規則",
    "count": 7,
+   "published": "2007-08-30",
+   "amended": "2023-05-10",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL044144",
    "hash": "ce9b3ccd24da"
   },
@@ -1524,6 +1846,7 @@
    "name": "財團法人預算未獲立法院審議通過時之執行注意事項",
    "kind": "行政規則",
    "count": 4,
+   "published": "2010-04-16",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000603",
    "hash": "060958e3ddad"
   },
@@ -1532,6 +1855,8 @@
    "name": "附屬單位預算執行要點",
    "kind": "行政規則",
    "count": 49,
+   "published": "1984-08-11",
+   "amended": "2025-12-19",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017582",
    "hash": "5415e90797c7"
   },
@@ -1540,6 +1865,7 @@
    "name": "中央公務人員購置住宅貸款基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 10,
+   "published": "1969-08-05",
    "abolished": "2008-03-07",
    "hash": "9abde6c90b41"
   },
@@ -1548,6 +1874,7 @@
    "name": "中央統籌分配稅款平衡省市預算基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1982-03-04",
    "abolished": "2001-02-22",
    "hash": "5918036b43df"
   },
@@ -1556,6 +1883,7 @@
    "name": "中華發展基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1994-01-14",
    "abolished": "2015-12-09",
    "hash": "e6bec1fdbb19"
   },
@@ -1564,6 +1892,7 @@
    "name": "九二一震災社區重建更新基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 17,
+   "published": "2000-09-18",
    "abolished": "2007-01-08",
    "hash": "39a2ae774eab"
   },
@@ -1572,6 +1901,7 @@
    "name": "交通部國道公路建設管理基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 26,
+   "published": "1995-07-19",
    "abolished": "1999-02-22",
    "hash": "a03a8940993a"
   },
@@ -1580,6 +1910,7 @@
    "name": "促進電源開發協助基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 14,
+   "published": "1999-09-22",
    "abolished": "2003-01-10",
    "hash": "eff5706922e5"
   },
@@ -1588,6 +1919,7 @@
    "name": "健康照護基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 13,
+   "published": "2001-05-08",
    "abolished": "2017-10-23",
    "hash": "15fef5306528"
   },
@@ -1596,6 +1928,7 @@
    "name": "兒童福利基金設立收支保管及運用辦法",
    "kind": "廢止",
    "count": 13,
+   "published": "2001-11-21",
    "abolished": "2005-11-21",
    "hash": "e27add79fab1"
   },
@@ -1604,6 +1937,7 @@
    "name": "全民健康保險紓困基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 14,
+   "published": "2001-05-08",
    "abolished": "2013-03-18",
    "hash": "c4c992ed760e"
   },
@@ -1612,6 +1946,7 @@
    "name": "公共造產基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 17,
+   "published": "2000-09-20",
    "abolished": "2005-05-02",
    "hash": "f08cf7b37c14"
   },
@@ -1620,6 +1955,7 @@
    "name": "共同管道建設基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "1994-06-17",
    "abolished": "2008-01-08",
    "hash": "8f5fdc13067a"
   },
@@ -1628,6 +1964,7 @@
    "name": "國有財產開發基金收支保管及運用辦法（76.06.26訂定）",
    "kind": "廢止",
    "count": 11,
+   "published": "1987-06-26",
    "abolished": "2000-02-02",
    "hash": "32ae03eeef41"
   },
@@ -1636,6 +1973,7 @@
    "name": "國有財產開發基金收支保管及運用辦法（98.11.26訂定）",
    "kind": "廢止",
    "count": 10,
+   "published": "2009-11-26",
    "abolished": "2019-05-31",
    "hash": "91c84dffca05"
   },
@@ -1644,6 +1982,7 @@
    "name": "國民住宅管理維護基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 10,
+   "published": "1981-04-18",
    "abolished": "2015-03-31",
    "hash": "d22023afe23f"
   },
@@ -1652,6 +1991,7 @@
    "name": "國立中正文化中心作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "1993-11-10",
    "abolished": "2005-06-23",
    "hash": "7b999a256854"
   },
@@ -1660,6 +2000,7 @@
    "name": "國立中興大學附設農林畜牧作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 10,
+   "published": "1983-07-09",
    "abolished": "2002-09-20",
    "hash": "9ff3e67ced6a"
   },
@@ -1668,6 +2009,7 @@
    "name": "國立大學校院校務基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1995-08-09",
    "abolished": "1999-05-05",
    "hash": "1492c768de01"
   },
@@ -1676,6 +2018,7 @@
    "name": "國立歷史博物館歷史文物圖錄印製作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 11,
+   "published": "1976-01-24",
    "abolished": "2007-12-24",
    "hash": "1653755ae432"
   },
@@ -1684,6 +2027,7 @@
    "name": "國立社教機構作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 11,
+   "published": "2007-03-12",
    "abolished": "2019-04-19",
    "hash": "3f151124fde2"
   },
@@ -1692,6 +2036,7 @@
    "name": "國立臺北護理學院附設醫院作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 10,
+   "published": "1981-10-12",
    "abolished": "2005-06-22",
    "hash": "18d29c4c0782"
   },
@@ -1700,6 +2045,7 @@
    "name": "國立臺灣大學農林畜牧作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 10,
+   "published": "1980-03-15",
    "abolished": "2002-09-20",
    "hash": "f84efb0382ec"
   },
@@ -1708,6 +2054,7 @@
    "name": "國立臺灣大學醫學院附設癌醫中心醫院作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "2018-03-21",
    "abolished": "2021-11-01",
    "hash": "8e5af77fbd42"
   },
@@ -1716,6 +2063,7 @@
    "name": "國立高級中等學校校務基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "2007-03-12",
    "abolished": "2009-11-26",
    "hash": "404f766a58f6"
   },
@@ -1724,6 +2072,7 @@
    "name": "國軍官兵購置住宅貸款基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1977-10-13",
    "abolished": "2008-05-02",
    "hash": "170887f1abc1"
   },
@@ -1732,6 +2081,7 @@
    "name": "國軍生產作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1995-08-30",
    "abolished": "1999-01-25",
    "hash": "45af0c9dd1e5"
   },
@@ -1740,6 +2090,7 @@
    "name": "國軍醫院附設民眾診療作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 13,
+   "published": "1991-09-20",
    "abolished": "1999-01-25",
    "hash": "8e4a433d7f24"
   },
@@ -1748,6 +2099,7 @@
    "name": "國防部所屬軍事監所作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "1991-09-18",
    "abolished": "1999-01-25",
    "hash": "abe3472460c6"
   },
@@ -1756,6 +2108,7 @@
    "name": "地方建設基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 19,
+   "published": "2000-02-11",
    "abolished": "2025-11-28",
    "hash": "f6cc1ab95010"
   },
@@ -1764,6 +2117,7 @@
    "name": "地方產業發展基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 16,
+   "published": "2008-12-26",
    "abolished": "2018-08-01",
    "hash": "978627971fc5"
   },
@@ -1772,6 +2126,7 @@
    "name": "山坡地開發基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "2001-02-02",
    "abolished": "2005-01-13",
    "hash": "dbb0c34655c8"
   },
@@ -1780,6 +2135,7 @@
    "name": "平均地權保護自耕農及重劃工程作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 13,
+   "published": "2000-05-18",
    "abolished": "2005-04-29",
    "hash": "94b739f0ca2f"
   },
@@ -1788,6 +2144,7 @@
    "name": "廢一般物品及容器資源回收管理基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 20,
+   "published": "1997-07-09",
    "abolished": "1998-11-04",
    "hash": "039e7dec45cb"
   },
@@ -1796,6 +2153,7 @@
    "name": "廢特定物品及容器資源回收管理基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 20,
+   "published": "1997-07-09",
    "abolished": "1998-11-04",
    "hash": "24bee5b9d0af"
   },
@@ -1804,6 +2162,7 @@
    "name": "文化建設基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1987-08-26",
    "abolished": "2006-04-13",
    "hash": "80dd68f2a557"
   },
@@ -1812,6 +2171,7 @@
    "name": "林務發展基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "2000-12-22",
    "abolished": "2007-09-10",
    "hash": "8c3125c09f13"
   },
@@ -1820,6 +2180,7 @@
    "name": "榮民醫院醫療作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1991-11-06",
    "abolished": "1997-09-15",
    "hash": "89f52704b5f0"
   },
@@ -1828,6 +2189,7 @@
    "name": "民航事業作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "1976-04-23",
    "abolished": "1999-02-22",
    "hash": "6cd0a60b39f9"
   },
@@ -1836,6 +2198,7 @@
    "name": "海外經濟合作發展基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 17,
+   "published": "1988-10-05",
    "abolished": "1996-07-31",
    "hash": "5ae2c4941d08"
   },
@@ -1844,6 +2207,7 @@
    "name": "漁產平準基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1994-04-29",
    "abolished": "2016-02-05",
    "hash": "c18f514a5ae4"
   },
@@ -1852,6 +2216,7 @@
    "name": "社會福利基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 17,
+   "published": "2001-10-26",
    "abolished": "2017-12-11",
    "hash": "8ab37020908c"
   },
@@ -1860,6 +2225,7 @@
    "name": "糧食平準基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 14,
+   "published": "1975-02-14",
    "abolished": "2001-07-04",
    "hash": "8da2574d5a6f"
   },
@@ -1868,6 +2234,7 @@
    "name": "臺灣地區煤業合理化基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1973-08-02",
    "abolished": "1995-11-08",
    "hash": "5f53501b9ce9"
   },
@@ -1876,6 +2243,7 @@
    "name": "臺灣西部走廊高速鐵路土地開發基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "1998-03-24",
    "abolished": "1999-02-22",
    "hash": "39a2bf20f978"
   },
@@ -1884,6 +2252,7 @@
    "name": "藥害救濟基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 13,
+   "published": "2001-03-16",
    "abolished": "2011-09-08",
    "hash": "0e56feabe9d4"
   },
@@ -1892,6 +2261,7 @@
    "name": "行政院中美經濟社會發展基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "1982-08-11",
    "abolished": "2012-01-03",
    "hash": "f1d738bf1a58"
   },
@@ -1900,6 +2270,7 @@
    "name": "行政院國軍退除役官兵輔導委員會台中榮民總醫院作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 11,
+   "published": "1989-06-30",
    "abolished": "1997-09-15",
    "hash": "5f7c52eec135"
   },
@@ -1908,6 +2279,7 @@
    "name": "行政院國軍退除役官兵輔導委員會臺北榮民總醫院作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 11,
+   "published": "1986-06-16",
    "abolished": "1997-09-15",
    "hash": "cf86fc28403b"
   },
@@ -1916,6 +2288,7 @@
    "name": "行政院國軍退除役官兵輔導委員會高雄榮民總醫院作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 11,
+   "published": "1995-08-02",
    "abolished": "1997-09-15",
    "hash": "a727965c84a2"
   },
@@ -1924,6 +2297,7 @@
    "name": "行政院開發基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 16,
+   "published": "1972-05-31",
    "abolished": "2010-08-11",
    "hash": "6e2f1f8cfbd1"
   },
@@ -1932,6 +2306,7 @@
    "name": "軍人儲蓄作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "1994-07-20",
    "abolished": "2002-05-23",
    "hash": "1d4f85281066"
   },
@@ -1940,6 +2315,7 @@
    "name": "軍民通用科技發展基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 16,
+   "published": "1994-10-28",
    "abolished": "1999-01-25",
    "hash": "f91415842834"
   },
@@ -1948,6 +2324,7 @@
    "name": "農業平準基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 10,
+   "published": "1998-09-07",
    "abolished": "2001-07-04",
    "hash": "d053d90b1ff5"
   },
@@ -1956,6 +2333,7 @@
    "name": "造林基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 13,
+   "published": "2000-05-18",
    "abolished": "2007-09-10",
    "hash": "fd0462122db8"
   },
@@ -1964,6 +2342,7 @@
    "name": "鄉鎮創業自立基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 17,
+   "published": "2000-09-20",
    "abolished": "2002-01-29",
    "hash": "85f3d77c1f45"
   },
@@ -1972,6 +2351,7 @@
    "name": "醫療服務業開發基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 15,
+   "published": "2001-10-19",
    "abolished": "2006-11-22",
    "hash": "c155c561f819"
   },
@@ -1980,6 +2360,7 @@
    "name": "金融資訊服務中心作業基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 12,
+   "published": "1987-12-02",
    "abolished": "2000-03-17",
    "hash": "67916912af2d"
   },
@@ -1988,6 +2369,7 @@
    "name": "預防接種受害救濟基金收支保管及運用辦法",
    "kind": "廢止",
    "count": 13,
+   "published": "2001-09-20",
    "abolished": "2008-02-01",
    "hash": "3d1026477aef"
   }
@@ -2032,11 +2414,6 @@
    "code": "FEEBP",
    "name": "各類事業費率、受益費及規費編列年度預算處理原則",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000552"
-  },
-  {
-   "code": "SOLTP",
-   "name": "國營事業長期計畫與年度預算配合作業實施要點",
-   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL041662"
   },
   {
    "code": "ZBPM",

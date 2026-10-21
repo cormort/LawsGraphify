@@ -209,8 +209,37 @@ def dgbas_index(recrawl: bool) -> dict[str, str]:
     return index
 
 
-def dgbas_articles(law_id: str) -> list[dict]:
-    """Rows of LawContent.aspx: "第 N 條" in the header cell, or "一、" 點-style."""
+def roc_iso(year: int, month: int, day: int) -> str:
+    return f"{year + 1911:04d}-{month:02d}-{day:02d}"
+
+
+def moj_dates(law: dict) -> dict:
+    """發布 date from the first 沿革 entry, the latest 修正 from LawModifiedDate
+    (for an abolished law that is the abolition, kept in "abolished" instead)."""
+    dates = {}
+    zh = "[零一二三四五六七八九十百]+"
+    if m := re.search(f"中華民國({zh})年({zh})月({zh})日", law.get("LawHistories") or ""):
+        dates["published"] = roc_iso(*map(chinese_to_arabic, m.groups()))
+    d = law.get("LawModifiedDate", "")
+    if len(d) == 8 and not law.get("LawAbandonNote") and f"{d[:4]}-{d[4:6]}-{d[6:8]}" != dates.get("published"):
+        dates["amended"] = f"{d[:4]}-{d[4:6]}-{d[6:8]}"
+    return dates
+
+
+def dgbas_dates(page: str) -> dict:
+    """"公發布日： 民國 100 年 03 月 29 日 修正日期： 民國 110 年 05 月 07 日" on LawContent.aspx."""
+    text, dates = re.sub(r"<[^>]+>", " ", page), {}
+    for key, label in (("published", "公發布日"), ("amended", "修正日期")):
+        if m := re.search(label + r"\s*[:：]\s*民國\s*(\d+)\s*年\s*(\d+)\s*月\s*(\d+)\s*日", text):
+            dates[key] = roc_iso(*map(int, m.groups()))
+    if dates.get("amended") == dates.get("published"):
+        dates.pop("amended", None)
+    return dates
+
+
+def dgbas_articles(law_id: str) -> tuple[list[dict], dict]:
+    """Rows of LawContent.aspx: "第 N 條" in the header cell, or "一、" 點-style;
+    plus the page's 公發布日 / 修正日期."""
     page = fetch(f"{DGBAS}LawContent.aspx?id={law_id}").decode("utf-8")
     articles = []
     for header, body in ROW_PAT.findall(page):
@@ -224,7 +253,7 @@ def dgbas_articles(law_id: str) -> list[dict]:
             sub = chinese_to_arabic(m.group(2)) if m.group(2) else None
             zh = f"第 {main}{f'-{sub}' if sub else ''} 點"
         articles.append({"num": main, "sub_num": sub, "zh": zh, "article": text})
-    return articles
+    return articles, dgbas_dates(page)
 
 
 def main():
@@ -249,10 +278,10 @@ def main():
     for name in sorted(targets):
         if targets[name] in done_codes:
             continue  # another alias of a law already written (憲法 -> 中華民國憲法)
-        abolished = None
+        dates = {}
         if name in moj:
             law_name, source, articles = moj[name]["LawName"], "moj", moj_articles(moj[name])
-            abolished = abolished_date(moj[name])
+            dates = {**moj_dates(moj[name]), "abolished": abolished_date(moj[name])}
         elif args.moj_only:
             if os.path.exists(os.path.join(OUTPUT_DIR, f"{name}.json")):
                 written.add(f"{name}.json")
@@ -264,7 +293,8 @@ def main():
                 missing.append(name)
                 continue
             try:
-                law_name, source, articles = name, "dgbas", dgbas_articles(dgbas[name])
+                law_name, source = name, "dgbas"
+                articles, dates = dgbas_articles(dgbas[name])
             except (OSError, Blocked) as e:  # URLError is an OSError
                 # Keep last run's text rather than dropping the law
                 if os.path.exists(os.path.join(OUTPUT_DIR, f"{name}.json")):
@@ -281,8 +311,8 @@ def main():
                 continue
 
         with open(os.path.join(OUTPUT_DIR, f"{law_name}.json"), "w", encoding="utf-8") as f:
-            json.dump({"name": law_name, "code": targets[name], "source": source, "content": articles,
-                       **({"abolished": abolished} if abolished else {})},
+            json.dump({"name": law_name, "code": targets[name], "source": source,
+                       **{k: v for k, v in dates.items() if v}, "content": articles},
                       f, ensure_ascii=False, indent=2)
         counts[source] += 1
         written.add(f"{law_name}.json")
