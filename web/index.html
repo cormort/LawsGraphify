@@ -59,6 +59,12 @@ button { font: inherit; cursor: pointer; }
 .topbar-inner, main, footer { max-width: 860px; margin: 0 auto; }
 .brand-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .brand { font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
+.brand-row { flex-wrap: wrap; row-gap: 6px; }  /* tools drop below the tabs when the 安裝 button leaves no room */
+.brand-row .tools { margin-left: auto; }
+.tabs { display: flex; gap: 14px; }
+@media (max-width: 420px) { .tabs .icon { display: none; } .tabs { gap: 10px; } .brand-row .tool { min-width: 36px; padding: 0 8px; } }
+.tabs .brand { font-size: 17px; white-space: nowrap; color: var(--muted); padding: 4px 0; border-bottom: 2px solid transparent; }
+.tabs .brand[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
 .tools { display: flex; gap: 6px; }
 .tool {
     min-width: 40px; min-height: 36px; padding: 0 10px; font-size: 14px; white-space: nowrap;
@@ -177,7 +183,7 @@ footer a { color: var(--muted); }
 <header class="topbar">
     <div class="topbar-inner">
         <div class="brand-row">
-            <a class="brand" href="#">📖 隨身法典</a>
+            <nav class="tabs"><a class="brand" href="#" data-tab="law"><span class="icon">📖 </span>隨身法典</a><a class="brand" href="#%E5%9F%BA%E9%87%91" data-tab="fund"><span class="icon">💰 </span>收支辦法</a></nav>
             <div class="tools">
                 <button class="tool" type="button" data-font="-1" aria-label="縮小字體">A−</button>
                 <button class="tool" type="button" data-font="1" aria-label="放大字體">A＋</button>
@@ -824,6 +830,11 @@ function runFromHash() {
     const raw = decodeURIComponent(path);
     const q = render(raw, mark ? decodeURIComponent(mark).split(" ") : []);
     document.getElementById("q").value = queryLabel(q, raw);
+    const fundView = q?.section === "基金" || fundCodes().has(q?.code);
+    document.querySelectorAll("[data-tab]").forEach(a => {
+        if ((a.dataset.tab === "fund") === fundView) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+    });
     window.scrollTo(0, scrollPositions.get(location.hash) || 0);
     updateScrubber();
     updateBack();
