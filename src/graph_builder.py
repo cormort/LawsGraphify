@@ -18,13 +18,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 KIND_ORDER = ["憲法與法律", "命令", "特種基金", "行政規則"]
+# Funds governed by a law rather than a 收支保管及運用辦法
+FUND_LAWS = {"軍事教育條例", "國防醫學大學軍事教育基金管理及監督辦法", "國立大學校院校務基金設置條例",
+             "國立大學校院校務基金管理及監督辦法", "國民年金法", "國民年金保險基金管理運用及監督辦法"}
 
 
 def law_kind(name, source):
     """Rough 法律 / 命令 / 行政規則 split for the home page grouping."""
     if source == "dgbas":
         return "行政規則"
-    if name.endswith("收支保管及運用辦法"):
+    if name.endswith("收支保管及運用辦法") or name in FUND_LAWS:
         return "特種基金"
     if name.endswith(("憲法", "條例", "通則")) or (name.endswith("法") and not name.endswith("辦法")):
         return "憲法與法律"
