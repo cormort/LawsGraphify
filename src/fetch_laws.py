@@ -140,8 +140,10 @@ def load_moj(refresh: bool) -> tuple[dict[str, dict], str]:
         print(f" {key}: {len(data['Laws'])} laws, updated {data.get('UpdateDate')}")
         updated = updated or str(data.get("UpdateDate", "")).split(" ")[0]  # "2026/6/12 上午 …"
         for law in data["Laws"]:
-            if not law.get("LawAbandonNote"):  # "廢": abolished, so not collected
-                laws.setdefault(normalize_text(law["LawName"]), law)
+            name = normalize_text(law["LawName"])
+            # A current record wins over an abolished one ("廢") of the same name
+            if name not in laws or laws[name].get("LawAbandonNote") and not law.get("LawAbandonNote"):
+                laws[name] = law
     return laws, updated
 
 
@@ -149,10 +151,18 @@ FUND_SUFFIX = "收支保管及運用辦法"
 
 
 def fund_targets(moj: dict[str, dict]) -> dict[str, str]:
-    """Every current 特種基金 收支保管及運用辦法 in MOJ data -> code. The code comes
-    from the name's hash, so a new fund never changes the codes of the others."""
+    """Every 特種基金 收支保管及運用辦法 in MOJ data, current or abolished -> code.
+    The code comes from the name's hash, so a new fund never changes the others'."""
     return {name: "F" + hashlib.sha1(law["LawName"].encode()).hexdigest()[:6].upper()
-            for name, law in moj.items() if name.endswith(FUND_SUFFIX)}
+            for name, law in moj.items() if FUND_SUFFIX in name}
+
+
+def abolished_date(law: dict) -> str | None:
+    """"2012-01-03" for an abolished law: its last change is the abolition."""
+    if not law.get("LawAbandonNote"):
+        return None
+    d = law.get("LawModifiedDate", "")
+    return f"{d[:4]}-{d[4:6]}-{d[6:8]}" if len(d) == 8 else "日期不詳"
 
 
 def moj_articles(law: dict) -> list[dict]:
@@ -239,8 +249,10 @@ def main():
     for name in sorted(targets):
         if targets[name] in done_codes:
             continue  # another alias of a law already written (憲法 -> 中華民國憲法)
+        abolished = None
         if name in moj:
             law_name, source, articles = moj[name]["LawName"], "moj", moj_articles(moj[name])
+            abolished = abolished_date(moj[name])
         elif args.moj_only:
             if os.path.exists(os.path.join(OUTPUT_DIR, f"{name}.json")):
                 written.add(f"{name}.json")
@@ -269,7 +281,8 @@ def main():
                 continue
 
         with open(os.path.join(OUTPUT_DIR, f"{law_name}.json"), "w", encoding="utf-8") as f:
-            json.dump({"name": law_name, "code": targets[name], "source": source, "content": articles},
+            json.dump({"name": law_name, "code": targets[name], "source": source, "content": articles,
+                       **({"abolished": abolished} if abolished else {})},
                       f, ensure_ascii=False, indent=2)
         counts[source] += 1
         written.add(f"{law_name}.json")

@@ -275,8 +275,8 @@ function parseQuery(raw) {
     const text = raw.normalize("NFKC").replace(/台/g, "臺").trim();
     if (!text) return null;
     const compact = text.replace(/\s+/g, "");
-    const fund = text.match(/^基金(?:專區)?(?:\s+(.*))?$/);
-    if (fund) return fund[1] ? { type: "search", code: null, kind: FUND_KIND, ...terms(fund[1]) } : { type: "funds" };
+    const sec = text.match(/^(基金|廢止專區)(?:專區)?(?:\s+(.*))?$/);
+    if (sec) return sec[2] ? { type: "search", code: null, section: sec[1], ...terms(sec[2]) } : { type: "section", section: sec[1] };
     const direct = compact.toUpperCase().match(/^([A-Z0-9]+)-(\d{1,4})(?:-(\d{1,3}))?$/);
     if (direct && codeToName[direct[1]]) {
         return { type: "article", code: direct[1], main: +direct[2], sub: direct[3] ? +direct[3] : null };
@@ -292,18 +292,38 @@ function parseQuery(raw) {
     return { type: "search", code, ...terms(rest) };
 }
 
-const FUND_KIND = "特種基金";
-const FUND_TOPICS = ["來源", "用途", "管理會", "預算", "會計", "決算", "賸餘", "結束"];
+// Sections: "基金" opens one, "基金 用途" searches only its laws
+const SECTIONS = {
+    "基金": {
+        kind: "特種基金", title: "基金收支保管規定專區", where: "基金規定",
+        note: n => `${n} 部：各特種基金的收支保管及運用辦法，以及由法律直接規範的基金之法律與管理辦法。`,
+        topics: ["來源", "用途", "管理會", "預算", "會計", "決算", "賸餘", "結束"],
+        short: l => l.name.replace(/收支保管及運用辦法$/, ""),
+    },
+    "廢止專區": {
+        kind: "廢止", title: "廢止法規專區", where: "已廢止的規定",
+        note: n => `${n} 部已廢止的規定，依廢止日期由新到舊排列，僅供查考；一般搜尋與「被引用」不含這些。`,
+        topics: [],
+        short: l => `${l.name}（${l.abolished} 廢止）`,
+        sort: (a, b) => b.abolished.localeCompare(a.abolished),
+    },
+};
+const FUND_KIND = SECTIONS["基金"].kind, ABOLISHED_KIND = SECTIONS["廢止專區"].kind;
 
-function renderFunds() {
-    const funds = laws.filter(l => l.kind === FUND_KIND);
-    return `<h2>基金收支保管規定專區</h2>
-        <p class="muted">${funds.length} 部：各特種基金的收支保管及運用辦法，以及由法律直接規範的基金之法律與管理辦法。</p>
-        <form id="fund-search"><input name="n" type="search" enterkeyhint="search" placeholder="在全部基金規定中搜尋，例：用途 -信託" aria-label="在基金規定中搜尋"><button class="tool" type="submit">搜尋</button></form>
-        <div class="chips">${FUND_TOPICS.map(t => `<a class="tool" href="#${encodeURIComponent("基金 " + t)}">${t}</a>`).join("")}</div>
-        <h3>基金（${funds.length}）</h3>
-        <div class="card list">${funds.map(l => `<a href="#${encodeURIComponent(l.code)}">
-            <span>${escapeHtml(l.name.replace(/收支保管及運用辦法$/, ""))}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div>`;
+function renderSection(key) {
+    const sec = SECTIONS[key], list = laws.filter(l => l.kind === sec.kind);
+    if (sec.sort) list.sort(sec.sort);
+    return `<h2>${sec.title}</h2><p class="muted">${sec.note(list.length)}</p>
+        <form class="section-search" data-section="${key}"><input name="n" type="search" enterkeyhint="search" placeholder="在${sec.where}中搜尋" aria-label="在${sec.where}中搜尋"><button class="tool" type="submit">搜尋</button></form>
+        ${sec.topics.length ? `<div class="chips">${sec.topics.map(t => `<a class="tool" href="#${encodeURIComponent(key + " " + t)}">${t}</a>`).join("")}</div>` : ""}
+        <h3>${sec.where}（${list.length}）</h3>
+        <div class="card list">${list.map(l => `<a href="#${encodeURIComponent(l.code)}">
+            <span>${escapeHtml(sec.short(l))}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div>`;
+}
+
+function abolishedNote(code) {
+    const date = laws.find(l => l.code === code)?.abolished;
+    return date ? `<p class="warn">本規定已於 ${date} 廢止，僅供查考。</p>` : "";
 }
 
 // "流用 預備金 -特別" -> include all of [流用, 預備金], exclude [特別]
@@ -555,7 +575,8 @@ function renderHome() {
     html += `<h3>法規（${laws.length} 部）</h3>`;
     html += kinds.map(kind => {
         const group = laws.filter(l => l.kind === kind);
-        if (kind === FUND_KIND) return `<div class="card list"><a href="#${encodeURIComponent("基金")}"><span>基金收支保管規定專區 →</span><span class="count">${group.length} 部</span></a></div>`;
+        const key = Object.keys(SECTIONS).find(k => SECTIONS[k].kind === kind);
+        if (key) return `<div class="card list"><a href="#${encodeURIComponent(key)}"><span>${SECTIONS[key].title} →</span><span class="count">${group.length} 部</span></a></div>`;
         return `<details class="card"${group.length > 50 ? "" : " open"}><summary>${escapeHtml(kind)}（${group.length}）</summary>
             <div class="list">${group.map(l => `<a href="#${encodeURIComponent(l.code)}">
                 <span>${escapeHtml(l.name)}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div></details>`;
@@ -581,6 +602,7 @@ function renderArticle(q, marks) {
     }
     html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? `<div class="tools">
         <button class="tool" type="button" data-copy="${escapeHtml(id)}">複製</button>${starButton(id)}</div>` : ""}</div>`;
+    html += abolishedNote(q.code);
     if (target) {
         const badge = amendedBadge(id, amended());
         if (badge) html += `<div class="badges">${badge}</div>`;
@@ -650,7 +672,7 @@ function renderFullText(code) {
     const favs = store.get("favs", []);
     rememberRecent(code);
 
-    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2>${starButton(code)}</div>
+    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2>${starButton(code)}</div>${abolishedNote(code)}
         <p class="muted">共 ${ids.length} ${unit(code)}，${cited} ${unit(code)}被其他條文引用</p>
         <div class="controls">
             <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)}</form>
@@ -690,13 +712,14 @@ function renderCitedList(code) {
 function renderSearch(q) {
     if (!q.include.length) return `<p class="warn">請輸入要搜尋的關鍵字。</p>`;
     const scope = q.code ? lawOrder.get(q.code) || []
-        : q.kind ? laws.filter(l => l.kind === q.kind).flatMap(l => lawOrder.get(l.code) || []) : [...nodes.keys()];
+        : laws.filter(l => q.section ? l.kind === SECTIONS[q.section].kind : l.kind !== ABOLISHED_KIND)
+            .flatMap(l => lawOrder.get(l.code) || []);
     const hits = scope.filter(id => {
         const t = nodes.get(id).norm;
         return q.include.every(w => t.includes(w)) && !q.exclude.some(w => t.includes(w));
     });
     const favs = store.get("favs", []);
-    const where = q.code ? `《${lawName(q.code)}》` : q.kind ? "基金規定" : "全部法規";
+    const where = q.code ? `《${lawName(q.code)}》` : q.section ? SECTIONS[q.section].where : "全部法規";
     let html = `<h3>在${escapeHtml(where)}中找到 ${hits.length} 條「${escapeHtml(q.include.join(" "))}」${q.exclude.length ? `（排除 ${escapeHtml(q.exclude.join("、"))}）` : ""}</h3>`;
     if (!hits.length) return html + `<p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
     // The keywords ride along to the article page, which marks them too
@@ -721,7 +744,7 @@ function render(raw, marks) {
     const q = parseQuery(raw);
     if (!q) result.innerHTML = renderHome();
     else if (q.type === "article") result.innerHTML = renderArticle(q, marks);
-    else if (q.type === "funds") result.innerHTML = renderFunds();
+    else if (q.type === "section") result.innerHTML = renderSection(q.section);
     else if (q.type === "law") result.innerHTML = lawOrder.has(q.code) ? renderFullText(q.code) : renderCitedList(q.code);
     else result.innerHTML = renderSearch(q);
     return q;
@@ -842,10 +865,12 @@ async function init() {
         if (!lawOrder.has(n.law_code)) lawOrder.set(n.law_code, []);
         lawOrder.get(n.law_code).push(n.id);
     });
+    const abolished = new Set(data.laws.filter(l => l.abolished).map(l => l.code));
     data.edges.forEach(e => {
         if (!outgoing.has(e.source)) outgoing.set(e.source, []);
         outgoing.get(e.source).push(e);
         if (!e.target) return;  // unresolved citations have nowhere to land
+        if (abolished.has(nodes.get(e.source)?.law_code)) return;  // nor do abolished laws count as citing it
         if (!incoming.has(e.target)) incoming.set(e.target, []);
         incoming.get(e.target).push(e);
     });
@@ -915,10 +940,10 @@ document.addEventListener("change", e => {
 
 // "跳至 N 條" inside a law's full text
 document.addEventListener("submit", e => {
-    if (e.target.id === "fund-search") {
+    if (e.target.matches(".section-search")) {
         e.preventDefault();
         e.target.n.blur();
-        location.hash = encodeURIComponent("基金 " + e.target.n.value.trim());
+        location.hash = encodeURIComponent(e.target.dataset.section + " " + e.target.n.value.trim());
         return;
     }
     const form = e.target.closest(".jump");

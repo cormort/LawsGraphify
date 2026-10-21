@@ -17,7 +17,7 @@ from citation_resolver import extract_short_names, parse_citations, load_aliases
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-KIND_ORDER = ["憲法與法律", "命令", "特種基金", "行政規則"]
+KIND_ORDER = ["憲法與法律", "命令", "特種基金", "行政規則", "廢止"]
 # Funds governed by a law rather than a 收支保管及運用辦法
 FUND_LAWS = {"軍事教育條例", "國防醫學大學軍事教育基金管理及監督辦法", "國立大學校院校務基金設置條例",
              "國立大學校院校務基金管理及監督辦法", "國民年金法", "國民年金保險基金管理運用及監督辦法"}
@@ -170,9 +170,11 @@ def build_graph():
             law = {
                 "code": law_code,
                 "name": law_name,
-                "kind": law_kind(law_name, law_data.get("source")),
+                "kind": "廢止" if law_data.get("abolished") else law_kind(law_name, law_data.get("source")),
                 "count": len(article_order),
             }
+            if law_data.get("abolished"):
+                law["abolished"] = law_data["abolished"]
             # The original page, where the attachments an article names can be downloaded
             if law_data.get("source") == "dgbas" and normalize_text(law_name) in dgbas:
                 law["url"] = DGBAS_PAGE + dgbas[normalize_text(law_name)]
