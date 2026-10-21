@@ -233,8 +233,9 @@ const NUM = "[0-9零一二三四五六七八九十百千兩]+";
 const ARTICLE_PAT = new RegExp(`^第?(${NUM})[條點]?(?:[之\\-](${NUM}))?[條點]?$`);
 
 // Free text -> {type: "article"|"law"|"search", ...}
+// 台 is read as 臺, the form the law texts use (same length, so offsets hold)
 function parseQuery(raw) {
-    const text = raw.normalize("NFKC").trim();
+    const text = raw.normalize("NFKC").replace(/台/g, "臺").trim();
     if (!text) return null;
     const compact = text.replace(/\s+/g, "");
     const direct = compact.toUpperCase().match(/^([A-Z0-9]+)-(\d{1,4})(?:-(\d{1,3}))?$/);
@@ -360,6 +361,19 @@ function renderFavs(favs) {
 }
 
 // Favourites live only in this browser (Safari may clear them), so they can be copied out and pasted back
+// "預算法第 62 條：…" for pasting into a document
+async function copyArticle(button) {
+    const node = nodes.get(button.dataset.copy);
+    const text = `${node.law_name}${node.article_zh}：${node.text}`;
+    try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = "已複製";
+        setTimeout(() => { button.textContent = "複製"; }, 1500);
+    } catch {
+        prompt("複製下面這段文字：", text);
+    }
+}
+
 async function exportFavs() {
     const text = store.get("favs", []).join(" ");
     try {
@@ -412,7 +426,8 @@ function renderArticle(q, marks) {
         html += `<nav class="article-nav">${link(q.code, `← 《${lawName(q.code)}》全文`)}
             <span>${step(order[i - 1], "‹ 上一條")}　${step(order[i + 1], "下一條 ›")}</span></nav>`;
     }
-    html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? starButton(id) : ""}</div>`;
+    html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? `<div class="tools">
+        <button class="tool" type="button" data-copy="${escapeHtml(id)}">複製</button>${starButton(id)}</div>` : ""}</div>`;
     if (target) {
         if (target.chapter) html += `<p class="muted">${escapeHtml(target.chapter)}</p>`;
         html += `<p class="text">${linkify(target, null, hitRanges(target, marks))}</p>`;
@@ -592,7 +607,7 @@ async function init() {
     data.nodes.forEach(n => {
         // Half-width per character, keeping any character that would expand
         // ("︰" -> ".."), so search offsets line up with the original text
-        n.norm = [...n.text].map(c => { const h = c.normalize("NFKC"); return h.length === c.length ? h : c; }).join("");
+        n.norm = [...n.text].map(c => { const h = c.normalize("NFKC"); return h.length === c.length ? h : c; }).join("").replace(/台/g, "臺");
         nodes.set(n.id, n);
         if (!lawOrder.has(n.law_code)) lawOrder.set(n.law_code, []);
         lawOrder.get(n.law_code).push(n.id);
@@ -643,6 +658,8 @@ document.addEventListener("click", e => {
     }
     const favIo = e.target.closest("[data-fav-io]");
     if (favIo) favIo.dataset.favIo === "export" ? exportFavs() : importFavs();
+    const copy = e.target.closest("[data-copy]");
+    if (copy) copyArticle(copy);
     const scroll = e.target.closest("[data-scroll]");
     if (scroll) document.getElementById(scroll.dataset.scroll)?.scrollIntoView();  // instant: laws are long
     const font = e.target.closest("[data-font]");
