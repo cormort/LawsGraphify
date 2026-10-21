@@ -147,7 +147,7 @@ def test_tai_and_tai_variant_find_the_same(page):
 def test_article_and_full_text_views(page, base_url):
     go(page, "預算法第62條")
     assert page.locator(".card h2").first.inner_text() == "預算法 第 62 條"
-    assert page.locator("[data-copy]").count() == 1
+    assert page.locator(".card").first.locator("[data-copy]").count() == 1
     go(page, "預算法")
     index = json.load(open(os.path.join(WEB, "laws", "index.json"), encoding="utf-8"))
     count = next(law["count"] for law in index["laws"] if law["code"] == "BUDGET")

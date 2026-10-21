@@ -133,6 +133,7 @@ details.card[open] > summary { margin-bottom: 8px; }
 .chapter:first-child { margin-top: 0; }
 #full-text.only-cited .law-article:not(.is-cited), #full-text.only-cited .chapter { display: none; }
 #full-text.only-own .law-article:not(.is-own), #full-text.only-own .chapter { display: none; }
+.badges .tool { min-height: 28px; min-width: 0; padding: 0 8px; font-size: 12px; }
 .badge.own { background: var(--warn-soft); color: var(--warn); }
 .fund-facts { margin-top: 10px; }
 .fund-facts p { margin: 4px 0; }
@@ -537,9 +538,18 @@ function renderFavs(favs) {
 
 // Favourites live only in this browser (Safari may clear them), so they can be copied out and pasted back
 // "預算法第 62 條：…" for pasting into a document
+// "預算法第62條之1", the way a 公文 cites it
+function citation(node) {
+    const zh = node.article_zh.replace(/\s/g, "");
+    const [, n, sub, u] = zh.match(/^第(\d+)(?:-(\d+))?([條點])$/) || [];
+    return node.law_name + (n ? `第${n}${u}${sub ? "之" + sub : ""}` : zh);
+}
+
+function copyButton(id) { return `<button class="tool" type="button" data-copy="${escapeHtml(id)}">複製</button>`; }
+
 async function copyArticle(button) {
     const node = nodes.get(button.dataset.copy);
-    const text = `${node.law_name}${node.article_zh}：${node.text}`;
+    const text = `${citation(node)}：${node.text}`;
     try {
         await navigator.clipboard.writeText(text);
         button.textContent = "已複製";
@@ -617,7 +627,7 @@ function renderArticle(q, marks) {
             <span>${step(order[i - 1], "‹ 上一條")}　${step(order[i + 1], "下一條 ›")}</span></nav>`;
     }
     html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? `<div class="tools">
-        <button class="tool" type="button" data-copy="${escapeHtml(id)}">複製</button>${starButton(id)}</div>` : ""}</div>`;
+        ${copyButton(id)}${starButton(id)}</div>` : ""}</div>`;
     html += abolishedNote(q.code);
     if (target) {
         const badge = amendedBadge(id, amended());
@@ -639,7 +649,7 @@ function renderArticle(q, marks) {
     bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
     return html + bySource.map(group => {
         const src = nodes.get(group[0].source);
-        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${starButton(src.id, favs)}</div></div>
+        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${copyButton(src.id)}${starButton(src.id, favs)}</div></div>
             <div class="text">${formatText(src, id)}</div></div>`;
     }).join("");
 }
@@ -681,7 +691,7 @@ function renderSimilar(node, favs) {
     const summary = same ? `另有 ${same} 個基金有相同規定（相似度 90% 以上）`
         : best[0]?.score >= OWN ? "其他基金有類似但不相同的規定" : "本基金特有：其他基金沒有相似度 50% 以上的規定";
     return `<h3>其他基金的類似規定</h3><p class="muted">${summary}</p>` + best.slice(0, SIMILAR_SHOWN).filter(t => t.score >= 0.3).map(t =>
-        `<div class="card"><div class="hit-head">${link(t.id)}<div class="badges"><span class="badge">相似 ${Math.round(t.score * 100)}%</span>${starButton(t.id, favs)}</div></div>
+        `<div class="card"><div class="hit-head">${link(t.id)}<div class="badges"><span class="badge">相似 ${Math.round(t.score * 100)}%</span>${copyButton(t.id)}${starButton(t.id, favs)}</div></div>
             <div class="text">${formatText(nodes.get(t.id))}</div></div>`).join("");
 }
 
@@ -745,7 +755,7 @@ function renderFullText(code) {
         const s = fund?.standing.get(id);
         return `${chapter}<article class="law-article${n ? " is-cited" : ""}${s?.own ? " is-own" : ""}" id="a-${escapeHtml(id)}" data-chapter="${escapeHtml(current)}">
             <div class="hit-head">${link(id, node.article_zh)}<div class="badges">${amendedBadge(id, changes)}${standingBadge(id, s)}
-                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${starButton(id, favs)}</div></div>
+                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${copyButton(id)}${starButton(id, favs)}</div></div>
             <div class="text">${formatText(node)}</div></article>`;
     }).join("");
     return html + `</div>`;
@@ -779,7 +789,7 @@ function renderSearch(q) {
     // The keywords ride along to the article page, which marks them too
     const mark = "?mark=" + encodeURIComponent(q.include.join(" "));
     html += hits.slice(0, MAX_RESULTS).map(id =>
-        `<div class="card"><div class="hit-head"><a href="#${encodeURIComponent(id)}${mark}">${escapeHtml(label(id))}</a>${starButton(id, favs)}</div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
+        `<div class="card"><div class="hit-head"><a href="#${encodeURIComponent(id)}${mark}">${escapeHtml(label(id))}</a><div class="badges">${copyButton(id)}${starButton(id, favs)}</div></div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
     ).join("");
     if (hits.length > MAX_RESULTS) html += `<p class="muted">只顯示前 ${MAX_RESULTS} 條，請加關鍵字縮小範圍。</p>`;
     return html;
