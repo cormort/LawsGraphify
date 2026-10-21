@@ -61,7 +61,7 @@ button { font: inherit; cursor: pointer; }
 .brand { font-weight: 700; font-size: 18px; color: var(--text); text-decoration: none; }
 .tools { display: flex; gap: 6px; }
 .tool {
-    min-width: 40px; min-height: 36px; padding: 0 10px; font-size: 14px;
+    min-width: 40px; min-height: 36px; padding: 0 10px; font-size: 14px; white-space: nowrap;
     border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text);
 }
 form { display: flex; gap: 8px; margin-top: 8px; }
@@ -80,7 +80,13 @@ h2 { font-size: 1.15em; margin: 0 0 4px; line-height: 1.5; }
 h3 { font-size: 0.9em; margin: 24px 0 8px; color: var(--muted); font-weight: 600; }
 .warn { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 10px 12px; margin: 12px 0; font-size: 0.9em; }
 .empty { color: var(--muted); }
-.text { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.text { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; text-align: justify; }
+/* Article layout: an item hangs from its marker (凸排); sub-items nest in the item above */
+.text .para, .text .item { margin-top: 0.3em; }
+.text > :first-child { margin-top: 0; }
+.text .item { display: flex; }
+.text .mk { flex: none; font-variant-numeric: tabular-nums; }  /* 1. and 2. same width, so siblings align */
+.text .body { flex: 1; min-width: 0; }
 mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
 
 .star { flex: none; border: 0; background: none; font-size: 1.4em; line-height: 1; padding: 4px; color: var(--muted); }
@@ -283,9 +289,9 @@ function marked(text, a, b, ranges) {
     return html + escapeHtml(text.slice(pos, b));
 }
 
-// Article text with each citation as a link; citations of focusId are linked
-// with a highlight, and the given ranges (search terms) are marked
-function linkify(node, focusId, ranges = []) {
+// Article text[from, to) with each citation as a link; citations of focusId are
+// linked with a highlight, and the given ranges (search terms) are marked
+function linkify(node, focusId, ranges = [], from = 0, to = (node.text || "").length) {
     const text = node.text || "";
     const bySpan = new Map();  // "a,b" -> targets (a range has several)
     for (const e of outgoing.get(node.id) || []) {
@@ -295,9 +301,11 @@ function linkify(node, focusId, ranges = []) {
             bySpan.get(key).targets.push(e.target);
         }
     }
-    let html = "", pos = 0;
-    for (const { a, b, targets } of [...bySpan.values()].sort((x, y) => x.a - y.a)) {
-        if (a < pos) continue;  // overlapping span: keep the first
+    let html = "", pos = from;
+    for (let { a, b, targets } of [...bySpan.values()].sort((x, y) => x.a - y.a)) {
+        a = Math.max(a, from);  // a citation across a line break is cut in two
+        b = Math.min(b, to);
+        if (a < pos || a >= b) continue;  // outside, or overlapping span: keep the first
         html += marked(text, pos, a, ranges);
         const words = marked(text, a, b, ranges);
         const known = targets.filter(Boolean);
@@ -310,7 +318,67 @@ function linkify(node, focusId, ranges = []) {
         }
         pos = b;
     }
-    return html + marked(text, pos, text.length, ranges);
+    return html + marked(text, pos, to, ranges);
+}
+
+// Item markers: 一、 (一) 1. 1、 (1) 甲、, matched on node.norm (half-width)
+const MARKERS = [
+    ["cn", /^[一二三四五六七八九十百]+、/],
+    ["cnp", /^\([一二三四五六七八九十百]+\)/],
+    ["num", /^\d+ ?[、.](?!\d)/],
+    ["nump", /^\(\d+\)/],
+    ["gan", /^[甲乙丙丁戊己庚辛壬癸][、.]/],
+];
+
+function marker(s) {
+    for (const [type, re] of MARKERS) {
+        const m = s.match(re);
+        if (m) return { type, length: m[0].length };
+    }
+    return null;
+}
+
+// Line breaks were flattened to spaces when the laws were fetched. A space is a
+// break unless it touches Latin text ("PDF 檔", "1 、"); one before a marker always is.
+// Some 行政規則 lost even the space: a marker right after 。：；starts a line too.
+function lines(norm) {
+    const latin = c => /[A-Za-z0-9]/.test(c || "");
+    const out = [];
+    let start = 0;
+    for (let i = 1; i < norm.length; i++) {
+        if (norm[i] === " " && (marker(norm.slice(i + 1)) || !(latin(norm[i - 1]) || latin(norm[i + 1])))) {
+            out.push([start, i]);
+            start = i + 1;
+        } else if (/[。:;︰]/.test(norm[i - 1]) && marker(norm.slice(i))) {
+            out.push([start, i]);
+            start = i;
+        }
+    }
+    out.push([start, norm.length]);
+    return out.filter(([a, b]) => a < b);
+}
+
+// Article text laid out by line: a line without a marker is a paragraph (項);
+// an item hangs from its marker, and an item of a new kind nests in the one above
+function formatText(node, focusId, ranges = []) {
+    let html = "";
+    const open = [];  // marker types of the open items, outermost first
+    const close = depth => { while (open.length > depth) { open.pop(); html += "</div></div>"; } };
+    for (const [a, b] of lines(node.norm)) {
+        const m = marker(node.norm.slice(a, b));
+        if (!m) {
+            close(0);
+            html += `<div class="para">${linkify(node, focusId, ranges, a, b)}</div>`;
+            continue;
+        }
+        const level = open.indexOf(m.type);
+        close(level >= 0 ? level : open.length);
+        open.push(m.type);
+        html += `<div class="item"><span class="mk">${linkify(node, focusId, ranges, a, a + m.length)}</span>`
+            + `<div class="body">${linkify(node, focusId, ranges, a + m.length, b)}`;
+    }
+    close(0);
+    return html;
 }
 
 // List views pass favs in, so a long law reads storage once
@@ -430,7 +498,7 @@ function renderArticle(q, marks) {
         <button class="tool" type="button" data-copy="${escapeHtml(id)}">複製</button>${starButton(id)}</div>` : ""}</div>`;
     if (target) {
         if (target.chapter) html += `<p class="muted">${escapeHtml(target.chapter)}</p>`;
-        html += `<p class="text">${linkify(target, null, hitRanges(target, marks))}</p>`;
+        html += `<div class="text">${formatText(target, null, hitRanges(target, marks))}</div>`;
         rememberRecent(id);
     } else if (lawHasText) {
         html += `<div class="warn">資料中沒有這一條（可能已刪除、改條號，或條號輸入錯誤）。${incoming.has(id) ? "下面的引用可能已經失效。" : ""}</div>`;
@@ -447,7 +515,7 @@ function renderArticle(q, marks) {
     return html + bySource.map(group => {
         const src = nodes.get(group[0].source);
         return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${starButton(src.id, favs)}</div></div>
-            <p class="text">${linkify(src, id)}</p></div>`;
+            <div class="text">${formatText(src, id)}</div></div>`;
     }).join("");
 }
 
@@ -476,7 +544,7 @@ function renderFullText(code) {
         return `${chapter}<article class="law-article${n ? " is-cited" : ""}" id="a-${escapeHtml(id)}">
             <div class="hit-head">${link(id, node.article_zh)}<div class="badges">
                 ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${starButton(id, favs)}</div></div>
-            <p class="text">${linkify(node)}</p></article>`;
+            <div class="text">${formatText(node)}</div></article>`;
     }).join("");
     return html + `</div>`;
 }
