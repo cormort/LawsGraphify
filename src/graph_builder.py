@@ -52,20 +52,26 @@ def write_law_files(graph, out_dir):
         json.dump({**index, "laws": laws}, f, ensure_ascii=False, indent=1)
 
 
-def attachment_only(name_to_code, laws):
-    """Targets DGBAS lists but has no article text for (tables published only as
-    attachments): the query page links to the original page instead."""
+DGBAS_PAGE = "https://law.dgbas.gov.tw/LawContent.aspx?id="
+
+
+def dgbas_index():
+    """Normalized name -> DGBAS id (written by fetch_laws.py), or {} if not crawled."""
     path = os.path.join(BASE_DIR, "data", "dgbas_index.json")
     if not os.path.exists(path):
-        return []
+        return {}
     with open(path, encoding="utf-8") as f:
-        dgbas = json.load(f)
+        return json.load(f)
+
+
+def attachment_only(name_to_code, laws, dgbas):
+    """Targets DGBAS lists but has no article text for (tables published only as
+    attachments): the query page links to the original page instead."""
     have = {law["code"] for law in laws}
     links = {}
     for name, code in name_to_code.items():
         if code not in have and name in dgbas:
-            links.setdefault(code, {"code": code, "name": name,
-                                    "url": f"https://law.dgbas.gov.tw/LawContent.aspx?id={dgbas[name]}"})
+            links.setdefault(code, {"code": code, "name": name, "url": DGBAS_PAGE + dgbas[name]})
     return sorted(links.values(), key=lambda link: link["name"])
 
 
@@ -114,6 +120,7 @@ def build_graph():
     nodes = []
     edges = []
     laws = []
+    dgbas = dgbas_index()
 
     print("Building Knowledge Graph from extracted laws...")
 
@@ -145,12 +152,16 @@ def build_graph():
             for art in law_data.get("content", []):
                 short_names.update(extract_short_names(art.get("article", "")))
 
-            laws.append({
+            law = {
                 "code": law_code,
                 "name": law_name,
                 "kind": law_kind(law_name, law_data.get("source")),
                 "count": len(article_order),
-            })
+            }
+            # The original page, where the attachments an article names can be downloaded
+            if law_data.get("source") == "dgbas" and normalize_text(law_name) in dgbas:
+                law["url"] = DGBAS_PAGE + dgbas[normalize_text(law_name)]
+            laws.append(law)
             chapter = None
             for art in law_data.get("content", []):
                 main_no = art.get("num", 0)
@@ -216,7 +227,7 @@ def build_graph():
         # name -> code, so the query page understands 憲法 / 政府採購法 etc.
         "aliases": name_to_code,
         "laws": sorted(laws, key=lambda law: (KIND_ORDER.index(law["kind"]), law["name"])),
-        "links": attachment_only(name_to_code, laws),
+        "links": attachment_only(name_to_code, laws, dgbas),
         "built": date.today().isoformat(),
         # MOJ open data's own date, written by fetch_laws.py
         **load_meta(),
