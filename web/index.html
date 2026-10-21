@@ -141,6 +141,7 @@ footer a { color: var(--muted); }
                 <button class="tool" type="button" data-font="-1" aria-label="縮小字體">A−</button>
                 <button class="tool" type="button" data-font="1" aria-label="放大字體">A＋</button>
                 <button class="tool" type="button" id="theme-btn" aria-label="切換深淺色">◐</button>
+                <button class="tool" type="button" id="install-btn" hidden>安裝</button>
             </div>
         </div>
         <form id="query-form" role="search">
@@ -615,6 +616,28 @@ document.getElementById("theme-btn").addEventListener("click", () => {
 const toTop = document.getElementById("to-top");
 window.addEventListener("scroll", () => { toTop.style.display = window.scrollY > 600 ? "block" : "none"; }, { passive: true });
 toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+// Install: Chrome / Edge / Android offer a prompt; iPhone Safari has none, so explain the steps
+const installBtn = document.getElementById("install-btn");
+let installPrompt = null;
+const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+const iOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+installBtn.hidden = standalone || !iOS;
+window.addEventListener("beforeinstallprompt", e => {
+    e.preventDefault();
+    installPrompt = e;
+    installBtn.hidden = false;
+});
+window.addEventListener("appinstalled", () => { installBtn.hidden = true; });
+installBtn.addEventListener("click", async () => {
+    if (!installPrompt) {
+        alert("用 Safari 開啟本頁，點下方「分享」→「加入主畫面」，即可像 App 一樣離線使用。");
+        return;
+    }
+    installPrompt.prompt();
+    if ((await installPrompt.userChoice).outcome === "accepted") installBtn.hidden = true;
+    installPrompt = null;
+});
 
 // Offline: cache the app and data on the phone
 function showOnline() {
