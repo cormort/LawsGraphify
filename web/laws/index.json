@@ -1,0 +1,585 @@
+{
+ "aliases": {
+  "憲法": "CONST",
+  "CONST": "CONST",
+  "中華民國憲法": "CONST",
+  "預算法": "BUDGET",
+  "BUDGET": "BUDGET",
+  "決算法": "SETTLE",
+  "SETTLE": "SETTLE",
+  "會計法": "ACCOUNT",
+  "ACCOUNT": "ACCOUNT",
+  "災害防救法": "DPPA",
+  "DPPA": "DPPA",
+  "民法": "CIVIL",
+  "CIVIL": "CIVIL",
+  "財政紀律法": "FDA",
+  "FDA": "FDA",
+  "審計法": "AUDIT",
+  "AUDIT": "AUDIT",
+  "審計法施行細則": "AUDITER",
+  "AUDITER": "AUDITER",
+  "行政法人法": "ACA",
+  "ACA": "ACA",
+  "財團法人法": "FOUNDA",
+  "FOUNDA": "FOUNDA",
+  "促進民間參與公共建設法施行細則": "PPIER",
+  "PPIER": "PPIER",
+  "公營事業移轉民營條例": "PEPA",
+  "PEPA": "PEPA",
+  "行政院功能業務與組織調整條例": "EYORG",
+  "EYORG": "EYORG",
+  "政府資訊公開法": "FOIA",
+  "FOIA": "FOIA",
+  "財政收支劃分法": "TFA",
+  "TFA": "TFA",
+  "地方制度法": "LGA",
+  "LGA": "LGA",
+  "政府採購法": "GPA",
+  "GPA": "GPA",
+  "中央政府中程計畫預算編製辦法": "CGMBPP",
+  "CGMBPP": "CGMBPP",
+  "中央對直轄市及縣(市)政府補助辦法": "CACGSB",
+  "CACGSB": "CACGSB",
+  "各機關單位預算執行要點": "MOPE",
+  "MOPE": "MOPE",
+  "附屬單位預算執行要點": "SUPE",
+  "SUPE": "SUPE",
+  "中央政府各機關對民間團體及個人補(捐)助預算執行應注意事項": "MOGCIP",
+  "MOGCIP": "MOGCIP",
+  "中央政府總預算案未能依限完成時之執行補充規定": "TBSCR",
+  "TBSCR": "TBSCR",
+  "中央政府總預算案未能依限完成時預算執行之補充規定": "TBSCR",
+  "中央政府總預算附屬單位預算準用預算法第54條補充規定": "TBSUB54",
+  "TBSUB54": "TBSUB54",
+  "財團法人依法預算須送立法院之預算編製注意事項": "FPLE",
+  "FPLE": "FPLE",
+  "財團法人預算未獲立法院審議通過時之執行注意事項": "FPLR",
+  "FPLR": "FPLR",
+  "中央政府非營業特種基金裁撤機制辦法": "CNGSF",
+  "CNGSF": "CNGSF",
+  "信託基金預算編製注意事項": "TBPE",
+  "TBPE": "TBPE",
+  "行政法人依法預算須送立法院之預算編製注意事項": "SPELE",
+  "SPELE": "SPELE",
+  "中華民國一百十六年度中央政府總預算編製辦法": "FY2027GBPP",
+  "FY2027GBPP": "FY2027GBPP",
+  "中華民國一百十六年度中央政府總預算附屬單位預算編製辦法": "FY2027GSUBPP",
+  "FY2027GSUBPP": "FY2027GSUBPP",
+  "中央政府特種基金管理準則": "CSMF",
+  "CSMF": "CSMF",
+  "中央各機關對地方政府補助款之撥款原則": "CAGDAP",
+  "CAGDAP": "CAGDAP",
+  "中央政府非營業特種基金對地方政府補助計畫之撥款原則": "CNGSDAP",
+  "CNGSDAP": "CNGSDAP",
+  "政府公共建設計畫先期作業實施要點": "PPPIP",
+  "PPPIP": "PPPIP",
+  "政府科技發展計畫先期作業實施要點": "STDPIP",
+  "STDPIP": "STDPIP",
+  "中央各主管機關規劃中程計畫與概算編審作業應行辦理事項": "CMPB",
+  "CMPB": "CMPB",
+  "自償性公共建設預算制度實施方案": "SPCP",
+  "SPCP": "SPCP",
+  "落實零基預算精神強化預算編製作業精進措施": "ZBPM",
+  "ZBPM": "ZBPM",
+  "中央政府總預算附屬單位預算半年結算報告編製要點": "FY2026GSUBHYR",
+  "FY2026GSUBHYR": "FY2026GSUBHYR",
+  "中華民國一百十四年度總決算編製要點": "FY2025SET",
+  "FY2025SET": "FY2025SET",
+  "中華民國一百十四年度總決算附屬單位決算編製要點": "FY2025SUBSET",
+  "FY2025SUBSET": "FY2025SUBSET",
+  "中華民國一百十五年度總預算半年結算報告編製要點": "FY2026GHYR",
+  "FY2026GHYR": "FY2026GHYR",
+  "中華民國一百十五年度總預算附屬單位預算半年結算報告編製要點": "FY2026GSUBHYR",
+  "中央政府總決算審核報告案審查程序": "CSEAP",
+  "CSEAP": "CSEAP",
+  "財團法人依法決算須送立法院或監察院之決算編製注意事項": "FDL",
+  "FDL": "FDL",
+  "信託基金決算編製注意事項": "TBSET",
+  "TBSET": "TBSET",
+  "行政法人依法預算須送立法院之決算編製注意事項": "SPEL",
+  "SPEL": "SPEL",
+  "中央對直轄市與縣(市)政府計畫及預算考核要點": "CACGP",
+  "CACGP": "CACGP",
+  "中華民國一百十六年度直轄市及縣(市)總預算編製要點": "FY2027LCGBPP",
+  "FY2027LCGBPP": "FY2027LCGBPP",
+  "中華民國一百十六年度直轄市及縣(市)總預算附屬單位預算編製要點": "FY2027LCGSUBPP",
+  "FY2027LCGSUBPP": "FY2027LCGSUBPP",
+  "行政院組織改造期間經費處理原則": "AORGP",
+  "AORGP": "AORGP",
+  "國內出差旅費報支要點": "DTRP",
+  "DTRP": "DTRP",
+  "國外出差旅費報支要點": "FTRP",
+  "FTRP": "FTRP",
+  "中央政府各機關派赴國外各地區出差人員生活費日支數額表": "FOLIET",
+  "FOLIET": "FOLIET",
+  "中央政府各機關派赴大陸地區、香港及澳門出差人員生活費日支數額表": "CHLIET",
+  "CHLIET": "CHLIET",
+  "中央各機關(含事業機構)派赴國外進修、研究、實習人員補助項目及數額表": "FRTT",
+  "FRTT": "FRTT",
+  "行政院及所屬各級機關因公派員出國案件編審要點": "OIPO",
+  "OIPO": "OIPO",
+  "行政院及所屬各級機關因公派員赴大陸地區案件編審要點": "OICP",
+  "OICP": "OICP",
+  "中央政府各機關學校出席費及稿費支給要點": "CSFPP",
+  "CSFPP": "CSFPP",
+  "各機關派員參加國內各項訓練或講習費用補助要點": "ETPP",
+  "ETPP": "ETPP",
+  "軍公教人員兼職費支給表": "CPT",
+  "CPT": "CPT",
+  "講座鐘點費支給表": "LPT",
+  "LPT": "LPT",
+  "行政院及所屬各機關行動電話通信費處理原則": "MCP",
+  "MCP": "MCP",
+  "中央政府各機關學校購置及租賃公務車輛作業要點": "CSVPP",
+  "CSVPP": "CSVPP",
+  "中央對各級地方政府重大天然災害救災經費處理辦法": "CNDR",
+  "CNDR": "CNDR",
+  "各級地方政府訂定災害搶險搶修開口契約應行注意事項": "LGER",
+  "LGER": "LGER",
+  "中央對各級地方政府支用災害準備金審查原則": "FDRS",
+  "FDRS": "FDRS",
+  "中央政府各機關單位預算分配注意事項": "BDA",
+  "BDA": "BDA",
+  "內部審核處理準則": "IACP",
+  "IACP": "IACP",
+  "政府各種會計制度設計應行注意事項": "GASD",
+  "GASD": "GASD",
+  "政府支出憑證處理要點": "GEVP",
+  "GEVP": "GEVP",
+  "政府支出會計憑證電子化處理要點": "GEVEP",
+  "GEVEP": "GEVEP",
+  "政府會計憑證保管調案及銷毀應行注意事項": "GARP",
+  "GARP": "GARP",
+  "原始憑證留存代辦、受委託機關(構)、學校或民間團體明細表": "OEDTL",
+  "OEDTL": "OEDTL",
+  "各機關員工待遇給與相關事項預算執行之權責分工表": "EWRT",
+  "EWRT": "EWRT",
+  "國營事業逾期欠款債權催收款及呆帳處理有關會計事務補充規定": "SOARP",
+  "SOARP": "SOARP",
+  "中央政府非營業特種基金賸餘解庫及短絀填補注意事項": "CNSRP",
+  "CNSRP": "CNSRP",
+  "國營事業機構營業盈餘解庫注意事項": "SOREP",
+  "SOREP": "SOREP",
+  "商業會計法": "CPA",
+  "CPA": "CPA",
+  "物品管理手冊": "PAM",
+  "PAM": "PAM",
+  "主計業務創新變革精進評審及獎勵要點": "BAIRP",
+  "BAIRP": "BAIRP",
+  "政府內部控制監督作業要點": "GICS",
+  "GICS": "GICS",
+  "政府內部控制聲明書簽署作業要點": "GICSD",
+  "GICSD": "GICSD"
+ },
+ "laws": [
+  {
+   "code": "CONST",
+   "name": "中華民國憲法",
+   "kind": "憲法與法律",
+   "count": 175,
+   "hash": "08ec121f61eb"
+  },
+  {
+   "code": "CPA",
+   "name": "商業會計法",
+   "kind": "憲法與法律",
+   "count": 87,
+   "hash": "c4b0334e94c6"
+  },
+  {
+   "code": "ACCOUNT",
+   "name": "會計法",
+   "kind": "憲法與法律",
+   "count": 123,
+   "hash": "86f5cf93308d"
+  },
+  {
+   "code": "SETTLE",
+   "name": "決算法",
+   "kind": "憲法與法律",
+   "count": 33,
+   "hash": "7e8df963d231"
+  },
+  {
+   "code": "BUDGET",
+   "name": "預算法",
+   "kind": "憲法與法律",
+   "count": 101,
+   "hash": "efe5629bae6e"
+  },
+  {
+   "code": "CNDR",
+   "name": "中央對各級地方政府重大天然災害救災經費處理辦法",
+   "kind": "命令",
+   "count": 21,
+   "hash": "9d1bd0df0397"
+  },
+  {
+   "code": "CACGSB",
+   "name": "中央對直轄市及縣（市）政府補助辦法",
+   "kind": "命令",
+   "count": 18,
+   "hash": "7a76607d7163"
+  },
+  {
+   "code": "CGMBPP",
+   "name": "中央政府中程計畫預算編製辦法",
+   "kind": "命令",
+   "count": 30,
+   "hash": "2729ee067516"
+  },
+  {
+   "code": "CSMF",
+   "name": "中央政府特種基金管理準則",
+   "kind": "命令",
+   "count": 22,
+   "hash": "8491baa421c7"
+  },
+  {
+   "code": "CNGSF",
+   "name": "中央政府非營業特種基金裁撤機制辦法",
+   "kind": "命令",
+   "count": 8,
+   "hash": "8f9dba2ea499"
+  },
+  {
+   "code": "FY2027GBPP",
+   "name": "中華民國一百十六年度中央政府總預算編製辦法",
+   "kind": "命令",
+   "count": 37,
+   "hash": "d66b5febdddd"
+  },
+  {
+   "code": "FY2027GSUBPP",
+   "name": "中華民國一百十六年度中央政府總預算附屬單位預算編製辦法",
+   "kind": "命令",
+   "count": 20,
+   "hash": "e5415a55e8ff"
+  },
+  {
+   "code": "IACP",
+   "name": "內部審核處理準則",
+   "kind": "命令",
+   "count": 29,
+   "hash": "acd1f220691b"
+  },
+  {
+   "code": "CMPB",
+   "name": "中央各主管機關規劃中程計畫與概算編審作業應行辦理事項",
+   "kind": "行政規則",
+   "count": 7,
+   "hash": "3e16631b660e"
+  },
+  {
+   "code": "CAGDAP",
+   "name": "中央各機關對地方政府補助款之撥款原則",
+   "kind": "行政規則",
+   "count": 6,
+   "hash": "6db834d7b946"
+  },
+  {
+   "code": "FDRS",
+   "name": "中央對各級地方政府支用災害準備金審查原則",
+   "kind": "行政規則",
+   "count": 7,
+   "hash": "7a44b7d8a96c"
+  },
+  {
+   "code": "CACGP",
+   "name": "中央對直轄市與縣(市)政府計畫及預算考核要點",
+   "kind": "行政規則",
+   "count": 11,
+   "hash": "152171521ecf"
+  },
+  {
+   "code": "BDA",
+   "name": "中央政府各機關單位預算分配注意事項",
+   "kind": "行政規則",
+   "count": 10,
+   "hash": "a6e22c4a2598"
+  },
+  {
+   "code": "CSFPP",
+   "name": "中央政府各機關學校出席費及稿費支給要點",
+   "kind": "行政規則",
+   "count": 9,
+   "hash": "f09460a9624e"
+  },
+  {
+   "code": "CSVPP",
+   "name": "中央政府各機關學校購置及租賃公務車輛作業要點",
+   "kind": "行政規則",
+   "count": 12,
+   "hash": "5157bb7db488"
+  },
+  {
+   "code": "MOGCIP",
+   "name": "中央政府各機關對民間團體及個人補(捐)助預算執行應注意事項",
+   "kind": "行政規則",
+   "count": 9,
+   "hash": "a6e16a5ab43d"
+  },
+  {
+   "code": "TBSCR",
+   "name": "中央政府總預算案未能依限完成時預算執行之補充規定",
+   "kind": "行政規則",
+   "count": 5,
+   "hash": "eed9ceb50dc1"
+  },
+  {
+   "code": "CNGSDAP",
+   "name": "中央政府非營業特種基金對地方政府補助計畫之撥款原則",
+   "kind": "行政規則",
+   "count": 6,
+   "hash": "48bf1018595b"
+  },
+  {
+   "code": "CNSRP",
+   "name": "中央政府非營業特種基金賸餘解庫及短絀填補注意事項",
+   "kind": "行政規則",
+   "count": 8,
+   "hash": "18904bc41c8b"
+  },
+  {
+   "code": "FY2026GHYR",
+   "name": "中華民國一百十五年度總預算半年結算報告編製要點",
+   "kind": "行政規則",
+   "count": 18,
+   "hash": "717e3cda9e99"
+  },
+  {
+   "code": "FY2026GSUBHYR",
+   "name": "中華民國一百十五年度總預算附屬單位預算半年結算報告編製要點",
+   "kind": "行政規則",
+   "count": 17,
+   "hash": "21877f42c63a"
+  },
+  {
+   "code": "FY2027LCGBPP",
+   "name": "中華民國一百十六年度直轄市及縣(市)總預算編製要點",
+   "kind": "行政規則",
+   "count": 39,
+   "hash": "1b36f86479d0"
+  },
+  {
+   "code": "FY2027LCGSUBPP",
+   "name": "中華民國一百十六年度直轄市及縣(市)總預算附屬單位預算編製要點",
+   "kind": "行政規則",
+   "count": 23,
+   "hash": "f324dcb5cff8"
+  },
+  {
+   "code": "FY2025SET",
+   "name": "中華民國一百十四年度總決算編製要點",
+   "kind": "行政規則",
+   "count": 46,
+   "hash": "5ea2c2ab17d9"
+  },
+  {
+   "code": "FY2025SUBSET",
+   "name": "中華民國一百十四年度總決算附屬單位決算編製要點",
+   "kind": "行政規則",
+   "count": 27,
+   "hash": "f811da5753c1"
+  },
+  {
+   "code": "BAIRP",
+   "name": "主計業務創新變革精進評審及獎勵要點",
+   "kind": "行政規則",
+   "count": 9,
+   "hash": "acc8eba121db"
+  },
+  {
+   "code": "TBSET",
+   "name": "信託基金決算編製注意事項",
+   "kind": "行政規則",
+   "count": 4,
+   "hash": "af4c14acc4f2"
+  },
+  {
+   "code": "TBPE",
+   "name": "信託基金預算編製注意事項",
+   "kind": "行政規則",
+   "count": 5,
+   "hash": "9e70f8c57dca"
+  },
+  {
+   "code": "MOPE",
+   "name": "各機關單位預算執行要點",
+   "kind": "行政規則",
+   "count": 55,
+   "hash": "8d7d9214d4cb"
+  },
+  {
+   "code": "ETPP",
+   "name": "各機關派員參加國內各項訓練或講習費用補助要點",
+   "kind": "行政規則",
+   "count": 8,
+   "hash": "6165ad7f196c"
+  },
+  {
+   "code": "LGER",
+   "name": "各級地方政府訂定災害搶險搶修開口契約應行注意事項",
+   "kind": "行政規則",
+   "count": 10,
+   "hash": "262ebb6d7cc2"
+  },
+  {
+   "code": "DTRP",
+   "name": "國內出差旅費報支要點",
+   "kind": "行政規則",
+   "count": 16,
+   "hash": "1dd96cb39d5a"
+  },
+  {
+   "code": "FTRP",
+   "name": "國外出差旅費報支要點",
+   "kind": "行政規則",
+   "count": 23,
+   "hash": "895b03202525"
+  },
+  {
+   "code": "SOREP",
+   "name": "國營事業機構營業盈餘解庫注意事項",
+   "kind": "行政規則",
+   "count": 7,
+   "hash": "2fe01df693ab"
+  },
+  {
+   "code": "SOARP",
+   "name": "國營事業逾期欠款債權催收款及呆帳處理有關會計事務補充規定",
+   "kind": "行政規則",
+   "count": 13,
+   "hash": "4f68a771f889"
+  },
+  {
+   "code": "GICS",
+   "name": "政府內部控制監督作業要點",
+   "kind": "行政規則",
+   "count": 22,
+   "hash": "7cfa623c5554"
+  },
+  {
+   "code": "GICSD",
+   "name": "政府內部控制聲明書簽署作業要點",
+   "kind": "行政規則",
+   "count": 11,
+   "hash": "d262afe2d4fa"
+  },
+  {
+   "code": "PPPIP",
+   "name": "政府公共建設計畫先期作業實施要點",
+   "kind": "行政規則",
+   "count": 14,
+   "hash": "94997621e3cf"
+  },
+  {
+   "code": "GASD",
+   "name": "政府各種會計制度設計應行注意事項",
+   "kind": "行政規則",
+   "count": 17,
+   "hash": "a075b54b34da"
+  },
+  {
+   "code": "GEVP",
+   "name": "政府支出憑證處理要點",
+   "kind": "行政規則",
+   "count": 24,
+   "hash": "c98e488ca91c"
+  },
+  {
+   "code": "GEVEP",
+   "name": "政府支出會計憑證電子化處理要點",
+   "kind": "行政規則",
+   "count": 10,
+   "hash": "f7485d08e363"
+  },
+  {
+   "code": "GARP",
+   "name": "政府會計憑證保管調案及銷毀應行注意事項",
+   "kind": "行政規則",
+   "count": 13,
+   "hash": "04132446463a"
+  },
+  {
+   "code": "STDPIP",
+   "name": "政府科技發展計畫先期作業實施要點",
+   "kind": "行政規則",
+   "count": 7,
+   "hash": "9ed9a8ed6b6d"
+  },
+  {
+   "code": "PAM",
+   "name": "物品管理手冊",
+   "kind": "行政規則",
+   "count": 43,
+   "hash": "428736ee8342"
+  },
+  {
+   "code": "SPCP",
+   "name": "自償性公共建設預算制度實施方案",
+   "kind": "行政規則",
+   "count": 16,
+   "hash": "75c83112411d"
+  },
+  {
+   "code": "SPEL",
+   "name": "行政法人依法預算須送立法院之決算編製注意事項",
+   "kind": "行政規則",
+   "count": 3,
+   "hash": "9fab94c9c03d"
+  },
+  {
+   "code": "SPELE",
+   "name": "行政法人依法預算須送立法院之預算編製注意事項",
+   "kind": "行政規則",
+   "count": 5,
+   "hash": "f138f269bb5f"
+  },
+  {
+   "code": "MCP",
+   "name": "行政院及所屬各機關行動電話通信費處理原則",
+   "kind": "行政規則",
+   "count": 8,
+   "hash": "8ce24f14abb7"
+  },
+  {
+   "code": "AORGP",
+   "name": "行政院組織改造期間經費處理原則",
+   "kind": "行政規則",
+   "count": 3,
+   "hash": "fc80c0ea869c"
+  },
+  {
+   "code": "FDL",
+   "name": "財團法人依法決算須送立法院或監察院之決算編製注意事項",
+   "kind": "行政規則",
+   "count": 7,
+   "hash": "15ba21d938cf"
+  },
+  {
+   "code": "FPLE",
+   "name": "財團法人依法預算須送立法院之預算編製注意事項",
+   "kind": "行政規則",
+   "count": 7,
+   "hash": "ce9b3ccd24da"
+  },
+  {
+   "code": "FPLR",
+   "name": "財團法人預算未獲立法院審議通過時之執行注意事項",
+   "kind": "行政規則",
+   "count": 4,
+   "hash": "060958e3ddad"
+  },
+  {
+   "code": "SUPE",
+   "name": "附屬單位預算執行要點",
+   "kind": "行政規則",
+   "count": 49,
+   "hash": "b2492f6727f5"
+  }
+ ],
+ "built": "2026-10-21",
+ "moj_updated": "2026/10/8"
+}

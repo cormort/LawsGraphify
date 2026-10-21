@@ -88,6 +88,9 @@ mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1
 .hit-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 .hit-head > a:first-child { font-weight: 600; text-decoration: none; }
 .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+#update-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 16px 0; }
+#update-bar[hidden] { display: none; }
+#update-bar span { flex: 1 1 12em; }
 .badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; text-decoration: none; }
 .badge.review { background: var(--warn-soft); color: var(--warn); }
 
@@ -149,6 +152,8 @@ footer a { color: var(--muted); }
     </div>
 </header>
 
+<div id="update-bar" class="warn" role="alert" hidden><span></span>
+    <button type="button" id="update-yes">下載</button> <button type="button" id="update-no">稍後</button></div>
 <main id="result" aria-live="polite"><p class="empty">資料載入中…</p></main>
 
 <footer>
@@ -451,8 +456,69 @@ function runFromHash() {
 
 // --- Data & wiring ---
 
+// Law texts live in their own cache, one file per law. The first visit downloads
+// them all; later visits compare laws/index.json hashes and ask before
+// downloading only the laws that changed.
+const DATA = "laws-data";
+
+async function fetchOk(path) {
+    const response = await fetch(path, { cache: "no-store" });
+    if (!response.ok) throw new Error(`${path} ${response.status}`);
+    return response;
+}
+
+// Everything is fetched before anything is written, so a dropped connection keeps the old data
+async function download(cache, index, codes, removed = []) {
+    const files = await Promise.all(codes.map(code => fetchOk(`laws/${code}.json`)));
+    await Promise.all(files.map((file, i) => cache.put(`laws/${codes[i]}.json`, file)));
+    await Promise.all(removed.map(code => cache.delete(`laws/${code}.json`)));
+    await cache.put("laws/index.json", new Response(JSON.stringify(index)));
+}
+
+async function checkUpdates(cache, local) {
+    const remote = await (await fetchOk("laws/index.json")).json();
+    const had = new Map(local.laws.map(l => [l.code, l.hash]));
+    const changed = remote.laws.filter(l => had.get(l.code) !== l.hash);
+    const removed = local.laws.map(l => l.code).filter(code => !remote.laws.some(l => l.code === code));
+    if (!changed.length && !removed.length) {
+        if (JSON.stringify({ ...remote, built: 0 }) !== JSON.stringify({ ...local, built: 0 }))
+            await download(cache, remote, []);  // aliases or dates only: nothing to ask about
+        return;
+    }
+    const bar = document.getElementById("update-bar"), yes = document.getElementById("update-yes");
+    const names = changed.map(l => l.name);
+    bar.querySelector("span").textContent = `法規有更新：${names.slice(0, 3).join("、")}${names.length > 3 ? ` 等 ${names.length} 部` : ""}` +
+        (removed.length ? `（另移除 ${removed.length} 部）` : "") + "，要下載嗎？";
+    bar.hidden = false;
+    document.getElementById("update-no").onclick = () => { bar.hidden = true; };
+    yes.onclick = async () => {
+        yes.disabled = true;
+        yes.textContent = "下載中…";
+        try {
+            await download(cache, remote, changed.map(l => l.code), removed);
+            location.reload();
+        } catch {
+            yes.disabled = false;
+            yes.textContent = "重試";
+        }
+    };
+}
+
+async function loadData() {
+    const cache = await caches.open(DATA);
+    let index = await (await cache.match("laws/index.json"))?.json();
+    if (index) {
+        checkUpdates(cache, index).catch(() => {});  // offline: keep what we have
+    } else {
+        index = await (await fetchOk("laws/index.json")).json();
+        await download(cache, index, index.laws.map(l => l.code));
+    }
+    const files = await Promise.all(index.laws.map(async l => (await cache.match(`laws/${l.code}.json`)).json()));
+    return { ...index, nodes: files.flatMap(f => f.nodes), edges: files.flatMap(f => f.edges) };
+}
+
 async function init() {
-    const data = await (await fetch("laws_graph.json")).json();
+    const data = await loadData();
     data.nodes.forEach(n => {
         // Half-width per character, keeping any character that would expand
         // ("︰" -> ".."), so search offsets line up with the original text
@@ -567,7 +633,7 @@ showOnline();
 
 init().catch(err => {
     document.getElementById("result").innerHTML =
-        `<p class="warn">讀不到 laws_graph.json（${escapeHtml(err.message)}）。請在專案目錄執行 <code>python3 run_server.py</code> 再開啟。</p>`;
+        `<p class="warn">讀不到法規資料（${escapeHtml(err.message)}）。請在專案目錄執行 <code>python3 run_server.py</code> 再開啟。</p>`;
 });
 </script>
 </body>

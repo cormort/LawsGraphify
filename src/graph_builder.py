@@ -5,6 +5,7 @@ on every article to identify references (edges), and compiles them into a single
 knowledge graph JSON file (nodes & edges).
 """
 
+import hashlib
 import os
 import re
 from datetime import date
@@ -24,6 +25,31 @@ def law_kind(name, source):
     if name.endswith(("憲法", "條例", "通則")) or (name.endswith("法") and not name.endswith("辦法")):
         return "憲法與法律"
     return "命令"
+
+
+def write_law_files(graph, out_dir):
+    """One file per law plus index.json with each file's hash, so the phone app
+    downloads only the laws that changed. A law's file holds its articles and the
+    citations they make."""
+    os.makedirs(out_dir, exist_ok=True)
+    law_of = {n["id"]: n["law_code"] for n in graph["nodes"]}
+    laws = []
+    for law in graph["laws"]:
+        code = law["code"]
+        body = json.dumps({
+            "nodes": [n for n in graph["nodes"] if n["law_code"] == code],
+            "edges": [e for e in graph["edges"] if law_of[e["source"]] == code],
+        }, ensure_ascii=False, separators=(",", ":"))
+        with open(os.path.join(out_dir, f"{code}.json"), "w", encoding="utf-8") as f:
+            f.write(body)
+        laws.append({**law, "hash": hashlib.sha1(body.encode()).hexdigest()[:12]})
+    keep = {f"{law['code']}.json" for law in laws} | {"index.json"}
+    for name in os.listdir(out_dir):
+        if name not in keep:
+            os.remove(os.path.join(out_dir, name))
+    index = {k: v for k, v in graph.items() if k not in ("nodes", "edges")}
+    with open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8") as f:
+        json.dump({**index, "laws": laws}, f, ensure_ascii=False, indent=1)
 
 
 def load_meta():
@@ -173,6 +199,8 @@ def build_graph():
                               os.path.join(BASE_DIR, "web", "laws_graph.json")):
         with open(output_graph_path, "w", encoding="utf-8") as out_f:
             json.dump(graph_data, out_f, ensure_ascii=False, indent=2)
+
+    write_law_files(graph_data, os.path.join(BASE_DIR, "web", "laws"))
 
     print(f"\nGraph compiled successfully!")
     print(f" - Total Nodes (Articles): {len(nodes)}")
