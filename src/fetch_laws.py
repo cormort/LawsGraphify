@@ -35,6 +35,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(BASE_DIR, "data", "laws_json")
 DGBAS_INDEX = os.path.join(BASE_DIR, "data", "dgbas_index.json")
 META = os.path.join(BASE_DIR, "data", "meta.json")
+# 法規資料庫（fund-law-api，跑在 Hugging Face）連不到 law.moj.gov.tw，改讀這份：
+# 全部基金收支保管及運用辦法的法務部原始紀錄，隨 GitHub Pages 發布
+FUND_RULES_EXPORT = os.path.join(BASE_DIR, "web", "fund_rules.json")
 
 MOJ_URLS = {
     "chlaw": "https://law.moj.gov.tw/api/ch/law/json",
@@ -268,6 +271,10 @@ def main():
     targets = target_names()
     moj, moj_updated = load_moj(args.refresh)
     targets = {**fund_targets(moj), **targets}  # config wins if it names one itself
+    with open(FUND_RULES_EXPORT, "w", encoding="utf-8") as f:
+        json.dump({"UpdateDate": moj_updated,
+                   "Laws": [law for name, law in sorted(moj.items()) if FUND_SUFFIX in name]},
+                  f, ensure_ascii=False)
     dgbas = None  # loaded only if some target is missing from MOJ
     counts, missing, written, kept = {"moj": 0, "dgbas": 0}, [], set(), []
     if any(YEAR in name for name in targets):

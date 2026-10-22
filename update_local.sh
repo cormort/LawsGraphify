@@ -105,7 +105,7 @@ if git diff --cached --quiet -- data/laws_json; then
 fi
 CHANGED="$(git diff --cached --name-only -- data/laws_json | sed 's|.*/||; s|\.json$||' | paste -sd '、' -)"
 git diff --cached --stat -- data/laws_json
-git add data web/laws_graph.json web/laws
+git add data web/laws_graph.json web/laws web/fund_rules.json
 git commit -q -m "法規資料自動更新（本機）$(date +%F)"
 git push -q
 notify "✅ 法規有更新，已推送並部署：$CHANGED"

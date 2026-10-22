@@ -46,7 +46,7 @@ jobs:
             exit 0
           fi
           { echo "### 有變動的法規"; echo '```'; git diff --cached --stat -- data/laws_json; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
-          git add data web/laws_graph.json web/laws
+          git add data web/laws_graph.json web/laws web/fund_rules.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "法規資料自動更新 $(date +%F)"
