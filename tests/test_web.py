@@ -310,3 +310,56 @@ def test_export_results_as_csv(page):
     shown = page.locator("#full-text .law-article.is-cited").count()
     assert 0 < shown < total
     assert len(exported_rows(page)) == shown + 1
+
+
+def test_read_aloud(browser, base_url):
+    """朗讀 reads an article; in a law's full text it goes on through the articles
+    showing; 停止, the 朗讀全文 button and leaving the page stop it."""
+    context = browser.new_context(viewport={"width": 390, "height": 800}, service_workers="block")
+    # A stand-in voice: utterances wait until the test finishes them
+    context.add_init_script("""
+        window.spoken = [];
+        const queue = [];
+        Object.defineProperty(window, "speechSynthesis", { value: {
+            speak(u) { spoken.push(u.text); queue.push(u); },
+            cancel() { queue.length = 0; },
+            getVoices: () => [],
+        } });
+        window.finishSpeaking = () => queue.splice(0).forEach(u => u.onend?.(new Event("end")));
+    """)
+    page = context.new_page()
+    errors = []
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.goto(base_url + "#")
+    page.wait_for_selector("details")
+
+    go(page, "預算法第62條")
+    button = page.locator(".card").first.locator("[data-speak]")
+    button.click()
+    text = page.evaluate("nodes.get('BUDGET-0062').text")
+    assert "".join(page.evaluate("spoken")) == "預算法 第 62 條。" + text
+    assert button.inner_text() == "停止"
+    page.evaluate("finishSpeaking()")
+    assert button.inner_text() == "朗讀"
+
+    go(page, "預算法")
+    page.evaluate("spoken.length = 0")
+    page.locator("[data-speak='BUDGET-0062']").click()
+    assert page.locator(".law-article.speaking").get_attribute("id") == "a-BUDGET-0062"
+    assert page.evaluate("spoken[0]").startswith("預算法 第 62 條。")
+    done = page.evaluate("spoken.length")
+    page.evaluate("finishSpeaking()")
+    after = page.evaluate("document.querySelector('#a-BUDGET-0062 ~ .law-article').id")
+    assert page.locator(".law-article.speaking").get_attribute("id") == after
+    assert page.evaluate(f"spoken[{done}]").startswith("第 ")  # no law name again
+    assert page.locator("[data-speak-all]").inner_text() == "停止朗讀"
+    page.locator("[data-speak-all]").click()
+    assert page.locator(".law-article.speaking").count() == 0
+    assert page.locator("[data-speak-all]").inner_text() == "朗讀全文"
+
+    page.locator("[data-speak-all]").click()
+    assert page.locator(".law-article.speaking").get_attribute("id") == "a-BUDGET-0001"
+    go(page, "預算法第1條")
+    assert page.evaluate("speaking") is None
+    context.close()
+    assert errors == []

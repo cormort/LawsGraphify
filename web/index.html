@@ -140,6 +140,8 @@ details.card[open] > summary { margin-bottom: 8px; }
 .chapter:first-child { margin-top: 0; }
 #full-text.only-cited .law-article:not(.is-cited), #full-text.only-cited .chapter { display: none; }
 #full-text.only-own .law-article:not(.is-own), #full-text.only-own .chapter { display: none; }
+/* The article being read aloud; the shadows widen the tint to the card's edges */
+.law-article.speaking { background: var(--accent-soft); box-shadow: -16px 0 var(--accent-soft), 16px 0 var(--accent-soft); }
 .badges .tool { min-height: 28px; min-width: 0; padding: 0 8px; font-size: 12px; }
 .badge.own { background: var(--warn-soft); color: var(--warn); }
 .fund-facts { margin-top: 10px; }
@@ -592,6 +594,54 @@ async function copyArticle(button) {
     }
 }
 
+// Read aloud with the browser's own voices (Web Speech API). In a law's full text
+// the reading goes on through the articles showing, the one being read tinted.
+// One utterance per sentence: some browsers stop a long one partway.
+const speech = window.speechSynthesis;
+let speaking = null;  // {ids, i, parts} while reading
+
+function speakButton(id) { return speech ? `<button class="tool" type="button" data-speak="${escapeHtml(id)}">朗讀</button>` : ""; }
+
+function showSpeaking() {
+    const id = speaking?.ids[speaking.i];
+    document.querySelectorAll("[data-speak]").forEach(b => { b.textContent = b.dataset.speak === id ? "停止" : "朗讀"; });
+    document.querySelectorAll("[data-speak-all]").forEach(b => { b.textContent = speaking ? "停止朗讀" : "朗讀全文"; });
+    document.querySelector(".law-article.speaking")?.classList.remove("speaking");
+    document.getElementById("a-" + id)?.classList.add("speaking");
+}
+
+function stopSpeaking() {
+    if (!speaking) return;
+    speaking = null;
+    speech.cancel();
+    showSpeaking();
+}
+
+function speak(ids) {
+    speech.cancel();
+    const run = speaking = { ids, i: 0, parts: [] };
+    const voice = speech.getVoices().find(v => /^zh[-_]TW/i.test(v.lang));
+    const next = () => {
+        if (speaking !== run) return;  // stopped, or another reading started
+        if (run.i >= ids.length) return stopSpeaking();
+        const node = nodes.get(ids[run.i]);
+        showSpeaking();
+        document.getElementById("a-" + node.id)?.scrollIntoView();
+        // The law's name only once; the articles after it are the same law's
+        const text = `${run.i ? node.article_zh : label(node.id)}。${node.text}`;
+        run.parts = text.match(/[^。；]+[。；]?/g).map(sentence => {
+            const u = new SpeechSynthesisUtterance(sentence);
+            u.lang = "zh-TW";
+            if (voice) u.voice = voice;
+            u.onerror = () => { if (speaking === run) stopSpeaking(); };
+            return u;
+        });  // kept on run: Chrome drops the events of an utterance nothing refers to
+        run.parts.at(-1).onend = () => { run.i++; next(); };
+        run.parts.forEach(u => speech.speak(u));
+    };
+    next();
+}
+
 async function exportFavs() {
     const text = store.get("favs", []).join(" ");
     try {
@@ -660,7 +710,7 @@ function renderArticle(q, marks) {
             <span>${step(order[i - 1], "‹ 上一條")}　${step(order[i + 1], "下一條 ›")}</span></nav>`;
     }
     html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? `<div class="tools">
-        ${copyButton(id)}${starButton(id)}</div>` : ""}</div>`;
+        ${speakButton(id)}${copyButton(id)}${starButton(id)}</div>` : ""}</div>`;
     html += abolishedNote(q.code);
     if (target) {
         const badge = amendedBadge(id, amended());
@@ -684,7 +734,7 @@ function renderArticle(q, marks) {
     exportable = { name: `引用 ${label(id)} 的條文`, ids: () => bySource.map(group => group[0].source) };
     return html + bySource.map(group => {
         const src = nodes.get(group[0].source);
-        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${copyButton(src.id)}${starButton(src.id, favs)}</div></div>
+        return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${speakButton(src.id)}${copyButton(src.id)}${starButton(src.id, favs)}</div></div>
             <div class="text">${formatText(src, id)}</div></div>`;
     }).join("");
 }
@@ -726,7 +776,7 @@ function renderSimilar(node, favs) {
     const summary = same ? `另有 ${same} 個基金有相同規定（相似度 90% 以上）`
         : best[0]?.score >= OWN ? "其他基金有類似但不相同的規定" : "本基金特有：其他基金沒有相似度 50% 以上的規定";
     return `<h3>其他基金的類似規定</h3><p class="muted">${summary}</p>` + best.slice(0, SIMILAR_SHOWN).filter(t => t.score >= 0.3).map(t =>
-        `<div class="card"><div class="hit-head">${link(t.id)}<div class="badges"><span class="badge">相似 ${Math.round(t.score * 100)}%</span>${copyButton(t.id)}${starButton(t.id, favs)}</div></div>
+        `<div class="card"><div class="hit-head">${link(t.id)}<div class="badges"><span class="badge">相似 ${Math.round(t.score * 100)}%</span>${speakButton(t.id)}${copyButton(t.id)}${starButton(t.id, favs)}</div></div>
             <div class="text">${formatText(nodes.get(t.id))}</div></div>`).join("");
 }
 
@@ -771,7 +821,7 @@ function renderFullText(code) {
     // The articles showing, whichever filter (只看被引用的, a fund's own) is on
     exportable = { name: lawName(code), ids: () => scrubList().map(el => el.id.slice(2)) };
 
-    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2><div class="tools">${EXPORT_BUTTON}${starButton(code)}</div></div>${abolishedNote(code)}${lawDates(code)}
+    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2><div class="tools">${speech ? `<button class="tool" type="button" data-speak-all>朗讀全文</button>` : ""}${EXPORT_BUTTON}${starButton(code)}</div></div>${abolishedNote(code)}${lawDates(code)}
         <p class="muted">共 ${ids.length} ${unit(code)}，${cited} ${unit(code)}被其他條文引用</p>
         <div class="controls">
             <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)}</form>
@@ -792,7 +842,7 @@ function renderFullText(code) {
         const s = fund?.standing.get(id);
         return `${chapter}<article class="law-article${n ? " is-cited" : ""}${s?.own ? " is-own" : ""}" id="a-${escapeHtml(id)}" data-chapter="${escapeHtml(current)}">
             <div class="hit-head">${link(id, node.article_zh)}<div class="badges">${amendedBadge(id, changes)}${standingBadge(id, s)}
-                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${copyButton(id)}${starButton(id, favs)}</div></div>
+                ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${speakButton(id)}${copyButton(id)}${starButton(id, favs)}</div></div>
             <div class="text">${formatText(node)}</div></article>`;
     }).join("");
     return html + `</div>`;
@@ -828,7 +878,7 @@ function renderSearch(q) {
     // The keywords ride along to the article page, which marks them too
     const mark = "?mark=" + encodeURIComponent(q.include.join(" "));
     html += hits.slice(0, MAX_RESULTS).map(id =>
-        `<div class="card"><div class="hit-head"><a href="#${encodeURIComponent(id)}${mark}">${escapeHtml(label(id))}</a><div class="badges">${copyButton(id)}${starButton(id, favs)}</div></div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
+        `<div class="card"><div class="hit-head"><a href="#${encodeURIComponent(id)}${mark}">${escapeHtml(label(id))}</a><div class="badges">${speakButton(id)}${copyButton(id)}${starButton(id, favs)}</div></div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
     ).join("");
     if (hits.length > MAX_RESULTS) html += `<p class="muted">只顯示前 ${MAX_RESULTS} 條，請加關鍵字縮小範圍。</p>`;
     return html;
@@ -860,6 +910,7 @@ function queryLabel(q, raw) {
 }
 
 function runFromHash() {
+    stopSpeaking();
     const [path, mark] = location.hash.slice(1).split("?mark=");
     const raw = decodeURIComponent(path);
     const q = render(raw, mark ? decodeURIComponent(mark).split(" ") : []);
@@ -1033,6 +1084,14 @@ document.addEventListener("click", e => {
     if (e.target.closest("[data-export]") && exportable) exportView();
     const copy = e.target.closest("[data-copy]");
     if (copy) copyArticle(copy);
+    // 朗讀 in a law's full text reads from that article on; 停止 (the same button) stops
+    const say = e.target.closest("[data-speak]");
+    if (say) {
+        const id = say.dataset.speak, shown = scrubList().map(el => el.id.slice(2));
+        if (speaking?.ids[speaking.i] === id) stopSpeaking();
+        else speak(shown.includes(id) ? shown.slice(shown.indexOf(id)) : [id]);
+    }
+    if (e.target.closest("[data-speak-all]")) speaking ? stopSpeaking() : speak(scrubList().map(el => el.id.slice(2)));
     const scroll = e.target.closest("[data-scroll]");
     if (scroll) document.getElementById(scroll.dataset.scroll)?.scrollIntoView();  // instant: laws are long
     const font = e.target.closest("[data-font]");
