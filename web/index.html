@@ -1318,6 +1318,12 @@ if ("serviceWorker" in navigator) {
         if (e.data === "app-updated") document.getElementById("app-update").hidden = false;
     });
     document.getElementById("app-reload").addEventListener("click", () => location.reload());
+    // Back from the background: look for a new sw.js and a new page
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState !== "visible" || !navigator.onLine) return;
+        navigator.serviceWorker.getRegistration().then(reg => reg?.update()).catch(() => {});
+        navigator.serviceWorker.controller?.postMessage("check-update");
+    });
 }
 window.addEventListener("online", showOnline);
 window.addEventListener("offline", showOnline);

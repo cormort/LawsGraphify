@@ -311,6 +311,58 @@ def test_new_version_offers_a_reload(browser, tmp_path):
         server.shutdown()
 
 
+def installed_app(browser, tmp_path):
+    """A copy of the site opened once and then answered by its service worker."""
+    site = tmp_path / "web"
+    shutil.copytree(WEB, site)
+    server, url = serve(site)
+    context = browser.new_context()
+    page = context.new_page()
+    page.goto(url + "#")
+    page.wait_for_selector("details")
+    page.evaluate("navigator.serviceWorker.ready")
+    page.reload()
+    page.wait_for_selector("details")
+    assert page.evaluate("!!navigator.serviceWorker.controller")
+    return site, server, context, page
+
+
+def deploy(path, old, new):
+    path.write_text(path.read_text(encoding="utf-8").replace(old, new), encoding="utf-8")
+    later = os.path.getmtime(path) + 60
+    os.utime(path, (later, later))
+
+
+def test_resumed_app_offers_a_reload(browser, tmp_path):
+    """An installed app brought back from the background is not reloaded, so it
+    checks for a newer page when it comes to the front."""
+    site, server, context, page = installed_app(browser, tmp_path)
+    try:
+        page.evaluate("document.dispatchEvent(new Event('visibilitychange'))")
+        page.wait_for_timeout(500)
+        assert page.locator("#app-update").is_hidden()  # nothing new yet
+        deploy(site / "index.html", "原始碼</a>", "原始碼</a> v2")
+        page.evaluate("document.dispatchEvent(new Event('visibilitychange'))")
+        page.wait_for_selector("#app-update:not([hidden])")
+    finally:
+        context.close()
+        server.shutdown()
+
+
+def test_new_service_worker_offers_a_reload(browser, tmp_path):
+    """A deploy that also changes sw.js: the new worker caches the new page while
+    installing, so it tells the pages still showing the old one."""
+    site, server, context, page = installed_app(browser, tmp_path)
+    try:
+        deploy(site / "index.html", "原始碼</a>", "原始碼</a> v2")
+        deploy(site / "sw.js", 'const CACHE = "laws-v', 'const CACHE = "laws-test-v')
+        page.evaluate("document.dispatchEvent(new Event('visibilitychange'))")
+        page.wait_for_selector("#app-update:not([hidden])")
+    finally:
+        context.close()
+        server.shutdown()
+
+
 def exported_rows(page):
     """Clicks 匯出 and parses the downloaded CSV."""
     with page.expect_download() as download:
