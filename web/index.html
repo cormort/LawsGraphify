@@ -81,7 +81,7 @@ input[type=search]:focus, .jump input:focus { outline: 2px solid var(--accent); 
 main { padding: 16px 16px 96px; }
 .muted { color: var(--muted); font-size: 0.85em; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-.title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.title-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 8px; }  /* buttons drop below a long title */
 h2 { font-size: 1.15em; margin: 0 0 4px; line-height: 1.5; }
 h3 { font-size: 0.9em; margin: 24px 0 8px; color: var(--muted); font-weight: 600; }
 .warn { background: var(--warn-soft); color: var(--warn); border-radius: 8px; padding: 10px 12px; margin: 12px 0; font-size: 0.9em; }
@@ -93,6 +93,7 @@ h3 { font-size: 0.9em; margin: 24px 0 8px; color: var(--muted); font-weight: 600
 .text .item { display: flex; }
 .text .mk { flex: none; font-variant-numeric: tabular-nums; }  /* 1. and 2. same width, so siblings align */
 .text .body { flex: 1; min-width: 0; }
+@media (max-width: 420px) { .text .item .body { text-align: start; } }  /* short indented lines: justify would space out every character */
 mark { background: var(--mark); color: inherit; border-radius: 3px; padding: 0 1px; }
 
 .star { flex: none; border: 0; background: none; font-size: 1.4em; line-height: 1; padding: 4px; color: var(--muted); }
@@ -176,7 +177,9 @@ details.card[open] > summary { margin-bottom: 8px; }
     max-width: calc(100vw - 96px); min-height: 44px; padding: 0 16px; border-radius: 22px;
     border: 1px solid var(--border); background: var(--surface); color: var(--accent); font-size: 15px;
     box-shadow: 0 2px 8px rgb(0 0 0 / 0.15); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: transform 0.2s;
 }
+#back.away { transform: translateY(calc(100% + 32px)); }  /* out of the way while reading down */
 footer { padding: 0 16px max(24px, env(safe-area-inset-bottom)); font-size: 13px; color: var(--muted); }
 footer a { color: var(--muted); }
 .offline-pill { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
@@ -986,7 +989,10 @@ function runFromHash() {
 // hash it was reached from, so the button follows the phone's own back and still
 // works after a reload; a home-screen app on iPhone has no back button of its own.
 const back = document.getElementById("back");
+let lastY = 0;  // hide the button while scrolling down
 function updateBack() {
+    lastY = scrollY;  // a restored scroll position is not reading down: keep the button
+    back.classList.remove("away");
     const from = history.state?.from;
     back.hidden = from === undefined;
     if (back.hidden) return;
@@ -994,6 +1000,10 @@ function updateBack() {
     back.textContent = "← " + (queryLabel(parseQuery(raw), raw) || "首頁");
 }
 back.addEventListener("click", () => history.back());
+window.addEventListener("scroll", () => {
+    back.classList.toggle("away", scrollY > lastY && scrollY > 200);
+    lastY = scrollY;
+}, { passive: true });
 
 // --- Data & wiring ---
 

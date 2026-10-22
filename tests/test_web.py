@@ -256,6 +256,10 @@ def test_attachment_names_link_to_the_original(page):
 def test_back_button_returns_to_where_a_link_was_followed(page):
     go(page, "預算法")
     assert page.locator("#back").is_hidden() or page.locator("#back").inner_text() == "← 首頁"
+    page.mouse.wheel(0, 600)  # reading down: the button steps aside, back up: it returns
+    page.wait_for_function("document.getElementById('back').classList.contains('away')")
+    page.mouse.wheel(0, -100)
+    page.wait_for_function("!document.getElementById('back').classList.contains('away')")
     page.evaluate("document.getElementById('a-BUDGET-0033').scrollIntoView()")
     y = page.evaluate("scrollY")
     page.locator("#a-BUDGET-0033 a.cite").first.click()
