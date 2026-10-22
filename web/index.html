@@ -191,6 +191,7 @@ footer a { color: var(--muted); }
                 <button class="tool" type="button" data-font="-1" aria-label="縮小字體">A−</button>
                 <button class="tool" type="button" data-font="1" aria-label="放大字體">A＋</button>
                 <button class="tool" type="button" id="theme-btn" aria-label="切換深淺色">◐</button>
+                <button class="tool" type="button" id="rate-btn" aria-label="朗讀速度" hidden></button>
                 <button class="tool" type="button" id="install-btn" hidden>安裝</button>
             </div>
         </div>
@@ -596,9 +597,12 @@ async function copyArticle(button) {
 
 // Read aloud with the browser's own voices (Web Speech API). In a law's full text
 // the reading goes on through the articles showing, the one being read tinted.
-// One utterance per sentence: some browsers stop a long one partway.
+// One utterance per sentence, each queued when the last ends: some browsers stop
+// a long one partway, and a new speed takes effect from the next sentence.
 const speech = window.speechSynthesis;
-let speaking = null;  // {ids, i, parts} while reading
+let speaking = null;  // {ids, i, utterance} while reading
+const RATES = [0.75, 1, 1.25, 1.5, 2];
+let rate = store.get("speechRate", 1);
 
 function speakButton(id) { return speech ? `<button class="tool" type="button" data-speak="${escapeHtml(id)}">朗讀</button>` : ""; }
 
@@ -629,18 +633,33 @@ function speak(ids) {
         document.getElementById("a-" + node.id)?.scrollIntoView();
         // The law's name only once; the articles after it are the same law's
         const text = `${run.i ? node.article_zh : label(node.id)}。${node.text}`;
-        run.parts = text.match(/[^。；]+[。；]?/g).map(sentence => {
-            const u = new SpeechSynthesisUtterance(sentence);
-            u.lang = "zh-TW";
-            if (voice) u.voice = voice;
-            u.onerror = () => { if (speaking === run) stopSpeaking(); };
-            return u;
-        });  // kept on run: Chrome drops the events of an utterance nothing refers to
-        run.parts.at(-1).onend = () => { run.i++; next(); };
-        run.parts.forEach(u => speech.speak(u));
+        say(text.match(/[^。；]+[。；]?/g), 0);
+    };
+    const say = (sentences, j) => {
+        if (speaking !== run) return;
+        if (j >= sentences.length) { run.i++; return next(); }
+        // Kept on run: Chrome drops the events of an utterance nothing refers to
+        const u = run.utterance = new SpeechSynthesisUtterance(sentences[j]);
+        u.lang = "zh-TW";
+        if (voice) u.voice = voice;
+        u.rate = rate;
+        u.onend = () => say(sentences, j + 1);
+        u.onerror = () => { if (speaking === run) stopSpeaking(); };
+        speech.speak(u);
     };
     next();
 }
+
+// Speed: 🔊 1× in the top bar steps through RATES
+const rateBtn = document.getElementById("rate-btn");
+function showRate() { rateBtn.textContent = `🔊 ${rate}×`; }
+rateBtn.hidden = !speech;
+showRate();
+rateBtn.addEventListener("click", () => {
+    rate = RATES[(RATES.indexOf(rate) + 1) % RATES.length];
+    store.set("speechRate", rate);
+    showRate();
+});
 
 async function exportFavs() {
     const text = store.get("favs", []).join(" ");

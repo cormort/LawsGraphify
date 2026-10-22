@@ -319,13 +319,18 @@ def test_read_aloud(browser, base_url):
     # A stand-in voice: utterances wait until the test finishes them
     context.add_init_script("""
         window.spoken = [];
+        window.rates = [];
         const queue = [];
         Object.defineProperty(window, "speechSynthesis", { value: {
-            speak(u) { spoken.push(u.text); queue.push(u); },
+            speak(u) { spoken.push(u.text); rates.push(u.rate); queue.push(u); },
             cancel() { queue.length = 0; },
             getVoices: () => [],
         } });
-        window.finishSpeaking = () => queue.splice(0).forEach(u => u.onend?.(new Event("end")));
+        // Ends sentence after sentence until the article being read is done
+        window.finishSpeaking = () => {
+            const id = speaking?.ids[speaking.i];
+            while (queue.length && speaking?.ids[speaking.i] === id) queue.shift().onend(new Event("end"));
+        };
     """)
     page = context.new_page()
     errors = []
@@ -336,22 +341,35 @@ def test_read_aloud(browser, base_url):
     go(page, "預算法第62條")
     button = page.locator(".card").first.locator("[data-speak]")
     button.click()
-    text = page.evaluate("nodes.get('BUDGET-0062').text")
-    assert "".join(page.evaluate("spoken")) == "預算法 第 62 條。" + text
     assert button.inner_text() == "停止"
     page.evaluate("finishSpeaking()")
+    text = page.evaluate("nodes.get('BUDGET-0062').text")
+    assert "".join(page.evaluate("spoken")) == "預算法 第 62 條。" + text
     assert button.inner_text() == "朗讀"
+    assert set(page.evaluate("rates")) == {1}
+
+    # Speed: steps through the rates, is remembered, and applies from the next sentence
+    rate = page.locator("#rate-btn")
+    assert rate.inner_text() == "🔊 1×"
+    button.click()
+    rate.click()
+    assert rate.inner_text() == "🔊 1.25×"
+    assert page.evaluate("JSON.parse(localStorage.getItem('speechRate'))") == 1.25
+    page.evaluate("finishSpeaking()")
+    assert page.evaluate("rates.at(-1)") == 1.25
+    for _ in range(4):
+        rate.click()
+    assert rate.inner_text() == "🔊 1×"
 
     go(page, "預算法")
     page.evaluate("spoken.length = 0")
     page.locator("[data-speak='BUDGET-0062']").click()
     assert page.locator(".law-article.speaking").get_attribute("id") == "a-BUDGET-0062"
     assert page.evaluate("spoken[0]").startswith("預算法 第 62 條。")
-    done = page.evaluate("spoken.length")
     page.evaluate("finishSpeaking()")
     after = page.evaluate("document.querySelector('#a-BUDGET-0062 ~ .law-article').id")
     assert page.locator(".law-article.speaking").get_attribute("id") == after
-    assert page.evaluate(f"spoken[{done}]").startswith("第 ")  # no law name again
+    assert page.evaluate("spoken.at(-1)").startswith("第 ")  # no law name again
     assert page.locator("[data-speak-all]").inner_text() == "停止朗讀"
     page.locator("[data-speak-all]").click()
     assert page.locator(".law-article.speaking").count() == 0
