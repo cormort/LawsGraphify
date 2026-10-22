@@ -180,6 +180,42 @@ details.card[open] > summary { margin-bottom: 8px; }
 footer { padding: 0 16px max(24px, env(safe-area-inset-bottom)); font-size: 13px; color: var(--muted); }
 footer a { color: var(--muted); }
 .offline-pill { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+
+/* Wide screens use the whole width: lists in columns, results side by side, and in
+   full text / article views the title (filters, 目錄) or article stays in a sticky left column */
+@media screen and (min-width: 1100px) {
+    .topbar, main, footer { padding-left: 32px; padding-right: 32px; }
+    .topbar-inner, main, footer { max-width: 1600px; }
+    .list { columns: 22em; column-gap: 40px; }
+    .list > * { break-inside: avoid; }
+    .list > a, .list > a:first-child { border-top: 0; border-bottom: 1px solid var(--border); padding: 10px 0; }  /* lines under: a column can start anywhere */
+    .hits { display: grid; grid-template-columns: repeat(auto-fill, minmax(32em, 1fr)); gap: 12px; align-items: start; }
+    .hits > .card { margin: 0; }
+    .split { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 24px; align-items: start; }
+    .split.article { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .split > div > :first-child { margin-top: 0; }
+    .side { position: sticky; top: 132px; max-height: calc(100vh - 148px); overflow-y: auto; }
+    .side > .card:last-child { margin-bottom: 0; }
+    .toc button { padding: 7px 0; }
+}
+
+/* 列印: the page as shown (filters included), without the controls */
+@media print {
+    :root, :root[data-theme], :root:not([data-theme="light"]) {
+        --bg: #fff; --surface: #fff; --border: #bbb; --text: #000; --muted: #444; --accent: #000; --accent-soft: #fff;
+        --warn: #000; --warn-soft: #fff; --mark: #eee;
+    }
+    @page { margin: 15mm; }
+    body { font-size: 12pt; line-height: 1.6; padding: 0; }
+    .topbar, footer, #to-top, #back, #scrubber, #app-update, #update-bar, .tools, button,
+    .controls, .toc, .article-nav, .chips { display: none !important; }
+    main { max-width: none; padding: 0; }
+    .card { border: 0; border-radius: 0; padding: 0; margin-bottom: 1em; }
+    a, a.cite, .cite-unresolved { color: inherit; text-decoration: none; }
+    .badge { border: 1px solid var(--border); }
+    .law-article { break-inside: avoid; }
+    .hit-head, .chapter, h2, h3 { break-after: avoid; }
+}
 </style>
 </head>
 <body>
@@ -581,6 +617,7 @@ function citation(node) {
     return node.law_name + (n ? `第${n}${u}${sub ? "之" + sub : ""}` : zh);
 }
 
+const PRINT_BUTTON = `<button class="tool" type="button" data-print aria-label="友善列印">列印</button>`;
 function copyButton(id) { return `<button class="tool" type="button" data-copy="${escapeHtml(id)}">複製</button>`; }
 
 async function copyArticle(button) {
@@ -728,8 +765,8 @@ function renderArticle(q, marks) {
         html += `<nav class="article-nav">${link(q.code, `← 《${lawName(q.code)}》全文`)}
             <span>${step(order[i - 1], "‹ 上一條")}　${step(order[i + 1], "下一條 ›")}</span></nav>`;
     }
-    html += `<div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? `<div class="tools">
-        ${speakButton(id)}${copyButton(id)}${starButton(id)}</div>` : ""}</div>`;
+    html += `<div class="split article"><div class="side"><div class="card"><div class="title-row"><h2>${escapeHtml(label(id))}</h2>${target ? `<div class="tools">
+        ${PRINT_BUTTON}${speakButton(id)}${copyButton(id)}${starButton(id)}</div>` : ""}</div>`;
     html += abolishedNote(q.code);
     if (target) {
         const badge = amendedBadge(id, amended());
@@ -745,8 +782,9 @@ function renderArticle(q, marks) {
 
     const bySource = groupBySource(incoming.get(id) || []), favs = store.get("favs", []);
     const similar = target && fundCodes().has(q.code) ? renderSimilar(target, favs) : "";
-    if (!bySource.length) return html + `</div>${similar}<h3>被 0 條條文引用</h3><p class="empty">沒有其他條文引用這一條。</p>`;
-    html += `</div>${similar}<div class="section-head"><h3>被 ${bySource.length} 條條文引用</h3>${EXPORT_BUTTON}</div>`;
+    html += `</div></div><div>${similar}`;
+    if (!bySource.length) return html + `<h3>被 0 條條文引用</h3><p class="empty">沒有其他條文引用這一條。</p></div></div>`;
+    html += `<div class="section-head"><h3>被 ${bySource.length} 條條文引用</h3><div class="tools">${PRINT_BUTTON}${EXPORT_BUTTON}</div></div>`;
     // Other laws first, then the same law; each in article order
     const own = sid => sid.startsWith(q.code + "-");
     bySource.sort((a, b) => (own(a[0].source) - own(b[0].source)) || a[0].source.localeCompare(b[0].source));
@@ -755,7 +793,7 @@ function renderArticle(q, marks) {
         const src = nodes.get(group[0].source);
         return `<div class="card"><div class="hit-head">${link(src.id)}<div class="badges">${edgeBadges(group)}${speakButton(src.id)}${copyButton(src.id)}${starButton(src.id, favs)}</div></div>
             <div class="text">${formatText(src, id)}</div></div>`;
-    }).join("");
+    }).join("") + `</div></div>`;
 }
 
 // Fund regulations are mostly written from one template. For a fund article, say
@@ -840,7 +878,7 @@ function renderFullText(code) {
     // The articles showing, whichever filter (只看被引用的, a fund's own) is on
     exportable = { name: lawName(code), ids: () => scrubList().map(el => el.id.slice(2)) };
 
-    let html = `<div class="card"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2><div class="tools">${speech ? `<button class="tool" type="button" data-speak-all>朗讀全文</button>` : ""}${EXPORT_BUTTON}${starButton(code)}</div></div>${abolishedNote(code)}${lawDates(code)}
+    let html = `<div class="split"><div class="card side"><div class="title-row"><h2>${escapeHtml(lawName(code))}</h2><div class="tools">${speech ? `<button class="tool" type="button" data-speak-all>朗讀全文</button>` : ""}${PRINT_BUTTON}${EXPORT_BUTTON}${starButton(code)}</div></div>${abolishedNote(code)}${lawDates(code)}
         <p class="muted">共 ${ids.length} ${unit(code)}，${cited} ${unit(code)}被其他條文引用</p>
         <div class="controls">
             <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)}</form>
@@ -848,7 +886,7 @@ function renderFullText(code) {
             ${fund ? `<label><input type="checkbox" id="only-own"> 只看本基金特有</label>` : ""}
         </div>${fund ? fund.html : ""}`;
     if (chapters.length) {
-        html += `<details class="toc"><summary>目錄（${chapters.length} 章）</summary>
+        html += `<details class="toc"${matchMedia("(min-width: 1100px)").matches ? " open" : ""}><summary>目錄（${chapters.length} 章）</summary>
             ${chapters.map(id => `<button type="button" data-scroll="ch-${escapeHtml(id)}">${escapeHtml(nodes.get(id).chapter)}</button>`).join("")}</details>`;
     }
     html += `</div><div class="card" id="full-text">`;
@@ -864,7 +902,7 @@ function renderFullText(code) {
                 ${n ? `<a class="badge" href="#${encodeURIComponent(id)}">被 ${n} 條引用</a>` : ""}${speakButton(id)}${copyButton(id)}${starButton(id, favs)}</div></div>
             <div class="text">${formatText(node)}</div></article>`;
     }).join("");
-    return html + `</div>`;
+    return html + `</div></div>`;
 }
 
 // Law without full text (external): which of its articles are cited
@@ -893,12 +931,12 @@ function renderSearch(q) {
     const title = `在${where}中找到 ${hits.length} 條「${q.include.join(" ")}」${q.exclude.length ? `（排除 ${q.exclude.join("、")}）` : ""}`;
     if (!hits.length) return `<h3>${escapeHtml(title)}</h3><p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
     exportable = { name: `搜尋 ${q.code ? lawName(q.code) : q.section ? SECTIONS[q.section].where : ""} ${q.include.join(" ")}`.replace(/\s+/g, " "), ids: () => hits };
-    let html = `<div class="section-head"><h3>${escapeHtml(title)}</h3>${EXPORT_BUTTON}</div>`;
+    let html = `<div class="section-head"><h3>${escapeHtml(title)}</h3><div class="tools">${PRINT_BUTTON}${EXPORT_BUTTON}</div></div>`;
     // The keywords ride along to the article page, which marks them too
     const mark = "?mark=" + encodeURIComponent(q.include.join(" "));
-    html += hits.slice(0, MAX_RESULTS).map(id =>
+    html += `<div class="hits">` + hits.slice(0, MAX_RESULTS).map(id =>
         `<div class="card"><div class="hit-head"><a href="#${encodeURIComponent(id)}${mark}">${escapeHtml(label(id))}</a><div class="badges">${speakButton(id)}${copyButton(id)}${starButton(id, favs)}</div></div><p class="text">${snippet(nodes.get(id), q.include)}</p></div>`
-    ).join("");
+    ).join("") + `</div>`;
     if (hits.length > MAX_RESULTS) html += `<p class="muted">只顯示前 ${MAX_RESULTS} 條，請加關鍵字縮小範圍。</p>`;
     return html;
 }
@@ -1111,6 +1149,7 @@ document.addEventListener("click", e => {
         else speak(shown.includes(id) ? shown.slice(shown.indexOf(id)) : [id]);
     }
     if (e.target.closest("[data-speak-all]")) speaking ? stopSpeaking() : speak(scrubList().map(el => el.id.slice(2)));
+    if (e.target.closest("[data-print]")) window.print();
     const scroll = e.target.closest("[data-scroll]");
     if (scroll) document.getElementById(scroll.dataset.scroll)?.scrollIntoView();  // instant: laws are long
     const font = e.target.closest("[data-font]");

@@ -27,8 +27,12 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+class Server(http.server.ThreadingHTTPServer):
+    request_queue_size = 128  # the page fetches every law at once; macOS resets connections past the default 5
+
+
 def serve(directory):
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(QuietHandler, directory=directory))
+    server = Server(("127.0.0.1", 0), functools.partial(QuietHandler, directory=directory))
     threading.Thread(target=server.serve_forever, daemon=True).start()
     return server, f"http://127.0.0.1:{server.server_port}/"
 
@@ -157,6 +161,28 @@ def test_article_and_full_text_views(page, base_url):
     assert page.locator("#scrubber").is_visible()
     page.evaluate("document.getElementById('a-BUDGET-0062').scrollIntoView()")
     page.wait_for_function("document.querySelector('#scrubber .bubble').textContent.startsWith('第 62 條')")
+
+
+def test_print_shows_the_filtered_text_without_controls(page):
+    go(page, "預算法")
+    page.evaluate("window.print = () => { window.printed = true; }")
+    page.click("[data-print]")
+    assert page.evaluate("window.printed")
+    page.check("#only-cited")
+    page.emulate_media(media="print")
+    assert page.locator(".topbar").is_hidden() and page.locator("[data-print]").is_hidden()
+    assert page.locator(".controls").is_hidden() and page.locator("#full-text .star").first.is_hidden()
+    shown = page.locator("#full-text .law-article:visible").count()
+    assert 0 < shown < page.locator("#full-text .law-article").count()
+    assert page.locator("#full-text .law-article.is-cited").count() == shown
+
+
+def test_wide_screen_keeps_the_title_beside_the_text(page):
+    page.set_viewport_size({"width": 1440, "height": 900})
+    go(page, "預算法")
+    side, text = page.locator(".split .side").bounding_box(), page.locator("#full-text").bounding_box()
+    assert side["x"] + side["width"] <= text["x"]
+    assert page.locator(".toc").evaluate("d => d.open")
 
 
 def test_favourites_export_and_import(page, base_url):
