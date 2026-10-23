@@ -180,6 +180,96 @@
   "行政院主計總處組織法": "DGBASORG",
   "DGBASORG": "DGBASORG",
   "主計總處組織法": "DGBASORG",
+  "中央對直轄市及縣(市)政府申請計畫型補助款補助之處理原則": "CAGPSP",
+  "CAGPSP": "CAGPSP",
+  "中央政府各機關單位預算財務收支處理注意事項": "UBFRP",
+  "UBFRP": "UBFRP",
+  "中央政府非營業特種基金設立及存續原則": "NSFEP",
+  "NSFEP": "NSFEP",
+  "因應財政紀律法設立非營業特種基金之執行原則": "FDASFP",
+  "FDASFP": "FDASFP",
+  "非營業特種基金設置、簡併、裁撤及預算編製共同性原則": "NSFCP",
+  "NSFCP": "NSFCP",
+  "預算法第63條但書規定之執行原則": "B63P",
+  "B63P": "B63P",
+  "預算法第六十二條之一執行原則": "B621P",
+  "B621P": "B621P",
+  "直轄市及縣(市)各機關單位預算分配注意事項": "LBDA",
+  "LBDA": "LBDA",
+  "直轄市及縣(市)單位預算執行要點": "LMOPE",
+  "LMOPE": "LMOPE",
+  "直轄市及縣(市)附屬單位預算執行要點": "LSUPE",
+  "LSUPE": "LSUPE",
+  "各級地方政府回饋金收支預算處理要點": "LFBP",
+  "LFBP": "LFBP",
+  "各級地方政府墊付款處理要點": "LADVP",
+  "LADVP": "LADVP",
+  "各級政府災害救助緊急搶救及復建經費處理作業要點": "DRFP",
+  "DRFP": "DRFP",
+  "中央政府特種基金參加民營事業投資管理要點": "SFIP",
+  "SFIP": "SFIP",
+  "成本性質劃分及彈性預算實施準則": "FLEXB",
+  "FLEXB": "FLEXB",
+  "強化特種基金預算管理提升營運效能方案": "SFBMP",
+  "SFBMP": "SFBMP",
+  "預算編製作業落實零基預算精神實施方案": "ZBIP",
+  "ZBIP": "ZBIP",
+  "公款支付時限及處理應行注意事項": "PPTP",
+  "PPTP": "PPTP",
+  "個人信用卡支付款項處理原則": "PCCP",
+  "PCCP": "PCCP",
+  "中央政府普通公務單位會計制度之一致規定": "GUACS",
+  "GUACS": "GUACS",
+  "行政法人會計制度設置準則": "ACAACS",
+  "ACAACS": "ACAACS",
+  "各機關取得紙本支出憑證辦理電子化處理之存管原則": "GEVSP",
+  "GEVSP": "GEVSP",
+  "各機關採用電子方式處理會計資料或貯存體之錯誤更正要點": "EACP",
+  "EACP": "EACP",
+  "中央政府各機關註銷應收款項、存貨及存出保證金會計事務處理作業規定": "WOARP",
+  "WOARP": "WOARP",
+  "財物標準分類": "PSC",
+  "PSC": "PSC",
+  "各機關財物報廢分級核定金額表": "PDAT",
+  "PDAT": "PDAT",
+  "中央政府各機關珍貴動產不動產管理要點": "VAMP",
+  "VAMP": "VAMP",
+  "重大天然災害搶救復建經費簡化會計手續處理要點": "DSAP",
+  "DSAP": "DSAP",
+  "公營事業責任會計制度實施原則": "SORAP",
+  "SORAP": "SORAP",
+  "政府內部控制制度設計原則": "GICDP",
+  "GICDP": "GICDP",
+  "強化內部控制實施方案": "SICP",
+  "SICP": "SICP",
+  "健全財務秩序與強化內部控制實施方案": "SFICP",
+  "SFICP": "SFICP",
+  "加強財務控管及落實會計審核方案": "SFCAP",
+  "SFCAP": "SFCAP",
+  "內部控制制度共通性作業範例製作原則": "ICCEP",
+  "ICCEP": "ICCEP",
+  "政府內部控制共通性作業(含跨職能整合)範例製作原則": "GICCEP",
+  "GICCEP": "GICCEP",
+  "辦理內部控制宣導及教育訓練應行注意事項": "ICTP",
+  "ICTP": "ICTP",
+  "擇定主管機關提報內部控制作業落實執行情形原則": "ICRP",
+  "ICRP": "ICRP",
+  "主計機構人員設置管理條例": "BOPA",
+  "BOPA": "BOPA",
+  "主計機構人員設置管理條例施行細則": "BOPER",
+  "BOPER": "BOPER",
+  "主計機構編制訂定及人員任免遷調辦法": "BOAR",
+  "BOAR": "BOAR",
+  "主計人員獎懲辦法": "BORP",
+  "BORP": "BORP",
+  "主計機構設置及員額編制標準": "BOSS",
+  "BOSS": "BOSS",
+  "行政院主計總處處務規程": "DGBASRP",
+  "DGBASRP": "DGBASRP",
+  "統計法": "STATA",
+  "STATA": "STATA",
+  "統計法施行細則": "STATER",
+  "STATER": "STATER",
   "軍事教育條例": "MEA",
   "MEA": "MEA",
   "國防醫學大學軍事教育基金管理及監督辦法": "NDMUF",
@@ -504,6 +594,15 @@
    "hash": "026aa114f81d"
   },
   {
+   "code": "BOPA",
+   "name": "主計機構人員設置管理條例",
+   "kind": "憲法與法律",
+   "count": 35,
+   "published": "1981-12-28",
+   "amended": "2012-12-05",
+   "hash": "65013757ff9f"
+  },
+  {
    "code": "CPA",
    "name": "商業會計法",
    "kind": "憲法與法律",
@@ -574,6 +673,15 @@
    "published": "1938-08-09",
    "amended": "2011-05-25",
    "hash": "7e8df963d231"
+  },
+  {
+   "code": "STATA",
+   "name": "統計法",
+   "kind": "憲法與法律",
+   "count": 27,
+   "published": "1932-10-19",
+   "amended": "2018-06-20",
+   "hash": "e469e6ad7209"
   },
   {
    "code": "DGBASORG",
@@ -671,6 +779,41 @@
    "hash": "e5415a55e8ff"
   },
   {
+   "code": "BORP",
+   "name": "主計人員獎懲辦法",
+   "kind": "命令",
+   "count": 15,
+   "published": "1985-02-08",
+   "amended": "2013-06-03",
+   "hash": "fe11c6efdfc3"
+  },
+  {
+   "code": "BOPER",
+   "name": "主計機構人員設置管理條例施行細則",
+   "kind": "命令",
+   "count": 17,
+   "published": "1983-01-20",
+   "amended": "2013-12-31",
+   "hash": "ca5a24f59d65"
+  },
+  {
+   "code": "BOAR",
+   "name": "主計機構編制訂定及人員任免遷調辦法",
+   "kind": "命令",
+   "count": 28,
+   "published": "1984-08-13",
+   "amended": "2025-12-12",
+   "hash": "5bee97649351"
+  },
+  {
+   "code": "BOSS",
+   "name": "主計機構設置及員額編制標準",
+   "kind": "命令",
+   "count": 14,
+   "published": "2015-01-19",
+   "hash": "66d912ab5b25"
+  },
+  {
    "code": "IACP",
    "name": "內部審核處理準則",
    "kind": "命令",
@@ -732,6 +875,32 @@
    "published": "1939-01-03",
    "amended": "1972-12-29",
    "hash": "e790b6a7aef3"
+  },
+  {
+   "code": "STATER",
+   "name": "統計法施行細則",
+   "kind": "命令",
+   "count": 42,
+   "published": "1934-04-24",
+   "amended": "2018-11-09",
+   "hash": "ab6cad9684a8"
+  },
+  {
+   "code": "ACAACS",
+   "name": "行政法人會計制度設置準則",
+   "kind": "命令",
+   "count": 12,
+   "published": "2011-12-21",
+   "hash": "d9fb458a8b2e"
+  },
+  {
+   "code": "DGBASRP",
+   "name": "行政院主計總處處務規程",
+   "kind": "命令",
+   "count": 21,
+   "published": "2012-02-06",
+   "amended": "2022-06-14",
+   "hash": "eed6730d018d"
   },
   {
    "code": "F20C49D",
@@ -1533,7 +1702,7 @@
    "count": 21,
    "published": "2026-05-20",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001111",
-   "hash": "3f2454bde304"
+   "hash": "0a113370043c"
   },
   {
    "code": "CMPB",
@@ -1566,6 +1735,15 @@
    "hash": "7a44b7d8a96c"
   },
   {
+   "code": "CAGPSP",
+   "name": "中央對直轄市及縣(市)政府申請計畫型補助款補助之處理原則",
+   "kind": "行政規則",
+   "count": 11,
+   "published": "2003-08-01",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL025755",
+   "hash": "e46aa0e2909c"
+  },
+  {
    "code": "CACGP",
    "name": "中央對直轄市與縣(市)政府計畫及預算考核要點",
    "kind": "行政規則",
@@ -1583,7 +1761,16 @@
    "published": "2003-12-15",
    "amended": "2026-10-20",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032660",
-   "hash": "a6e22c4a2598"
+   "hash": "7678b774217a"
+  },
+  {
+   "code": "UBFRP",
+   "name": "中央政府各機關單位預算財務收支處理注意事項",
+   "kind": "行政規則",
+   "count": 20,
+   "published": "2003-12-15",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032661",
+   "hash": "f65e5a61006f"
   },
   {
    "code": "LYRES",
@@ -1625,6 +1812,46 @@
    "hash": "a6e16a5ab43d"
   },
   {
+   "code": "VAMP",
+   "name": "中央政府各機關珍貴動產不動產管理要點",
+   "kind": "行政規則",
+   "count": 20,
+   "published": "1998-09-25",
+   "amended": "2021-05-28",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017695",
+   "hash": "47a47b82bc38"
+  },
+  {
+   "code": "WOARP",
+   "name": "中央政府各機關註銷應收款項、存貨及存出保證金會計事務處理作業規定",
+   "kind": "行政規則",
+   "count": 5,
+   "published": "2006-10-18",
+   "amended": "2022-07-14",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000776",
+   "hash": "247732e4b4ae"
+  },
+  {
+   "code": "GUACS",
+   "name": "中央政府普通公務單位會計制度之一致規定",
+   "kind": "行政規則",
+   "count": 117,
+   "published": "1986-09-26",
+   "amended": "2019-12-31",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017697",
+   "hash": "51166ed0cb5c"
+  },
+  {
+   "code": "SFIP",
+   "name": "中央政府特種基金參加民營事業投資管理要點",
+   "kind": "行政規則",
+   "count": 13,
+   "published": "1997-12-04",
+   "amended": "2017-07-14",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL011799",
+   "hash": "e9c5401ca82e"
+  },
+  {
    "code": "TBSCR",
    "name": "中央政府總預算案未能依限完成時預算執行之補充規定",
    "kind": "行政規則",
@@ -1642,6 +1869,15 @@
    "published": "2023-08-01",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001043",
    "hash": "48bf1018595b"
+  },
+  {
+   "code": "NSFEP",
+   "name": "中央政府非營業特種基金設立及存續原則",
+   "kind": "行政規則",
+   "count": 7,
+   "published": "2002-12-31",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL038770",
+   "hash": "243fad7e5ada"
   },
   {
    "code": "CNSRP",
@@ -1738,13 +1974,50 @@
    "hash": "9e70f8c57dca"
   },
   {
+   "code": "SFICP",
+   "name": "健全財務秩序與強化內部控制實施方案",
+   "kind": "行政規則",
+   "count": 6,
+   "published": "2000-02-09",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL051362",
+   "hash": "3d9959e7d368"
+  },
+  {
+   "code": "ICCEP",
+   "name": "內部控制制度共通性作業範例製作原則",
+   "kind": "行政規則",
+   "count": 8,
+   "published": "2011-04-19",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000645",
+   "hash": "9389b6cfb6d7"
+  },
+  {
+   "code": "PPTP",
+   "name": "公款支付時限及處理應行注意事項",
+   "kind": "行政規則",
+   "count": 12,
+   "published": "2001-02-23",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017696",
+   "hash": "68f1a05257dd"
+  },
+  {
    "code": "UBPE",
    "name": "各機關一百十六年度單位預算案編製應行注意辦理事項",
    "kind": "行政規則",
    "count": 16,
    "published": "2026-08-13",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001118",
-   "hash": "28a325eb0e82"
+   "hash": "40e29f86c8c0"
+  },
+  {
+   "code": "GEVSP",
+   "name": "各機關取得紙本支出憑證辦理電子化處理之存管原則",
+   "kind": "行政規則",
+   "count": 5,
+   "published": "2021-01-14",
+   "amended": "2023-08-14",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000983",
+   "hash": "0ccf6f733e66"
   },
   {
    "code": "MOPE",
@@ -1757,6 +2030,16 @@
    "hash": "8d7d9214d4cb"
   },
   {
+   "code": "EACP",
+   "name": "各機關採用電子方式處理會計資料或貯存體之錯誤更正要點",
+   "kind": "行政規則",
+   "count": 5,
+   "published": "1986-03-07",
+   "amended": "2018-06-01",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017557",
+   "hash": "b2680daf19fc"
+  },
+  {
    "code": "ETPP",
    "name": "各機關派員參加國內各項訓練或講習費用補助要點",
    "kind": "行政規則",
@@ -1765,6 +2048,24 @@
    "amended": "2022-04-14",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017586",
    "hash": "6165ad7f196c"
+  },
+  {
+   "code": "LFBP",
+   "name": "各級地方政府回饋金收支預算處理要點",
+   "kind": "行政規則",
+   "count": 6,
+   "published": "2002-08-13",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL037938",
+   "hash": "10788e6475bf"
+  },
+  {
+   "code": "LADVP",
+   "name": "各級地方政府墊付款處理要點",
+   "kind": "行政規則",
+   "count": 5,
+   "published": "2001-04-06",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL001133",
+   "hash": "93a7ee71be0d"
   },
   {
    "code": "LGER",
@@ -1825,6 +2126,42 @@
    "amended": "2011-05-19",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL041662",
    "hash": "70de392cbdfe"
+  },
+  {
+   "code": "SICP",
+   "name": "強化內部控制實施方案",
+   "kind": "行政規則",
+   "count": 8,
+   "published": "2011-02-01",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000616",
+   "hash": "b7b30916a396"
+  },
+  {
+   "code": "ICRP",
+   "name": "擇定主管機關提報內部控制作業落實執行情形原則",
+   "kind": "行政規則",
+   "count": 6,
+   "published": "2012-06-27",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000681",
+   "hash": "16fc5fe1973d"
+  },
+  {
+   "code": "GICCEP",
+   "name": "政府內部控制共通性作業(含跨職能整合)範例製作原則",
+   "kind": "行政規則",
+   "count": 6,
+   "published": "2016-12-30",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000853",
+   "hash": "082fc061ed45"
+  },
+  {
+   "code": "GICDP",
+   "name": "政府內部控制制度設計原則",
+   "kind": "行政規則",
+   "count": 9,
+   "published": "2011-07-04",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000644",
+   "hash": "1a21ea2cab63"
   },
   {
    "code": "GICS",
@@ -1915,6 +2252,34 @@
    "hash": "428736ee8342"
   },
   {
+   "code": "LBDA",
+   "name": "直轄市及縣(市)各機關單位預算分配注意事項",
+   "kind": "行政規則",
+   "count": 11,
+   "published": "2017-12-25",
+   "amended": "2023-11-07",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000887",
+   "hash": "e85d901e48aa"
+  },
+  {
+   "code": "LMOPE",
+   "name": "直轄市及縣(市)單位預算執行要點",
+   "kind": "行政規則",
+   "count": 45,
+   "published": "2001-12-24",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL028015",
+   "hash": "6d2e4e7bd536"
+  },
+  {
+   "code": "LSUPE",
+   "name": "直轄市及縣(市)附屬單位預算執行要點",
+   "kind": "行政規則",
+   "count": 45,
+   "published": "2001-12-24",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000743",
+   "hash": "b2671abe24a3"
+  },
+  {
    "code": "SPCP",
    "name": "自償性公共建設預算制度實施方案",
    "kind": "行政規則",
@@ -1992,6 +2357,34 @@
    "published": "2010-04-16",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000603",
    "hash": "060958e3ddad"
+  },
+  {
+   "code": "PSC",
+   "name": "財物標準分類",
+   "kind": "行政規則",
+   "count": 6,
+   "published": "2005-08-26",
+   "amended": "2026-05-27",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000005",
+   "hash": "a6406fa788bc"
+  },
+  {
+   "code": "ICTP",
+   "name": "辦理內部控制宣導及教育訓練應行注意事項",
+   "kind": "行政規則",
+   "count": 4,
+   "published": "2011-05-27",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000633",
+   "hash": "4e841a4146e0"
+  },
+  {
+   "code": "DSAP",
+   "name": "重大天然災害搶救復建經費簡化會計手續處理要點",
+   "kind": "行政規則",
+   "count": 5,
+   "published": "1996-08-05",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017692",
+   "hash": "b1eaad419d3a"
   },
   {
    "code": "SUPE",
@@ -2544,6 +2937,21 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001021"
   },
   {
+   "code": "PCCP",
+   "name": "個人信用卡支付款項處理原則",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000930"
+  },
+  {
+   "code": "SORAP",
+   "name": "公營事業責任會計制度實施原則",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000543"
+  },
+  {
+   "code": "SFCAP",
+   "name": "加強財務控管及落實會計審核方案",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL047145"
+  },
+  {
    "code": "OEDTL",
    "name": "原始憑證留存代辦、受委託機關(構)、學校或民間團體明細表",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000827"
@@ -2554,9 +2962,34 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032659"
   },
   {
+   "code": "PDAT",
+   "name": "各機關財物報廢分級核定金額表",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017693"
+  },
+  {
+   "code": "DRFP",
+   "name": "各級政府災害救助緊急搶救及復建經費處理作業要點",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000112"
+  },
+  {
    "code": "FEEBP",
    "name": "各類事業費率、受益費及規費編列年度預算處理原則",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000552"
+  },
+  {
+   "code": "FDASFP",
+   "name": "因應財政紀律法設立非營業特種基金之執行原則",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000970"
+  },
+  {
+   "code": "SFBMP",
+   "name": "強化特種基金預算管理提升營運效能方案",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL049875"
+  },
+  {
+   "code": "FLEXB",
+   "name": "成本性質劃分及彈性預算實施準則",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000242"
   },
   {
    "code": "ZBPM",
@@ -2582,6 +3015,26 @@
    "code": "CPT",
    "name": "軍公教人員兼職費支給表",
    "url": "https://www.dgpa.gov.tw/information?pid=7971&uid=109"
+  },
+  {
+   "code": "NSFCP",
+   "name": "非營業特種基金設置、簡併、裁撤及預算編製共同性原則",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000106"
+  },
+  {
+   "code": "B63P",
+   "name": "預算法第63條但書規定之執行原則",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000922"
+  },
+  {
+   "code": "B621P",
+   "name": "預算法第六十二條之一執行原則",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000921"
+  },
+  {
+   "code": "ZBIP",
+   "name": "預算編製作業落實零基預算精神實施方案",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000749"
   }
  ],
  "built": "2026-10-23",
