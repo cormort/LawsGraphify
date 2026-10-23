@@ -270,6 +270,48 @@
   "STATA": "STATA",
   "統計法施行細則": "STATER",
   "STATER": "STATER",
+  "行政院與所屬中央及地方各機關約僱人員僱用辦法": "CTEMP",
+  "CTEMP": "CTEMP",
+  "公共債務管理委員會審議規則": "PDCR",
+  "PDCR": "PDCR",
+  "行政院年度計畫及預算審核會議組設要點": "EYBRM",
+  "EYBRM": "EYBRM",
+  "各類歲入、歲出預算經常、資本門劃分標準": "BCAPS",
+  "BCAPS": "BCAPS",
+  "歲入來源別預算科目設置依據與範圍": "RSCS",
+  "RSCS": "RSCS",
+  "歲出政事別科目歸類原則與範圍": "EFCS",
+  "EFCS": "EFCS",
+  "歲出機關別預算科目設置要點": "EACS",
+  "EACS": "EACS",
+  "歲出機關別共同性預算科目及其預算編列範圍表": "EACCT",
+  "EACCT": "EACCT",
+  "各機關歲出按職能及經濟性分類應行注意事項": "EFECP",
+  "EFECP": "EFECP",
+  "共同性費用編列基準表": "CCST",
+  "CCST": "CCST",
+  "一般房屋建築費及辦公室翻修費編列基準": "OBRS",
+  "OBRS": "OBRS",
+  "用途別預算科目分類定義及計列標準表": "OCCS",
+  "OCCS": "OCCS",
+  "預算科目編號注意事項": "BCNP",
+  "BCNP": "BCNP",
+  "中央政府各機關工程管理費支用要點": "EMFP",
+  "EMFP": "EMFP",
+  "各機關資通訊應用管理要點": "ICTMP",
+  "ICTMP": "ICTMP",
+  "行政院所屬各機關中長程個案計畫編審要點": "MLPP",
+  "MLPP": "MLPP",
+  "中央政府總預算案編製日程表": "GBSCH",
+  "GBSCH": "GBSCH",
+  "中央政府各級機關單位分級表": "AUCL",
+  "AUCL": "AUCL",
+  "行政院重要社會發展計畫先期作業實施要點": "SDPIP",
+  "SDPIP": "SDPIP",
+  "政府公共工程計畫與經費審議作業要點": "PWRP",
+  "PWRP": "PWRP",
+  "附屬單位預算共同項目編列作業規範": "SUBCI",
+  "SUBCI": "SUBCI",
   "軍事教育條例": "MEA",
   "MEA": "MEA",
   "國防醫學大學軍事教育基金管理及監督辦法": "NDMUF",
@@ -823,6 +865,14 @@
    "hash": "acd1f220691b"
   },
   {
+   "code": "PDCR",
+   "name": "公共債務管理委員會審議規則",
+   "kind": "命令",
+   "count": 9,
+   "published": "2014-04-15",
+   "hash": "82e3dfda6515"
+  },
+  {
    "code": "AUDJV",
    "name": "審計機關審核公私合營事業辦法",
    "kind": "命令",
@@ -901,6 +951,15 @@
    "published": "2012-02-06",
    "amended": "2022-06-14",
    "hash": "eed6730d018d"
+  },
+  {
+   "code": "CTEMP",
+   "name": "行政院與所屬中央及地方各機關約僱人員僱用辦法",
+   "kind": "命令",
+   "count": 12,
+   "published": "1972-12-27",
+   "amended": "2022-09-13",
+   "hash": "aabfed5dfcc0"
   },
   {
    "code": "F20C49D",
@@ -1702,7 +1761,7 @@
    "count": 21,
    "published": "2026-05-20",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL001111",
-   "hash": "0a113370043c"
+   "hash": "c5fa2a718068"
   },
   {
    "code": "CMPB",
@@ -2320,6 +2379,16 @@
    "hash": "8ce24f14abb7"
   },
   {
+   "code": "EYBRM",
+   "name": "行政院年度計畫及預算審核會議組設要點",
+   "kind": "行政規則",
+   "count": 9,
+   "published": "2001-04-23",
+   "amended": "2023-04-20",
+   "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL044743",
+   "hash": "92a3ecd2e571"
+  },
+  {
    "code": "AORGP",
    "name": "行政院組織改造期間經費處理原則",
    "kind": "行政規則",
@@ -2912,9 +2981,19 @@
  ],
  "links": [
   {
+   "code": "OBRS",
+   "name": "一般房屋建築費及辦公室翻修費編列基準",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/11-116%E5%B9%B4%E5%BA%A6%E4%B8%80%E8%88%AC%E6%88%BF%E5%B1%8B%E5%BB%BA%E7%AF%89%E8%B2%BB%E5%8F%8A%E8%BE%A6%E5%85%AC%E5%AE%A4%E7%BF%BB%E4%BF%AE%E8%B2%BB.pdf"
+  },
+  {
    "code": "FRTT",
    "name": "中央各機關(含事業機構)派赴國外進修、研究、實習人員補助項目及數額表",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL020312"
+  },
+  {
+   "code": "EMFP",
+   "name": "中央政府各機關工程管理費支用要點",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/15-%E4%B8%AD%E5%A4%AE%E6%94%BF%E5%BA%9C%E5%90%84%E6%A9%9F%E9%97%9C%E5%B7%A5%E7%A8%8B%E7%AE%A1%E7%90%86%E8%B2%BB%E6%94%AF%E7%94%A8%E8%A6%81%E9%BB%9E.pdf"
   },
   {
    "code": "FOLIET",
@@ -2927,9 +3006,19 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000696"
   },
   {
+   "code": "AUCL",
+   "name": "中央政府各級機關單位分級表",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/8-%E4%B8%AD%E5%A4%AE%E6%94%BF%E5%BA%9C%E5%90%84%E7%B4%9A%E6%A9%9F%E9%97%9C%E5%96%AE%E4%BD%8D%E5%88%86%E7%B4%9A%E8%A1%A8.pdf"
+  },
+  {
    "code": "CSEAP",
    "name": "中央政府總決算審核報告案審查程序",
    "url": "https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=20934&pid=171755"
+  },
+  {
+   "code": "GBSCH",
+   "name": "中央政府總預算案編製日程表",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/7-%E4%B8%80%E7%99%BE%E5%8D%81%E5%85%AD%E5%B9%B4%E5%BA%A6%E4%B8%AD%E5%A4%AE%E6%94%BF%E5%BA%9C%E7%B8%BD%E9%A0%90%E7%AE%97%E6%A1%88%E7%B7%A8%E8%A3%BD%E6%97%A5%E7%A8%8B%E8%A1%A8.pdf"
   },
   {
    "code": "TBSUB54",
@@ -2947,6 +3036,11 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000543"
   },
   {
+   "code": "CCST",
+   "name": "共同性費用編列基準表",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/10-%E5%85%B1%E5%90%8C%E6%80%A7%E8%B2%BB%E7%94%A8%E7%B7%A8%E5%88%97%E5%9F%BA%E6%BA%96%E8%A1%A8.pdf"
+  },
+  {
    "code": "SFCAP",
    "name": "加強財務控管及落實會計審核方案",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL047145"
@@ -2962,9 +3056,19 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL032659"
   },
   {
+   "code": "EFECP",
+   "name": "各機關歲出按職能及經濟性分類應行注意事項",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/9-%E5%90%84%E6%A9%9F%E9%97%9C%E6%AD%B2%E5%87%BA%E8%81%B7%E8%83%BD%E5%8F%8A%E7%B6%93%E6%BF%9F%E5%88%86%E9%A1%9E%E6%87%89%E8%A1%8C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85.pdf"
+  },
+  {
    "code": "PDAT",
    "name": "各機關財物報廢分級核定金額表",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017693"
+  },
+  {
+   "code": "ICTMP",
+   "name": "各機關資通訊應用管理要點",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/17-%E5%90%84%E6%A9%9F%E9%97%9C%E8%B3%87%E9%80%9A%E8%A8%8A%E6%87%89%E7%94%A8%E7%AE%A1%E7%90%86%E8%A6%81%E9%BB%9E.pdf"
   },
   {
    "code": "DRFP",
@@ -2975,6 +3079,11 @@
    "code": "FEEBP",
    "name": "各類事業費率、受益費及規費編列年度預算處理原則",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000552"
+  },
+  {
+   "code": "BCAPS",
+   "name": "各類歲入、歲出預算經常、資本門劃分標準",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/4-%E5%90%84%E9%A1%9E%E6%AD%B2%E5%85%A5%E6%AD%B2%E5%87%BA%E9%A0%90%E7%AE%97%E7%B6%93%E5%B8%B8%E7%B6%93%E8%B3%87%E9%96%80%E5%8A%83%E5%88%86%E6%A8%99%E6%BA%96.pdf"
   },
   {
    "code": "FDASFP",
@@ -2992,6 +3101,36 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000242"
   },
   {
+   "code": "PWRP",
+   "name": "政府公共工程計畫與經費審議作業要點",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/12-%E6%94%BF%E5%BA%9C%E5%85%AC%E5%85%B1%E5%B7%A5%E7%A8%8B%E8%A8%88%E7%95%AB%E8%88%87%E7%B6%93%E8%B2%BB%E5%AF%A9%E8%AD%B0%E4%BD%9C%E6%A5%AD%E8%A6%81%E9%BB%9E.pdf"
+  },
+  {
+   "code": "RSCS",
+   "name": "歲入來源別預算科目設置依據與範圍",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/5-%E6%AD%B2%E5%85%A5%E4%BE%86%E6%BA%90%E5%88%A5%E7%A7%91%E7%9B%AE%E4%BE%9D%E6%93%9A%E8%88%87%E7%AF%84%E5%9C%8D.pdf"
+  },
+  {
+   "code": "EFCS",
+   "name": "歲出政事別科目歸類原則與範圍",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/6-%E6%94%BF%E4%BA%8B%E5%88%A5%E7%A7%91%E7%9B%AE%E6%AD%B8%E9%A1%9E%E5%8E%9F%E5%89%87%E8%88%87%E7%AF%84%E5%9C%8D.pdf"
+  },
+  {
+   "code": "EACCT",
+   "name": "歲出機關別共同性預算科目及其預算編列範圍表",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/8-%E6%AD%B2%E5%87%BA%E6%A9%9F%E9%97%9C%E5%88%A5%E5%85%B1%E5%90%8C%E6%80%A7%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E5%8F%8A%E7%B7%A8%E5%88%97%E7%AF%84%E5%9C%8D%E8%A1%A8.pdf"
+  },
+  {
+   "code": "EACS",
+   "name": "歲出機關別預算科目設置要點",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/7-%E6%AD%B2%E5%87%BA%E6%A9%9F%E9%97%9C%E5%88%A5%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E8%A8%AD%E7%BD%AE%E8%A6%81%E9%BB%9E.pdf"
+  },
+  {
+   "code": "OCCS",
+   "name": "用途別預算科目分類定義及計列標準表",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/12-%E7%94%A8%E9%80%94%E5%88%A5%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E5%88%86%E9%A1%9E%E5%AE%9A%E7%BE%A9%E5%8F%8A%E8%A8%88%E5%88%97%E6%A8%99%E6%BA%96%E8%A1%A8.pdf"
+  },
+  {
    "code": "ZBPM",
    "name": "落實零基預算精神強化預算編製作業精進措施",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000864"
@@ -3007,6 +3146,16 @@
    "url": "https://www.ey.gov.tw/Page/8F768BC511A94C5D/aef06e06-a900-47dc-b143-e6eb2ed2a0cf"
   },
   {
+   "code": "MLPP",
+   "name": "行政院所屬各機關中長程個案計畫編審要點",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/2-%E8%A1%8C%E6%94%BF%E9%99%A2%E6%89%80%E5%B1%AC%E5%90%84%E6%A9%9F%E9%97%9C%E4%B8%AD%E9%95%B7%E7%A8%8B%E5%80%8B%E6%A1%88%E8%A8%88%E7%95%AB%E7%B7%A8%E5%AF%A9%E8%A6%81%E9%BB%9E.pdf"
+  },
+  {
+   "code": "SDPIP",
+   "name": "行政院重要社會發展計畫先期作業實施要點",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/11-%E9%87%8D%E8%A6%81%E7%A4%BE%E6%9C%83%E7%99%BC%E5%B1%95%E8%A8%88%E7%95%AB%E5%85%88%E6%9C%9F%E4%BD%9C%E6%A5%AD%E5%AF%A6%E6%96%BD%E8%A6%81%E9%BB%9E.pdf"
+  },
+  {
    "code": "LPT",
    "name": "講座鐘點費支給表",
    "url": "https://www.dgpa.gov.tw/FileConversion?filename=dgpa/files/201801/1e15732a-091f-4194-a9e3-e7a4c67d6e5e.docx&nfix=pdf&name=%E8%AC%9B%E5%BA%A7%E9%90%98%E9%BB%9E%E8%B2%BB%E6%94%AF%E7%B5%A6%E8%A1%A8.docx"
@@ -3015,6 +3164,11 @@
    "code": "CPT",
    "name": "軍公教人員兼職費支給表",
    "url": "https://www.dgpa.gov.tw/information?pid=7971&uid=109"
+  },
+  {
+   "code": "SUBCI",
+   "name": "附屬單位預算共同項目編列作業規範",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236279/6%29%E9%99%84%E5%B1%AC%E5%96%AE%E4%BD%8D%E9%A0%90%E7%AE%97%E5%85%B1%E5%90%8C%E9%A0%85%E7%9B%AE%E7%B7%A8%E5%88%97%E4%BD%9C%E6%A5%AD%E8%A6%8F%E7%AF%84.pdf"
   },
   {
    "code": "NSFCP",
@@ -3032,6 +3186,11 @@
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000921"
   },
   {
+   "code": "BCNP",
+   "name": "預算科目編號注意事項",
+   "url": "https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/13-%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E7%B7%A8%E8%99%9F%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85.pdf"
+  },
+  {
    "code": "ZBIP",
    "name": "預算編製作業落實零基預算精神實施方案",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000749"
@@ -3045,7 +3204,13 @@
     "ACCOUNT"
    ],
    "預算編製": [
+    "EYBRM",
     "BPRIN",
+    "GBSCH",
+    "AUCL",
+    "MLPP",
+    "SDPIP",
+    "PWRP",
     "CMBE",
     "CMPB",
     "UBPE",
@@ -3061,6 +3226,19 @@
     "SPELE",
     "FPLE",
     "FEEBP"
+   ],
+   "預算科目與編列基準": [
+    "BCAPS",
+    "RSCS",
+    "EFCS",
+    "EACS",
+    "EACCT",
+    "EFECP",
+    "OCCS",
+    "BCNP",
+    "CCST",
+    "OBRS",
+    "SUBCI"
    ],
    "預算執行": [
     "MOPE",
@@ -3080,6 +3258,9 @@
     "EWRT"
    ],
    "經費支用": [
+    "CTEMP",
+    "EMFP",
+    "ICTMP",
     "DTRP",
     "FTRP",
     "FOLIET",
@@ -3186,7 +3367,8 @@
     "CONST",
     "LGA",
     "TFA",
-    "FDA"
+    "FDA",
+    "PDCR"
    ],
    "審計": [
     "AUDIT",

@@ -173,6 +173,29 @@ aliases:
   統計法: STATA
   統計法施行細則: STATER
 
+  # 預算編製作業手冊（116年度總預算、附屬單位預算）收錄的規定
+  行政院與所屬中央及地方各機關約僱人員僱用辦法: CTEMP
+  公共債務管理委員會審議規則: PDCR
+  行政院年度計畫及預算審核會議組設要點: EYBRM
+  各類歲入、歲出預算經常、資本門劃分標準: BCAPS
+  歲入來源別預算科目設置依據與範圍: RSCS
+  歲出政事別科目歸類原則與範圍: EFCS
+  歲出機關別預算科目設置要點: EACS
+  歲出機關別共同性預算科目及其預算編列範圍表: EACCT
+  各機關歲出按職能及經濟性分類應行注意事項: EFECP
+  共同性費用編列基準表: CCST
+  一般房屋建築費及辦公室翻修費編列基準: OBRS
+  用途別預算科目分類定義及計列標準表: OCCS
+  預算科目編號注意事項: BCNP
+  中央政府各機關工程管理費支用要點: EMFP
+  各機關資通訊應用管理要點: ICTMP
+  行政院所屬各機關中長程個案計畫編審要點: MLPP
+  中央政府總預算案編製日程表: GBSCH
+  中央政府各級機關單位分級表: AUCL
+  行政院重要社會發展計畫先期作業實施要點: SDPIP
+  政府公共工程計畫與經費審議作業要點: PWRP
+  附屬單位預算共同項目編列作業規範: SUBCI
+
   # 沒有收支保管及運用辦法、由法律直接規範的基金：國防醫學院軍事教育基金、國立臺灣大學校務基金、國民年金保險基金
   軍事教育條例: MEA
   國防醫學大學軍事教育基金管理及監督辦法: NDMUF
@@ -195,15 +218,35 @@ links:
   CPT: https://www.dgpa.gov.tw/information?pid=7971&uid=109
   LPT: https://www.dgpa.gov.tw/FileConversion?filename=dgpa/files/201801/1e15732a-091f-4194-a9e3-e7a4c67d6e5e.docx&nfix=pdf&name=%E8%AC%9B%E5%BA%A7%E9%90%98%E9%BB%9E%E8%B2%BB%E6%94%AF%E7%B5%A6%E8%A1%A8.docx
   CSEAP: https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=20934&pid=171755
+  # 只在主計總處預算編製作業手冊有 PDF 的（ponytail: 手冊每年換資料夾編號，換年度時更新網址）
+  BCAPS: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/4-%E5%90%84%E9%A1%9E%E6%AD%B2%E5%85%A5%E6%AD%B2%E5%87%BA%E9%A0%90%E7%AE%97%E7%B6%93%E5%B8%B8%E7%B6%93%E8%B3%87%E9%96%80%E5%8A%83%E5%88%86%E6%A8%99%E6%BA%96.pdf
+  RSCS: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/5-%E6%AD%B2%E5%85%A5%E4%BE%86%E6%BA%90%E5%88%A5%E7%A7%91%E7%9B%AE%E4%BE%9D%E6%93%9A%E8%88%87%E7%AF%84%E5%9C%8D.pdf
+  EFCS: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/6-%E6%94%BF%E4%BA%8B%E5%88%A5%E7%A7%91%E7%9B%AE%E6%AD%B8%E9%A1%9E%E5%8E%9F%E5%89%87%E8%88%87%E7%AF%84%E5%9C%8D.pdf
+  EACS: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/7-%E6%AD%B2%E5%87%BA%E6%A9%9F%E9%97%9C%E5%88%A5%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E8%A8%AD%E7%BD%AE%E8%A6%81%E9%BB%9E.pdf
+  EACCT: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/8-%E6%AD%B2%E5%87%BA%E6%A9%9F%E9%97%9C%E5%88%A5%E5%85%B1%E5%90%8C%E6%80%A7%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E5%8F%8A%E7%B7%A8%E5%88%97%E7%AF%84%E5%9C%8D%E8%A1%A8.pdf
+  EFECP: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/9-%E5%90%84%E6%A9%9F%E9%97%9C%E6%AD%B2%E5%87%BA%E8%81%B7%E8%83%BD%E5%8F%8A%E7%B6%93%E6%BF%9F%E5%88%86%E9%A1%9E%E6%87%89%E8%A1%8C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85.pdf
+  CCST: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/10-%E5%85%B1%E5%90%8C%E6%80%A7%E8%B2%BB%E7%94%A8%E7%B7%A8%E5%88%97%E5%9F%BA%E6%BA%96%E8%A1%A8.pdf
+  OBRS: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/11-116%E5%B9%B4%E5%BA%A6%E4%B8%80%E8%88%AC%E6%88%BF%E5%B1%8B%E5%BB%BA%E7%AF%89%E8%B2%BB%E5%8F%8A%E8%BE%A6%E5%85%AC%E5%AE%A4%E7%BF%BB%E4%BF%AE%E8%B2%BB.pdf
+  OCCS: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/12-%E7%94%A8%E9%80%94%E5%88%A5%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E5%88%86%E9%A1%9E%E5%AE%9A%E7%BE%A9%E5%8F%8A%E8%A8%88%E5%88%97%E6%A8%99%E6%BA%96%E8%A1%A8.pdf
+  BCNP: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/13-%E9%A0%90%E7%AE%97%E7%A7%91%E7%9B%AE%E7%B7%A8%E8%99%9F%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85.pdf
+  EMFP: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/15-%E4%B8%AD%E5%A4%AE%E6%94%BF%E5%BA%9C%E5%90%84%E6%A9%9F%E9%97%9C%E5%B7%A5%E7%A8%8B%E7%AE%A1%E7%90%86%E8%B2%BB%E6%94%AF%E7%94%A8%E8%A6%81%E9%BB%9E.pdf
+  ICTMP: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/17-%E5%90%84%E6%A9%9F%E9%97%9C%E8%B3%87%E9%80%9A%E8%A8%8A%E6%87%89%E7%94%A8%E7%AE%A1%E7%90%86%E8%A6%81%E9%BB%9E.pdf
+  MLPP: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/2-%E8%A1%8C%E6%94%BF%E9%99%A2%E6%89%80%E5%B1%AC%E5%90%84%E6%A9%9F%E9%97%9C%E4%B8%AD%E9%95%B7%E7%A8%8B%E5%80%8B%E6%A1%88%E8%A8%88%E7%95%AB%E7%B7%A8%E5%AF%A9%E8%A6%81%E9%BB%9E.pdf
+  GBSCH: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/7-%E4%B8%80%E7%99%BE%E5%8D%81%E5%85%AD%E5%B9%B4%E5%BA%A6%E4%B8%AD%E5%A4%AE%E6%94%BF%E5%BA%9C%E7%B8%BD%E9%A0%90%E7%AE%97%E6%A1%88%E7%B7%A8%E8%A3%BD%E6%97%A5%E7%A8%8B%E8%A1%A8.pdf
+  AUCL: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/8-%E4%B8%AD%E5%A4%AE%E6%94%BF%E5%BA%9C%E5%90%84%E7%B4%9A%E6%A9%9F%E9%97%9C%E5%96%AE%E4%BD%8D%E5%88%86%E7%B4%9A%E8%A1%A8.pdf
+  SDPIP: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/11-%E9%87%8D%E8%A6%81%E7%A4%BE%E6%9C%83%E7%99%BC%E5%B1%95%E8%A8%88%E7%95%AB%E5%85%88%E6%9C%9F%E4%BD%9C%E6%A5%AD%E5%AF%A6%E6%96%BD%E8%A6%81%E9%BB%9E.pdf
+  PWRP: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236317/12-%E6%94%BF%E5%BA%9C%E5%85%AC%E5%85%B1%E5%B7%A5%E7%A8%8B%E8%A8%88%E7%95%AB%E8%88%87%E7%B6%93%E8%B2%BB%E5%AF%A9%E8%AD%B0%E4%BD%9C%E6%A5%AD%E8%A6%81%E9%BB%9E.pdf
+  SUBCI: https://ws.dgbas.gov.tw/001/Upload/461/relfile/10693/236279/6%29%E9%99%84%E5%B1%AC%E5%96%AE%E4%BD%8D%E9%A0%90%E7%AE%97%E5%85%B1%E5%90%8C%E9%A0%85%E7%9B%AE%E7%B7%A8%E5%88%97%E4%BD%9C%E6%A5%AD%E8%A6%8F%E7%AF%84.pdf
 
 # 首頁分類：頂端分頁 → 分組 → 代碼。特種基金、已廢止的自動歸「收支辦法」，不必列；
 # 漏列的放「其他／未分類」（graph_builder.py 會提示）。組內依法律、命令、行政規則排列
 categories:
   主計法規:
     主計三法: [BUDGET, SETTLE, ACCOUNT]
-    預算編製: [BPRIN, CMBE, CMPB, UBPE, FY2027GBPP, FY2027GSUBPP, CGMBPP, PPPIP, STDPIP, SPCP, ZBPM, ZBIP, TBPE, SPELE, FPLE, FEEBP]
+    預算編製: [EYBRM, BPRIN, GBSCH, AUCL, MLPP, SDPIP, PWRP, CMBE, CMPB, UBPE, FY2027GBPP, FY2027GSUBPP, CGMBPP, PPPIP, STDPIP, SPCP, ZBPM, ZBIP, TBPE, SPELE, FPLE, FEEBP]
+    預算科目與編列基準: [BCAPS, RSCS, EFCS, EACS, EACCT, EFECP, OCCS, BCNP, CCST, OBRS, SUBCI]
     預算執行: [MOPE, SUPE, BDA, UBFRP, MOGCIP, TBSCR, TBSUB54, LYRES, B621P, B63P, PPTP, PCCP, FPLR, AORGP, EWRT]
-    經費支用: [DTRP, FTRP, FOLIET, CHLIET, FRTT, OIPO, OICP, CSFPP, ETPP, CPT, LPT, MCP, CSVPP]
+    經費支用: [CTEMP, EMFP, ICTMP, DTRP, FTRP, FOLIET, CHLIET, FRTT, OIPO, OICP, CSFPP, ETPP, CPT, LPT, MCP, CSVPP]
     地方政府: [FY2027LCGBPP, FY2027LCGSUBPP, CACGSB, CAGPSP, CAGDAP, CNGSDAP, CACGP, LBDA, LMOPE, LSUPE, LFBP, LADVP, CNDR, FDRS, LGER, DRFP]
     決算與結算: [FY2025SET, FY2025SUBSET, FY2026GHYR, FY2026GSUBHYR, CSEAP, FDL, SPEL, TBSET]
     特種基金與國營事業: [CSMF, CNGSF, NSFEP, FDASFP, NSFCP, SFBMP, SFIP, CNSRP, SOREP, SOLTP, SOARP, SORAP, FLEXB]
@@ -211,5 +254,5 @@ categories:
     內部控制: [GICDP, SICP, SFICP, ICCEP, GICCEP, GICS, GICSD, ICTP, ICRP]
     主計組織人事與統計: [DGBASORG, DGBASRP, BOPA, BOPER, BOAR, BOSS, BORP, BAIRP, STATA, STATER]
   其他:
-    憲法與財政法制: [CONST, LGA, TFA, FDA]
+    憲法與財政法制: [CONST, LGA, TFA, FDA, PDCR]
     審計: [AUDIT, AUDITER, AUDORG, AUDOFF, AUDAPP, AUDJV, AUDTWN, AUDMTG, AUDOMTG, AUDINSP]
