@@ -106,6 +106,20 @@ aliases:
   政府內部控制監督作業要點: GICS
   政府內部控制聲明書簽署作業要點: GICSD
 
+  # 審計部
+  審計部組織法: AUDORG
+  審計處室組織通則: AUDOFF
+  審計人員任用條例: AUDAPP
+  審計機關審核公私合營事業辦法: AUDJV
+  審計機關辦理鄉鎮縣轄市財務審計辦法: AUDTWN
+  審計部審計會議議事規則: AUDMTG
+  審計處室審核會議議事規則: AUDOMTG
+  審計部稽察證使用規則: AUDINSP
+
+  # 主計總處
+  行政院主計總處組織法: DGBASORG
+  主計總處組織法: DGBASORG
+
   # 沒有收支保管及運用辦法、由法律直接規範的基金：國防醫學院軍事教育基金、國立臺灣大學校務基金、國民年金保險基金
   軍事教育條例: MEA
   國防醫學大學軍事教育基金管理及監督辦法: NDMUF
@@ -118,7 +132,7 @@ aliases:
   # （已廢止的跳過、新設的加入；代碼取名稱雜湊，新增時不會變動既有代碼）
 
 # 只當被引用對象、不抓全文的外部法規代碼（src/fetch_laws.py 會略過）
-external: [DPPA, CIVIL, FDA, TFA, LGA, GPA, AUDIT, AUDITER, ACA, FOUNDA, PPIER, PEPA, EYORG, FOIA]
+external: [DPPA, CIVIL, GPA, ACA, FOUNDA, PPIER, PEPA, EYORG, FOIA]
 
 # 不在法務部、主計總處系統的法規（行政院、人事總處、立法院發布）：不抓全文，
 # 首頁「沒有收錄條文，連到原文」列出，連到主管機關的原文

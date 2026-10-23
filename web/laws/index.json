@@ -161,6 +161,25 @@
   "GICS": "GICS",
   "政府內部控制聲明書簽署作業要點": "GICSD",
   "GICSD": "GICSD",
+  "審計部組織法": "AUDORG",
+  "AUDORG": "AUDORG",
+  "審計處室組織通則": "AUDOFF",
+  "AUDOFF": "AUDOFF",
+  "審計人員任用條例": "AUDAPP",
+  "AUDAPP": "AUDAPP",
+  "審計機關審核公私合營事業辦法": "AUDJV",
+  "AUDJV": "AUDJV",
+  "審計機關辦理鄉鎮縣轄市財務審計辦法": "AUDTWN",
+  "AUDTWN": "AUDTWN",
+  "審計部審計會議議事規則": "AUDMTG",
+  "AUDMTG": "AUDMTG",
+  "審計處室審核會議議事規則": "AUDOMTG",
+  "AUDOMTG": "AUDOMTG",
+  "審計部稽察證使用規則": "AUDINSP",
+  "AUDINSP": "AUDINSP",
+  "行政院主計總處組織法": "DGBASORG",
+  "DGBASORG": "DGBASORG",
+  "主計總處組織法": "DGBASORG",
   "軍事教育條例": "MEA",
   "MEA": "MEA",
   "國防醫學大學軍事教育基金管理及監督辦法": "NDMUF",
@@ -494,6 +513,51 @@
    "hash": "c4b0334e94c6"
   },
   {
+   "code": "LGA",
+   "name": "地方制度法",
+   "kind": "憲法與法律",
+   "count": 107,
+   "published": "1999-01-25",
+   "amended": "2025-12-03",
+   "hash": "205d641140bb"
+  },
+  {
+   "code": "AUDAPP",
+   "name": "審計人員任用條例",
+   "kind": "憲法與法律",
+   "count": 7,
+   "published": "1961-05-19",
+   "amended": "2023-11-29",
+   "hash": "9b11675fbf37"
+  },
+  {
+   "code": "AUDIT",
+   "name": "審計法",
+   "kind": "憲法與法律",
+   "count": 82,
+   "published": "1925-11-28",
+   "amended": "2015-12-09",
+   "hash": "8ce5c911d219"
+  },
+  {
+   "code": "AUDOFF",
+   "name": "審計處室組織通則",
+   "kind": "憲法與法律",
+   "count": 15,
+   "published": "1949-05-27",
+   "amended": "1981-04-10",
+   "hash": "5c2f5fa438e2"
+  },
+  {
+   "code": "AUDORG",
+   "name": "審計部組織法",
+   "kind": "憲法與法律",
+   "count": 18,
+   "published": "1929-10-29",
+   "amended": "2026-01-21",
+   "hash": "43d973778181"
+  },
+  {
    "code": "ACCOUNT",
    "name": "會計法",
    "kind": "憲法與法律",
@@ -510,6 +574,31 @@
    "published": "1938-08-09",
    "amended": "2011-05-25",
    "hash": "7e8df963d231"
+  },
+  {
+   "code": "DGBASORG",
+   "name": "行政院主計總處組織法",
+   "kind": "憲法與法律",
+   "count": 8,
+   "published": "2012-02-03",
+   "hash": "8794e2ef2a3a"
+  },
+  {
+   "code": "TFA",
+   "name": "財政收支劃分法",
+   "kind": "憲法與法律",
+   "count": 44,
+   "published": "1951-06-13",
+   "amended": "2025-12-03",
+   "hash": "26103630c024"
+  },
+  {
+   "code": "FDA",
+   "name": "財政紀律法",
+   "kind": "憲法與法律",
+   "count": 19,
+   "published": "2019-04-10",
+   "hash": "50e3888d5599"
   },
   {
    "code": "BUDGET",
@@ -589,6 +678,60 @@
    "published": "1976-07-22",
    "amended": "2018-05-14",
    "hash": "acd1f220691b"
+  },
+  {
+   "code": "AUDJV",
+   "name": "審計機關審核公私合營事業辦法",
+   "kind": "命令",
+   "count": 9,
+   "published": "1974-07-05",
+   "amended": "2016-02-22",
+   "hash": "a0798024ba46"
+  },
+  {
+   "code": "AUDTWN",
+   "name": "審計機關辦理鄉鎮縣轄市財務審計辦法",
+   "kind": "命令",
+   "count": 8,
+   "published": "1996-06-04",
+   "amended": "2016-04-29",
+   "hash": "38c6cdae1867"
+  },
+  {
+   "code": "AUDITER",
+   "name": "審計法施行細則",
+   "kind": "命令",
+   "count": 85,
+   "published": "1938-07-23",
+   "amended": "2026-07-24",
+   "hash": "045306239436"
+  },
+  {
+   "code": "AUDOMTG",
+   "name": "審計處室審核會議議事規則",
+   "kind": "命令",
+   "count": 15,
+   "published": "1971-02-17",
+   "amended": "1999-07-27",
+   "hash": "dd9b8eae0868"
+  },
+  {
+   "code": "AUDMTG",
+   "name": "審計部審計會議議事規則",
+   "kind": "命令",
+   "count": 15,
+   "published": "1939-03-04",
+   "amended": "2019-11-06",
+   "hash": "56e31de22223"
+  },
+  {
+   "code": "AUDINSP",
+   "name": "審計部稽察證使用規則",
+   "kind": "命令",
+   "count": 7,
+   "published": "1939-01-03",
+   "amended": "1972-12-29",
+   "hash": "e790b6a7aef3"
   },
   {
    "code": "F20C49D",
@@ -2441,6 +2584,6 @@
    "url": "https://www.dgpa.gov.tw/information?pid=7971&uid=109"
   }
  ],
- "built": "2026-10-21",
- "moj_updated": "2026/10/8"
+ "built": "2026-10-23",
+ "moj_updated": "2026/10/16"
 }
