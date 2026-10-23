@@ -931,6 +931,15 @@ function renderCitedList(code) {
 }
 
 // Keyword search (all laws, or one law): every include term, no exclude term
+// Laws whose name has every keyword, so 特種基金管理準則 finds 中央政府特種基金管理準則
+function renderNameMatches(q) {
+    if (q.code || q.section) return "";
+    const found = [...laws.filter(l => l.kind !== ABOLISHED_KIND), ...links.values()]
+        .filter(l => q.include.every(w => l.name.normalize("NFKC").replace(/台/g, "臺").includes(w)));
+    return found.length ? `<h3>名稱含「${escapeHtml(q.include.join(" "))}」的法規（${found.length}）</h3><div class="card list">${found.slice(0, MAX_RESULTS).map(l =>
+        links.has(l.code) ? originalLink(l) : `<a href="#${encodeURIComponent(l.code)}"><span>${escapeHtml(l.name)}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div>` : "";
+}
+
 function renderSearch(q) {
     if (!q.include.length) return `<p class="warn">請輸入要搜尋的關鍵字。</p>`;
     const scope = q.code ? lawOrder.get(q.code) || []
@@ -943,9 +952,10 @@ function renderSearch(q) {
     const favs = store.get("favs", []);
     const where = q.code ? `《${lawName(q.code)}》` : q.section ? SECTIONS[q.section].where : "全部法規";
     const title = `在${where}中找到 ${hits.length} 條「${q.include.join(" ")}」${q.exclude.length ? `（排除 ${q.exclude.join("、")}）` : ""}`;
-    if (!hits.length) return `<h3>${escapeHtml(title)}</h3><p class="empty">沒有符合的條文。${q.code ? "" : "要查法規請輸入完整名稱，例如「預算法」。"}</p>`;
+    const names = renderNameMatches(q);
+    if (!hits.length) return names + `<h3>${escapeHtml(title)}</h3><p class="empty">沒有符合的條文。${q.code || names ? "" : "要查法規請輸入名稱，例如「預算法」。"}</p>`;
     exportable = { name: `搜尋 ${q.code ? lawName(q.code) : q.section ? SECTIONS[q.section].where : ""} ${q.include.join(" ")}`.replace(/\s+/g, " "), ids: () => hits };
-    let html = `<div class="section-head"><h3>${escapeHtml(title)}</h3><div class="tools">${PRINT_BUTTON}${EXPORT_BUTTON}</div></div>`;
+    let html = names + `<div class="section-head"><h3>${escapeHtml(title)}</h3><div class="tools">${PRINT_BUTTON}${EXPORT_BUTTON}</div></div>`;
     // The keywords ride along to the article page, which marks them too
     const mark = "?mark=" + encodeURIComponent(q.include.join(" "));
     html += `<div class="hits">` + hits.slice(0, MAX_RESULTS).map(id =>
