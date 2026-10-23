@@ -65948,6 +65948,171 @@
       "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=GL000749"
     }
   ],
+  "categories": {
+    "主計法規": {
+      "主計三法": [
+        "BUDGET",
+        "SETTLE",
+        "ACCOUNT"
+      ],
+      "預算編製": [
+        "BPRIN",
+        "CMBE",
+        "CMPB",
+        "UBPE",
+        "FY2027GBPP",
+        "FY2027GSUBPP",
+        "CGMBPP",
+        "PPPIP",
+        "STDPIP",
+        "SPCP",
+        "ZBPM",
+        "ZBIP",
+        "TBPE",
+        "SPELE",
+        "FPLE",
+        "FEEBP"
+      ],
+      "預算執行": [
+        "MOPE",
+        "SUPE",
+        "BDA",
+        "UBFRP",
+        "MOGCIP",
+        "TBSCR",
+        "TBSUB54",
+        "LYRES",
+        "B621P",
+        "B63P",
+        "PPTP",
+        "PCCP",
+        "FPLR",
+        "AORGP",
+        "EWRT"
+      ],
+      "經費支用": [
+        "DTRP",
+        "FTRP",
+        "FOLIET",
+        "CHLIET",
+        "FRTT",
+        "OIPO",
+        "OICP",
+        "CSFPP",
+        "ETPP",
+        "CPT",
+        "LPT",
+        "MCP",
+        "CSVPP"
+      ],
+      "地方政府": [
+        "FY2027LCGBPP",
+        "FY2027LCGSUBPP",
+        "CACGSB",
+        "CAGPSP",
+        "CAGDAP",
+        "CNGSDAP",
+        "CACGP",
+        "LBDA",
+        "LMOPE",
+        "LSUPE",
+        "LFBP",
+        "LADVP",
+        "CNDR",
+        "FDRS",
+        "LGER",
+        "DRFP"
+      ],
+      "決算與結算": [
+        "FY2025SET",
+        "FY2025SUBSET",
+        "FY2026GHYR",
+        "FY2026GSUBHYR",
+        "CSEAP",
+        "FDL",
+        "SPEL",
+        "TBSET"
+      ],
+      "特種基金與國營事業": [
+        "CSMF",
+        "CNGSF",
+        "NSFEP",
+        "FDASFP",
+        "NSFCP",
+        "SFBMP",
+        "SFIP",
+        "CNSRP",
+        "SOREP",
+        "SOLTP",
+        "SOARP",
+        "SORAP",
+        "FLEXB"
+      ],
+      "會計與財物": [
+        "GUACS",
+        "GASD",
+        "ACAACS",
+        "IACP",
+        "GEVP",
+        "GEVEP",
+        "GEVSP",
+        "GARP",
+        "EACP",
+        "OEDTL",
+        "WOARP",
+        "CPA",
+        "PAM",
+        "PSC",
+        "PDAT",
+        "VAMP",
+        "DSAP",
+        "SFCAP"
+      ],
+      "內部控制": [
+        "GICDP",
+        "SICP",
+        "SFICP",
+        "ICCEP",
+        "GICCEP",
+        "GICS",
+        "GICSD",
+        "ICTP",
+        "ICRP"
+      ],
+      "主計組織人事與統計": [
+        "DGBASORG",
+        "DGBASRP",
+        "BOPA",
+        "BOPER",
+        "BOAR",
+        "BOSS",
+        "BORP",
+        "BAIRP",
+        "STATA",
+        "STATER"
+      ]
+    },
+    "其他": {
+      "憲法與財政法制": [
+        "CONST",
+        "LGA",
+        "TFA",
+        "FDA"
+      ],
+      "審計": [
+        "AUDIT",
+        "AUDITER",
+        "AUDORG",
+        "AUDOFF",
+        "AUDAPP",
+        "AUDJV",
+        "AUDTWN",
+        "AUDMTG",
+        "AUDOMTG",
+        "AUDINSP"
+      ]
+    }
+  },
   "built": "2026-10-23",
   "moj_updated": "2026/10/16"
 }

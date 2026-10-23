@@ -78,6 +78,20 @@ def configured_links():
         return yaml.safe_load(f).get("links") or {}
 
 
+def categories(laws, links):
+    """Tab -> group -> codes from law_aliases.yaml, for the home page tabs. A law
+    the config leaves out (funds and abolished ones aside) goes to 其他／未分類."""
+    with open(os.path.join(BASE_DIR, "config", "law_aliases.yaml"), encoding="utf-8") as f:
+        cats = yaml.safe_load(f).get("categories") or {}
+    listed = {code for groups in cats.values() for codes in groups.values() for code in codes}
+    shown = [law["code"] for law in laws if law["kind"] not in ("特種基金", "廢止")] + [l["code"] for l in links]
+    unlisted = [code for code in shown if code not in listed]
+    if unlisted:
+        print(f" ! 沒有分類，放「其他／未分類」（請補進 law_aliases.yaml 的 categories）：{', '.join(unlisted)}")
+        cats.setdefault("其他", {})["未分類"] = unlisted
+    return cats
+
+
 def attachment_only(name_to_code, laws, dgbas):
     """Targets with no article text the query page links to the original of
     instead: DGBAS rules published only as attachments, and configured links."""
@@ -239,13 +253,15 @@ def build_graph():
             print(f" Error processing file {filename}: {e}")
 
     # Output consolidated graph
+    links = attachment_only(name_to_code, laws, dgbas)
     graph_data = {
         "nodes": nodes,
         "edges": edges,
         # name -> code, so the query page understands 憲法 / 政府採購法 etc.
         "aliases": name_to_code,
         "laws": sorted(laws, key=lambda law: (KIND_ORDER.index(law["kind"]), law["name"])),
-        "links": attachment_only(name_to_code, laws, dgbas),
+        "links": links,
+        "categories": categories(laws, links),
         "built": date.today().isoformat(),
         # MOJ open data's own date, written by fetch_laws.py
         **load_meta(),

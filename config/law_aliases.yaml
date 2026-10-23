@@ -195,3 +195,21 @@ links:
   CPT: https://www.dgpa.gov.tw/information?pid=7971&uid=109
   LPT: https://www.dgpa.gov.tw/FileConversion?filename=dgpa/files/201801/1e15732a-091f-4194-a9e3-e7a4c67d6e5e.docx&nfix=pdf&name=%E8%AC%9B%E5%BA%A7%E9%90%98%E9%BB%9E%E8%B2%BB%E6%94%AF%E7%B5%A6%E8%A1%A8.docx
   CSEAP: https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=20934&pid=171755
+
+# 首頁分類：頂端分頁 → 分組 → 代碼。特種基金、已廢止的自動歸「收支辦法」，不必列；
+# 漏列的放「其他／未分類」（graph_builder.py 會提示）。組內依法律、命令、行政規則排列
+categories:
+  主計法規:
+    主計三法: [BUDGET, SETTLE, ACCOUNT]
+    預算編製: [BPRIN, CMBE, CMPB, UBPE, FY2027GBPP, FY2027GSUBPP, CGMBPP, PPPIP, STDPIP, SPCP, ZBPM, ZBIP, TBPE, SPELE, FPLE, FEEBP]
+    預算執行: [MOPE, SUPE, BDA, UBFRP, MOGCIP, TBSCR, TBSUB54, LYRES, B621P, B63P, PPTP, PCCP, FPLR, AORGP, EWRT]
+    經費支用: [DTRP, FTRP, FOLIET, CHLIET, FRTT, OIPO, OICP, CSFPP, ETPP, CPT, LPT, MCP, CSVPP]
+    地方政府: [FY2027LCGBPP, FY2027LCGSUBPP, CACGSB, CAGPSP, CAGDAP, CNGSDAP, CACGP, LBDA, LMOPE, LSUPE, LFBP, LADVP, CNDR, FDRS, LGER, DRFP]
+    決算與結算: [FY2025SET, FY2025SUBSET, FY2026GHYR, FY2026GSUBHYR, CSEAP, FDL, SPEL, TBSET]
+    特種基金與國營事業: [CSMF, CNGSF, NSFEP, FDASFP, NSFCP, SFBMP, SFIP, CNSRP, SOREP, SOLTP, SOARP, SORAP, FLEXB]
+    會計與財物: [GUACS, GASD, ACAACS, IACP, GEVP, GEVEP, GEVSP, GARP, EACP, OEDTL, WOARP, CPA, PAM, PSC, PDAT, VAMP, DSAP, SFCAP]
+    內部控制: [GICDP, SICP, SFICP, ICCEP, GICCEP, GICS, GICSD, ICTP, ICRP]
+    主計組織人事與統計: [DGBASORG, DGBASRP, BOPA, BOPER, BOAR, BOSS, BORP, BAIRP, STATA, STATER]
+  其他:
+    憲法與財政法制: [CONST, LGA, TFA, FDA]
+    審計: [AUDIT, AUDITER, AUDORG, AUDOFF, AUDAPP, AUDJV, AUDTWN, AUDMTG, AUDOMTG, AUDINSP]
