@@ -2084,9 +2084,9 @@
    "kind": "行政規則",
    "count": 55,
    "published": "2001-01-04",
-   "amended": "2025-12-10",
+   "amended": "2026-11-03",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL017587",
-   "hash": "8d7d9214d4cb"
+   "hash": "a461ea171f08"
   },
   {
    "code": "EACP",
@@ -2296,9 +2296,9 @@
    "kind": "行政規則",
    "count": 7,
    "published": "2001-06-13",
-   "amended": "2023-05-09",
+   "amended": "2026-11-13",
    "url": "https://law.dgbas.gov.tw/LawContent.aspx?id=FL029948",
-   "hash": "9ed9a8ed6b6d"
+   "hash": "5551b301dad2"
   },
   {
    "code": "PAM",
@@ -3384,6 +3384,6 @@
    ]
   }
  },
- "built": "2026-10-23",
- "moj_updated": "2026/10/16"
+ "built": "2026-11-16",
+ "moj_updated": "2026/11/6"
 }
