@@ -501,6 +501,9 @@ def test_section_filters_counter_and_reset(page):
     assert page.locator("#section-reset").is_visible()
     page.click("#section-reset")
     assert int(page.locator("#section-count").inner_text()) == total
+    page.fill(".section-search input[name=n]", "文化發展基金收支保管及運用辦法")
+    assert page.locator("#section-count").inner_text() == f"1 / {total}"
+    assert "文化發展基金" in page.locator("#section-list a:visible").first.inner_text()
 
 
 def test_inlaw_filter_and_empty_state(page):

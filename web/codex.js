@@ -145,7 +145,7 @@ const SECTIONS = {
 };
 
 // code -> [基金類別, 主管機關]
-const FUND_META = {"F707E80":["特別收入基金","總統府"],"FB1F205":["作業基金","內政部"],"FC07CDC":["特別收入基金","經濟部"],"FB683F8":["作業基金","交通部"],"FE72DE0":["作業基金","內政部"],"FC05DB6":["特別收入基金","行政院"],"FDC5BA5":["特別收入基金","經濟部"],"F5DEE95":["作業基金","勞動部"],"F7A91EB":["作業基金","原住民族委員會"],"F8A811F":["作業基金","原住民族委員會"],"FD2FE67":["特別收入基金","公平交易委員會"],"F041CF5":["特別收入基金","內政部"],"NPFR":["作業基金","衛生福利部"],"FB0637C":["作業基金","教育部"],"F4A9FEE":["作業基金","文化部"],"F7D7130":["作業基金","教育部"],"F798890":["作業基金","教育部"],"FD9B3AF":["資本計畫基金","國防部"],"FB908BE":["作業基金","國防部"],"F2D7DFC":["作業基金","國防部"],"F427F75":["作業基金","國軍退除役官兵輔導委員會"],"FBF44BD":["特別收入基金","環境部"],"FBE8AA9":["特別收入基金","教育部"],"FD9F7CA":["特別收入基金","衛生福利部"],"FAEC86A":["作業基金","內政部"],"F052F0E":["特別收入基金","勞動部"],"F9677D5":["特別收入基金","經濟部"],"FD6887A":["作業基金","國立故宮博物院"],"FF85C45":["特別收入基金","文化部"],"F81B77C":["作業基金","內政部"],"FB9F93A":["作業基金","內政部"],"FC9FC37":["特別收入基金","國家通訊傳播委員會"],"FB2D9A7":["特別收入基金","農業部"],"FE45EC5":["特別收入基金","核能安全委員會"],"FE1DB80":["特別收入基金","經濟部"],"FD109BD":["作業基金","國軍退除役官兵輔導委員會"],"F880F5F":["特別收入基金","法務部"],"F25F454":["特別收入基金","環境部"],"F271D89":["作業基金","經濟部"],"FD1B6CD":["作業基金","法務部"],"F5A37E8":["特別收入基金","海洋委員會"],"F87A541":["特別收入基金","環境部"],"F99BA92":["特別收入基金","農業部"],"F01B160":["作業基金","內政部"],"F05D7C4":["特別收入基金","環境部"],"FFC0841":["特別收入基金","環境部"],"F988E0A":["作業基金","經濟部"],"FD15BBA":["特別收入基金","經濟部"],"F6C9D55":["特別收入基金","內政部"],"FA5E1D8":["特別收入基金","教育部"],"FBB4228":["作業基金","國家科學及技術委員會"],"F94F090":["作業基金","經濟部"],"F334F96":["特別收入基金","環境部"],"F0B008A":["作業基金","衛生福利部"],"F500CF7":["作業基金","經濟部"],"FBB7DFD":["特別收入基金","經濟部"],"F0C017D":["作業基金","考試院考選部"],"F760681":["特別收入基金","經濟部"],"F5FD380":["特別收入基金","交通部"],"F4623BA":["特別收入基金","行政院"],"FE7B886":["特別收入基金","衛生福利部"],"F3DFC6F":["作業基金","行政院"],"F48E8E6":["特別收入基金","行政院"],"FBED6C2":["特別收入基金","衛生福利部"],"FE5DFA5":["特別收入基金","環境部"],"F192A4B":["特別收入基金","環境部"],"FD7F279":["作業基金","農業部"],"FA43C4C":["特別收入基金","農業部"],"F6BE2A6":["作業基金","農業部"],"F395409":["特別收入基金","農業部"],"FEE28F2":["特別收入基金","農業部"],"F950FF8":["作業基金","農業部"],"F140C7F":["特別收入基金","國家通訊傳播委員會"],"FC7BD0C":["特別收入基金","運動部"],"F82C061":["特別收入基金","衛生福利部"],"FDBF048":["作業基金","衛生福利部"],"FBA5022":["特別收入基金","金融監督管理委員會"],"FD14EAA":["特別收入基金","行政院"],"F20C49D":["債務基金","財政部"],"F7B0EDB":["作業基金","衛生福利部"],"NPA":["作業基金","衛生福利部"],"NUSFR":["作業基金","教育部"],"NUSFA":["作業基金","教育部"],"NDMUF":["作業基金","國防部"],"MEA":["作業基金","國防部"]};
+const FUND_META = {"F707E80":["特別收入基金","總統府"],"FB1F205":["作業基金","內政部"],"FC07CDC":["特別收入基金","經濟部"],"FB683F8":["作業基金","交通部"],"FE72DE0":["作業基金","內政部"],"FC05DB6":["特別收入基金","行政院"],"FDC5BA5":["特別收入基金","經濟部"],"F5DEE95":["作業基金","勞動部"],"F7A91EB":["作業基金","原住民族委員會"],"F8A811F":["作業基金","原住民族委員會"],"FD2FE67":["特別收入基金","公平交易委員會"],"F041CF5":["特別收入基金","內政部"],"NPFR":["作業基金","衛生福利部"],"FB0637C":["作業基金","教育部"],"F4A9FEE":["作業基金","文化部"],"F7D7130":["作業基金","教育部"],"F798890":["作業基金","教育部"],"FD9B3AF":["資本計畫基金","國防部"],"FB908BE":["作業基金","國防部"],"F2D7DFC":["作業基金","國防部"],"F427F75":["作業基金","國軍退除役官兵輔導委員會"],"FBF44BD":["特別收入基金","環境部"],"FBE8AA9":["特別收入基金","教育部"],"FD9F7CA":["特別收入基金","衛生福利部"],"FAEC86A":["作業基金","內政部"],"F052F0E":["特別收入基金","勞動部"],"F9677D5":["特別收入基金","經濟部"],"FD6887A":["作業基金","國立故宮博物院"],"FF85C45":["特別收入基金","文化部"],"F81B77C":["特別收入基金","內政部"],"FB9F93A":["作業基金","內政部"],"FC9FC37":["特別收入基金","國家通訊傳播委員會"],"FB2D9A7":["特別收入基金","農業部"],"FE45EC5":["特別收入基金","核能安全委員會"],"FE1DB80":["特別收入基金","經濟部"],"FD109BD":["作業基金","國軍退除役官兵輔導委員會"],"F880F5F":["特別收入基金","法務部"],"F25F454":["特別收入基金","環境部"],"F271D89":["作業基金","經濟部"],"FD1B6CD":["作業基金","法務部"],"F5A37E8":["特別收入基金","海洋委員會"],"F87A541":["特別收入基金","環境部"],"F99BA92":["特別收入基金","農業部"],"F01B160":["作業基金","內政部"],"F05D7C4":["特別收入基金","環境部"],"FFC0841":["特別收入基金","環境部"],"F988E0A":["作業基金","經濟部"],"FD15BBA":["特別收入基金","經濟部"],"F6C9D55":["特別收入基金","內政部"],"FA5E1D8":["特別收入基金","教育部"],"FBB4228":["作業基金","國家科學及技術委員會"],"F94F090":["作業基金","經濟部"],"F334F96":["特別收入基金","環境部"],"F0B008A":["作業基金","衛生福利部"],"F500CF7":["作業基金","經濟部"],"FBB7DFD":["特別收入基金","經濟部"],"F0C017D":["作業基金","考試院考選部"],"F760681":["特別收入基金","經濟部"],"F5FD380":["特別收入基金","交通部"],"F4623BA":["特別收入基金","行政院"],"FE7B886":["特別收入基金","衛生福利部"],"F3DFC6F":["作業基金","行政院"],"F48E8E6":["特別收入基金","行政院"],"FBED6C2":["特別收入基金","衛生福利部"],"FE5DFA5":["特別收入基金","環境部"],"F192A4B":["特別收入基金","環境部"],"FD7F279":["作業基金","農業部"],"FA43C4C":["特別收入基金","農業部"],"F6BE2A6":["特別收入基金","農業部"],"F395409":["特別收入基金","農業部"],"FEE28F2":["特別收入基金","農業部"],"F950FF8":["作業基金","農業部"],"F140C7F":["特別收入基金","國家通訊傳播委員會"],"FC7BD0C":["特別收入基金","運動部"],"F82C061":["特別收入基金","衛生福利部"],"FDBF048":["作業基金","衛生福利部"],"FBA5022":["特別收入基金","金融監督管理委員會"],"FD14EAA":["特別收入基金","行政院"],"F20C49D":["債務基金","財政部"],"F7B0EDB":["作業基金","衛生福利部"],"NPA":["作業基金","衛生福利部"],"NUSFR":["作業基金","教育部"],"NUSFA":["作業基金","教育部"],"NDMUF":["作業基金","國防部"],"MEA":["作業基金","國防部"]};
 const FUND_TYPES = ["作業基金", "特別收入基金", "債務基金", "資本計畫基金"];
 const lawDate = code => { const l = lawByCode.get(code); return l?.amended || l?.published || ""; };
 const newestFirst = (a, b) => lawDate(b).localeCompare(lawDate(a));
@@ -726,7 +726,8 @@ function renderSection(key) {
         <div class="card list" id="section-list">${list.map(l => {
             const meta = FUND_META[l.code];
             const pills = meta ? `<span class="meta-pill">${escapeHtml(meta[0])}</span><span class="meta-pill">${escapeHtml(meta[1])}</span>` : "";
-            return `<a href="#${encodeURIComponent(l.code)}" data-t="${escapeHtml(meta?.[0] || "")}" data-o="${escapeHtml(meta?.[1] || "")}">
+            const searchKey = `${l.name} ${sec.short(l)} ${meta ? meta.join(" ") : ""} ${l.code}`.normalize("NFKC").replace(/台/g, "臺");
+            return `<a href="#${encodeURIComponent(l.code)}" data-t="${escapeHtml(meta?.[0] || "")}" data-o="${escapeHtml(meta?.[1] || "")}" data-search="${escapeHtml(searchKey)}">
                 <span class="row-main"><span class="row-title">${escapeHtml(sec.short(l))}</span>${pills}</span>
                 <span class="count">${escapeHtml(l.amended || l.published || "")} · ${l.count} ${unit(l.code)}</span></a>`;
         }).join("")}</div>
@@ -753,8 +754,8 @@ function applySectionFilters(f, changedEl = null) {
     const items = [...document.querySelectorAll("#section-list a")];
     let shown = 0;
     items.forEach(a => {
-        const title = a.querySelector(".row-title")?.textContent || a.textContent;
-        const hide = !words.every(w => title.includes(w)) || (!!t && a.dataset.t !== t) || (!!o && a.dataset.o !== o);
+        const hay = a.dataset.search || a.querySelector(".row-title")?.textContent || a.textContent;
+        const hide = !words.every(w => hay.includes(w)) || (!!t && a.dataset.t !== t) || (!!o && a.dataset.o !== o);
         a.hidden = hide;
         if (!hide) shown++;
     });
@@ -1716,6 +1717,19 @@ function refreshStarsFor(id) {
 document.addEventListener("click", e => {
     if (!e.target.closest(".prefs-anchor")) closePrefsMenu();
     if (!e.target.closest(".search-wrap")) hideSuggest();
+
+    const tabLink = e.target.closest("[data-tab='fund']");
+    if (tabLink) {
+        sessionStore.set("sectionFilters", {});
+        const f = document.querySelector(".section-search");
+        if (f && location.hash === "#%E5%9F%BA%E9%87%91") {
+            if (f.t) f.t.value = "";
+            applySectionFilters(f, f.t);
+            if (f.o) f.o.value = "";
+            f.n.value = "";
+            applySectionFilters(f);
+        }
+    }
 
     const fav = e.target.closest("[data-fav]");
     if (fav) {
