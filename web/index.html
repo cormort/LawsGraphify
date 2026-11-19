@@ -367,26 +367,34 @@ const SECTIONS = {
         sort: (a, b) => b.abolished.localeCompare(a.abolished),
     },
 };
+// code -> [基金類別, 主管機關], from 116年度非營業特種基金預算編列情形表 (主管別.xlsx); 分基金 take their 母基金's
+const FUND_META = {"F707E80":["特別收入基金","總統府"],"FB1F205":["作業基金","內政部"],"FC07CDC":["特別收入基金","經濟部"],"FB683F8":["作業基金","交通部"],"FE72DE0":["作業基金","內政部"],"FC05DB6":["特別收入基金","行政院"],"FDC5BA5":["特別收入基金","經濟部"],"F5DEE95":["作業基金","勞動部"],"F7A91EB":["作業基金","原住民族委員會"],"F8A811F":["作業基金","原住民族委員會"],"FD2FE67":["特別收入基金","公平交易委員會"],"F041CF5":["特別收入基金","內政部"],"NPFR":["作業基金","衛生福利部"],"FB0637C":["作業基金","教育部"],"F4A9FEE":["作業基金","文化部"],"F7D7130":["作業基金","教育部"],"F798890":["作業基金","教育部"],"FD9B3AF":["資本計畫基金","國防部"],"FB908BE":["作業基金","國防部"],"F2D7DFC":["作業基金","國防部"],"F427F75":["作業基金","國軍退除役官兵輔導委員會"],"FBF44BD":["特別收入基金","環境部"],"FBE8AA9":["特別收入基金","教育部"],"FD9F7CA":["特別收入基金","衛生福利部"],"FAEC86A":["作業基金","內政部"],"F052F0E":["特別收入基金","勞動部"],"F9677D5":["特別收入基金","經濟部"],"FD6887A":["作業基金","國立故宮博物院"],"FF85C45":["特別收入基金","文化部"],"F81B77C":["特別收入基金","內政部"],"FB9F93A":["作業基金","內政部"],"FC9FC37":["特別收入基金","國家通訊傳播委員會"],"FB2D9A7":["特別收入基金","農業部"],"FE45EC5":["特別收入基金","核能安全委員會"],"FE1DB80":["特別收入基金","經濟部"],"FD109BD":["作業基金","國軍退除役官兵輔導委員會"],"F880F5F":["特別收入基金","法務部"],"F25F454":["特別收入基金","環境部"],"F271D89":["作業基金","經濟部"],"FD1B6CD":["作業基金","法務部"],"F5A37E8":["特別收入基金","海洋委員會"],"F87A541":["特別收入基金","環境部"],"F99BA92":["特別收入基金","農業部"],"F01B160":["作業基金","內政部"],"F05D7C4":["特別收入基金","環境部"],"FFC0841":["特別收入基金","環境部"],"F988E0A":["作業基金","經濟部"],"FD15BBA":["特別收入基金","經濟部"],"F6C9D55":["特別收入基金","內政部"],"FA5E1D8":["特別收入基金","教育部"],"FBB4228":["作業基金","國家科學及技術委員會"],"F94F090":["作業基金","經濟部"],"F334F96":["特別收入基金","環境部"],"F0B008A":["作業基金","衛生福利部"],"F500CF7":["作業基金","經濟部"],"FBB7DFD":["特別收入基金","經濟部"],"F0C017D":["作業基金","考試院考選部"],"F760681":["特別收入基金","經濟部"],"F5FD380":["特別收入基金","交通部"],"F4623BA":["特別收入基金","行政院"],"FE7B886":["特別收入基金","衛生福利部"],"F3DFC6F":["作業基金","行政院"],"F48E8E6":["特別收入基金","行政院"],"FBED6C2":["特別收入基金","衛生福利部"],"FE5DFA5":["特別收入基金","環境部"],"F192A4B":["特別收入基金","環境部"],"FD7F279":["作業基金","農業部"],"FA43C4C":["特別收入基金","農業部"],"F6BE2A6":["特別收入基金","農業部"],"F395409":["特別收入基金","農業部"],"FEE28F2":["特別收入基金","農業部"],"F950FF8":["作業基金","農業部"],"F140C7F":["特別收入基金","國家通訊傳播委員會"],"FC7BD0C":["特別收入基金","運動部"],"F82C061":["特別收入基金","衛生福利部"],"FDBF048":["作業基金","衛生福利部"],"FBA5022":["特別收入基金","金融監督管理委員會"],"FD14EAA":["特別收入基金","行政院"],"F20C49D":["債務基金","財政部"],"F7B0EDB":["作業基金","衛生福利部"],"NPA":["作業基金","衛生福利部"],"NUSFR":["作業基金","教育部"],"NUSFA":["作業基金","教育部"],"NDMUF":["作業基金","國防部"],"MEA":["作業基金","國防部"]};
+const FUND_TYPES = ["作業基金", "特別收入基金", "債務基金", "資本計畫基金"];
+// Newest 修正 (or 發布) first; laws without a date (links to the original) last
+const lawDate = code => { const l = laws.find(l => l.code === code); return l?.amended || l?.published || ""; };
+const newestFirst = (a, b) => lawDate(b).localeCompare(lawDate(a));
 const FUND_KIND = SECTIONS["基金"].kind, ABOLISHED_KIND = SECTIONS["廢止專區"].kind;
 
 function renderSection(key) {
     const sec = SECTIONS[key], list = laws.filter(l => l.kind === sec.kind);
-    if (sec.sort) list.sort(sec.sort);
+    list.sort(sec.sort || ((a, b) => newestFirst(a.code, b.code)));
+    const owners = [...new Set(Object.values(FUND_META).map(m => m[1]))].sort((a, b) => a.localeCompare(b, "zh-Hant"));
+    const selects = key !== "基金" ? "" : `<select name="t" aria-label="基金類別"><option value="">全部類別</option>${FUND_TYPES.map(t => `<option>${t}</option>`).join("")}</select>
+        <select name="o" aria-label="主管機關"><option value="">全部主管機關</option>${owners.map(o => `<option>${o}</option>`).join("")}</select>`;
     return `<h2>${sec.title}</h2><p class="muted">${sec.note(list.length)}</p>
-        <form class="section-search" data-section="${key}"><input name="n" type="search" enterkeyhint="search" placeholder="名稱篩選，按搜尋找條文內容" aria-label="篩選名稱，或在${sec.where}中搜尋條文"><button class="tool" type="submit">搜尋</button></form>
+        <form class="section-search" data-section="${key}"><input name="n" type="search" enterkeyhint="search" placeholder="名稱篩選，按搜尋找條文內容" aria-label="篩選名稱，或在${sec.where}中搜尋條文"><button class="tool" type="submit">搜尋</button>${selects}</form>
         ${sec.topics.length ? `<div class="chips">${sec.topics.map(t => `<a class="tool" href="#${encodeURIComponent(key + " " + t)}">${t}</a>`).join("")}</div>` : ""}
         <h3>${sec.where}（${list.length}）</h3>
-        <div class="card list" id="section-list">${list.map(l => `<a href="#${encodeURIComponent(l.code)}">
-            <span>${escapeHtml(sec.short(l))}</span><span class="count">${l.count} ${unit(l.code)}</span></a>`).join("")}</div>
+        <div class="card list" id="section-list">${list.map(l => `<a href="#${encodeURIComponent(l.code)}" data-t="${FUND_META[l.code]?.[0] || ""}" data-o="${FUND_META[l.code]?.[1] || ""}">
+            <span>${escapeHtml(sec.short(l))}</span><span class="count">${l.amended || l.published || ""} · ${l.count} ${unit(l.code)}</span></a>`).join("")}</div>
         ${key === "基金" ? `<div class="card list"><a href="#${encodeURIComponent("廢止專區")}"><span>${SECTIONS["廢止專區"].title} →</span><span class="count">${laws.filter(l => l.kind === ABOLISHED_KIND).length} 部</span></a></div>` : ""}`;
 }
 
 // One tab's laws by topic (law_aliases.yaml) or by level (法律, 命令, 行政規則), as the
 // viewer last chose; within a group in level order. Laws without text link to the original
 function renderGroups(tab) {
-    const byCode = new Map(laws.map(l => [l.code, l])), levels = [...new Set(laws.map(l => l.kind))];
-    const rank = c => byCode.has(c) ? levels.indexOf(byCode.get(c).kind) : levels.length;
-    const order = codes => codes.filter(c => byCode.has(c) || links.has(c)).sort((a, b) => rank(a) - rank(b));  // stable: config order within a level
+    const byCode = new Map(laws.map(l => [l.code, l]));
+    const order = codes => codes.filter(c => byCode.has(c) || links.has(c)).sort(newestFirst);
     const byLevel = store.get("groupBy", "topic") === "level";
     let groups = Object.entries(categories[tab] || {}).map(([group, codes]) => [group, order(codes)]);
     if (byLevel) {
@@ -399,7 +407,7 @@ function renderGroups(tab) {
     return `<div id="groups" data-tab="${escapeHtml(tab)}"><div class="section-head"><h3>${escapeHtml(tab)}（${total} 部）</h3><div class="tools">${toggle}</div></div>` + groups.filter(([, codes]) => codes.length).map(([group, codes]) =>
         `<details class="card"${codes.length > 5 ? "" : " open"}><summary>${escapeHtml(group)}（${codes.length}）</summary>
             <div class="list">${codes.map(c => byCode.has(c) ? `<a href="#${encodeURIComponent(c)}">
-                <span>${escapeHtml(byCode.get(c).name)}</span><span class="count">${byCode.get(c).count} ${unit(c)}</span></a>` : originalLink(links.get(c))).join("")}</div></details>`).join("") + `</div>`;
+                <span>${escapeHtml(byCode.get(c).name)}</span><span class="count">${lawDate(c)} · ${byCode.get(c).count} ${unit(c)}</span></a>` : originalLink(links.get(c))).join("")}</div></details>`).join("") + `</div>`;
 }
 
 // "2021-06-09" -> "民國 110 年 6 月 9 日", how the law texts write dates
@@ -1206,9 +1214,10 @@ document.addEventListener("click", e => {
 // Typing in a section's box narrows its list by name; 搜尋 searches the article text
 document.addEventListener("input", e => {
     if (!e.target.closest(".section-search")) return;
-    const words = e.target.value.normalize("NFKC").replace(/台/g, "臺").split(/\s+/).filter(Boolean);
+    const f = e.target.closest(".section-search"), t = f.t?.value, o = f.o?.value;
+    const words = f.n.value.normalize("NFKC").replace(/台/g, "臺").split(/\s+/).filter(Boolean);
     document.querySelectorAll("#section-list a").forEach(a => {
-        a.hidden = !words.every(w => a.firstElementChild.textContent.includes(w));
+        a.hidden = !words.every(w => a.firstElementChild.textContent.includes(w)) || !!t && a.dataset.t !== t || !!o && a.dataset.o !== o;
     });
 });
 

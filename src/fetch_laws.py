@@ -151,13 +151,15 @@ def load_moj(refresh: bool) -> tuple[dict[str, dict], str]:
 
 
 FUND_SUFFIX = "收支保管及運用辦法"
+# Named like one but not a 中央政府非營業特種基金 (勞工退休基金 is a 信託基金)
+NOT_CENTRAL_FUNDS = {"勞工退休基金收支保管及運用辦法", "原住民族傳統智慧創作保護共同基金收支保管及運用辦法", "建築物無障礙設備與設施改善基金收支保管及運用辦法"}
 
 
 def fund_targets(moj: dict[str, dict]) -> dict[str, str]:
     """Every 特種基金 收支保管及運用辦法 in MOJ data, current or abolished -> code.
     The code comes from the name's hash, so a new fund never changes the others'."""
     return {name: "F" + hashlib.sha1(law["LawName"].encode()).hexdigest()[:6].upper()
-            for name, law in moj.items() if FUND_SUFFIX in name}
+            for name, law in moj.items() if FUND_SUFFIX in name and law["LawName"] not in NOT_CENTRAL_FUNDS}
 
 
 def abolished_date(law: dict) -> str | None:
