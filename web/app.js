@@ -1,725 +1,859 @@
 // Laws Graphify - Interactive Knowledge Graph Application
 
-let rawData = null; // Store the original graph dataset
+let rawData = null;
+let nodeById = new Map();
+let lawCounts = new Map();
+let lawFullNames = new Map();
+let connectedLawCodes = new Set();
+let validEdges = [];
+let outgoingMap = new Map();
+let incomingMap = new Map();
+let connectedNodeIds = new Set();
+let reviewSourceSet = new Set();
+let reviewEdgeNodeIds = new Set();
+let reviewLawCodes = new Set();
+
 let svg = null;
 let container = null;
 let simulation = null;
 let zoomBehavior = null;
+let currentZoomScale = 1;
 
-// Graph Nodes & Edges visual selections
 let nodeSelection = null;
 let linkSelection = null;
 let labelSelection = null;
 let tooltip = null;
 
-// Keep track of active filters & selections
 const activeFilters = {
+    preset: "triad",
     search: "",
-    laws: new Set(), // Set of selected law codes to display
+    laws: new Set(),
+    connectedOnly: true,
     external: true,
     internal: true,
-    needsReviewOnly: false
+    needsReviewOnly: false,
+    egoNodeId: null,
 };
 
 let selectedNode = null;
+let activeNeighborIds = new Set();
 let searchTimeout = null;
 
-// Color Palette for specific law codes (HSL colors)
 const LAW_COLORS = {
-    "CONST": "#f87171",    // Red
-    "BUDGET": "#60a5fa",   // Blue
-    "SETTLE": "#c084fc",   // Purple
-    "ACCOUNT": "#34d399",  // Green
-    "CPA": "#fbbf24",      // Amber
-    "IACP": "#2dd4bf",     // Teal
-    "CSMF": "#f472b6",     // Pink
-    "CGMBPP": "#fb7185",   // Rose
-    "CNGSF": "#a78bfa",    // Violet
-    "CACGSB": "#38bdf8",   // Sky
-    "CNDR": "#a3e635",     // Lime
-    "FY2027GBPP": "#22d3ee",    // Cyan
-    "FY2027GSUBPP": "#818cf8",  // Indigo
+    "CONST": "#ef4444",
+    "BUDGET": "#3b82f6",
+    "SETTLE": "#a855f7",
+    "ACCOUNT": "#10b981",
+    "CPA": "#f59e0b",
+    "IACP": "#14b8a6",
+    "CSMF": "#ec4899",
+    "CGMBPP": "#f43f5e",
+    "CNGSF": "#8b5cf6",
+    "CACGSB": "#0ea5e9",
+    "CNDR": "#84cc16",
+    "AUDIT": "#06b6d4",
+    "LGA": "#f97316",
+    "TFA": "#6366f1",
+    "FDA": "#eab308",
 };
 
-// Escape data before it goes into innerHTML / .html()
+const CORE_CODES = [
+    "CONST", "BUDGET", "SETTLE", "ACCOUNT", "CPA", "IACP", "CSMF", "CGMBPP",
+    "CNGSF", "CACGSB", "CNDR", "MOPE", "SUPE", "AUDIT", "AUDITER", "LGA",
+    "TFA", "FDA", "FY2027GBPP", "FY2027GSUBPP", "BOPA", "STATA"
+];
+
 function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, c => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     })[c]);
 }
 
-// Fallback color generator based on string hash
+function safeDecode(value) {
+    try { return decodeURIComponent(value); } catch { return value; }
+}
+
 function getLawColor(code) {
     if (LAW_COLORS[code]) return LAW_COLORS[code];
     let hash = 0;
-    for (let i = 0; i < code.length; i++) {
-        hash = code.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const h = Math.abs(hash % 360);
-    return `hsl(${h}, 70%, 60%)`;
+    for (let i = 0; i < code.length; i++) hash = code.charCodeAt(i) + ((hash << 5) - hash);
+    return `hsl(${Math.abs(hash % 360)}, 68%, 52%)`;
 }
 
-// Initialize Application
-document.addEventListener("DOMContentLoaded", () => {
-    initApp();
+function shortLawTitle(name) {
+    if (!name) return "";
+    return name
+        .replace(/收支保管及運用辦法$/, "")
+        .replace(/應行注意事項$/, "")
+        .replace(/^中央政府各機關/, "")
+        .replace(/^行政院及所屬各級機關/, "");
+}
+
+function shortNodeLabel(node) {
+    const shortLaw = shortLawTitle(node.law_name);
+    const num = node.article_sub_num ? `${node.article_num}-${node.article_sub_num}` : `${node.article_num}`;
+    return `${shortLaw} ${num}`;
+}
+
+function citationText(node) {
+    const zh = (node.article_zh || "").replace(/\s/g, "");
+    const [, n, sub, u] = zh.match(/^第(\d+)(?:-(\d+))?([條點])$/) || [];
+    return node.law_name + (n ? `第${n}${u}${sub ? "之" + sub : ""}` : zh);
+}
+
+// Theme sync (same localStorage.theme key as index.html)
+const THEMES = [null, "light", "dark"];
+document.getElementById("graph-theme-btn")?.addEventListener("click", () => {
+    const now = document.documentElement.dataset.theme || null;
+    const next = THEMES[(THEMES.indexOf(now) + 1) % THEMES.length];
+    if (next) document.documentElement.dataset.theme = next;
+    else delete document.documentElement.dataset.theme;
+    try { localStorage.setItem("theme", JSON.stringify(next)); } catch (e) {}
 });
+
+document.addEventListener("DOMContentLoaded", initApp);
 
 async function initApp() {
     setupUIEventListeners();
+    const statusEl = document.getElementById("graph-status");
+    if (!window.d3) {
+        statusEl.innerHTML = `<div class="status-card"><strong>需要網路載入圖表函式庫</strong><p style="font-size:13px;color:var(--text-secondary);">離線狀態下無法載入 D3.js，您仍可使用 <a href="index.html">隨身法典</a>離線查詢全文與引用。</p></div>`;
+        return;
+    }
+
     try {
         const response = await fetch("laws_graph.json");
-        if (!response.ok) throw new Error("CORS or File Not Found");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         rawData = await response.json();
-        setupGraph();
+        preprocessData();
+        initD3Stage();
+        populateLawFilters();
+        applyRouteFromHash(true);
+        statusEl.hidden = true;
     } catch (err) {
-        console.warn("Could not fetch laws_graph.json directly, searching fallback paths or checking inline data...", err);
-        // Fallback: Show a friendly overlay in case of CORS errors
-        document.getElementById("svg-container").innerHTML = `
-            <div class="cors-error-container">
-                <div class="cors-card">
-                    <span class="cors-icon">⚠️</span>
-                    <h3>CORS 跨來源存取阻擋</h3>
-                    <p>瀏覽器安全機制阻止了以本地檔案 (file://) 讀取 JSON。請在專案目錄下執行以下指令開啟本地伺服器：</p>
-                    <code>python3 -m http.server 8000</code>
-                    <p>然後在瀏覽器中開啟：<a href="http://localhost:8000/web/" target="_blank">http://localhost:8000/web/</a></p>
-                </div>
-            </div>
-        `;
+        console.warn("Could not load laws_graph.json:", err);
+        statusEl.innerHTML = `<div class="status-card"><strong>無法載入圖譜資料</strong><p style="font-size:13px;color:var(--text-secondary);">請在專案目錄執行以下指令開啟本機伺服器：</p><code>python3 run_server.py</code><p style="font-size:12px;"><a href="index.html">返回隨身法典</a></p></div>`;
     }
 }
 
-// Setup Event Listeners for HTML inputs
-function setupUIEventListeners() {
-    // Search input
-    const searchInput = document.getElementById("search-input");
-    const clearSearchBtn = document.getElementById("clear-search");
+function preprocessData() {
+    nodeById = new Map();
+    lawCounts = new Map();
+    lawFullNames = new Map();
+    connectedLawCodes = new Set();
+    outgoingMap = new Map();
+    incomingMap = new Map();
+    connectedNodeIds = new Set();
+    reviewSourceSet = new Set();
+    reviewEdgeNodeIds = new Set();
+    reviewLawCodes = new Set();
 
-    searchInput.addEventListener("input", (e) => {
-        activeFilters.search = e.target.value.toLowerCase().trim();
-        clearSearchBtn.style.display = activeFilters.search ? "block" : "none";
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => { applyFilters(); }, 150);
-    });
+    for (const n of rawData.nodes) {
+        n.searchText = `${n.id} ${n.law_name} ${n.article_zh} ${n.text || ""}`.normalize("NFKC").replace(/台/g, "臺").toLowerCase();
+        nodeById.set(n.id, n);
+        lawCounts.set(n.law_code, (lawCounts.get(n.law_code) || 0) + 1);
+        lawFullNames.set(n.law_code, n.law_name);
+    }
 
-    clearSearchBtn.addEventListener("click", () => {
-        searchInput.value = "";
-        activeFilters.search = "";
-        clearSearchBtn.style.display = "none";
-        applyFilters();
-    });
+    validEdges = rawData.edges.filter(e => e.target && nodeById.has(e.source) && nodeById.has(e.target));
+    for (const e of validEdges) {
+        connectedNodeIds.add(e.source);
+        connectedNodeIds.add(e.target);
+        const srcNode = nodeById.get(e.source);
+        const tgtNode = nodeById.get(e.target);
+        connectedLawCodes.add(srcNode.law_code);
+        connectedLawCodes.add(tgtNode.law_code);
 
-    // Toggle switches
-    document.getElementById("toggle-external").addEventListener("change", (e) => {
-        activeFilters.external = e.target.checked;
-        applyFilters();
-    });
+        if (!outgoingMap.has(e.source)) outgoingMap.set(e.source, []);
+        outgoingMap.get(e.source).push(e);
+        if (!incomingMap.has(e.target)) incomingMap.set(e.target, []);
+        incomingMap.get(e.target).push(e);
 
-    document.getElementById("toggle-internal").addEventListener("change", (e) => {
-        activeFilters.internal = e.target.checked;
-        applyFilters();
-    });
+        if (e.needs_review) {
+            reviewSourceSet.add(e.source);
+            reviewEdgeNodeIds.add(e.source);
+            reviewEdgeNodeIds.add(e.target);
+            reviewLawCodes.add(srcNode.law_code);
+            reviewLawCodes.add(tgtNode.law_code);
+        }
+    }
 
-    document.getElementById("toggle-needs-review").addEventListener("change", (e) => {
-        activeFilters.needsReviewOnly = e.target.checked;
-        applyFilters();
-    });
-
-    // HUD Zoom controls
-    document.getElementById("zoom-in").addEventListener("click", () => {
-        if (svg) svg.transition().duration(300).call(zoomBehavior.scaleBy, 1.3);
-    });
-
-    document.getElementById("zoom-out").addEventListener("click", () => {
-        if (svg) svg.transition().duration(300).call(zoomBehavior.scaleBy, 1 / 1.3);
-    });
-
-    document.getElementById("zoom-fit").addEventListener("click", () => {
-        resetZoomFit();
-    });
-
-    // Inspector close button
-    document.getElementById("close-inspector").addEventListener("click", () => {
-        deselectAllNodes();
-    });
-
-    // Inspector Tab Switching
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    tabButtons.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            tabButtons.forEach(b => b.classList.remove("active"));
-            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-            
-            btn.classList.add("active");
-            const tabId = `tab-${btn.dataset.tab}`;
-            document.getElementById(tabId).classList.add("active");
-        });
-    });
+    const summaryEl = document.getElementById("graph-dataset-summary");
+    if (summaryEl) {
+        summaryEl.textContent = `全庫共 ${lawCounts.size} 部法規、${rawData.nodes.length} 條、${validEdges.length} 條引用`;
+    }
 }
 
-// Setup D3 Graphics
-function setupGraph() {
-    if (!rawData) return;
-
+function initD3Stage() {
     const containerEl = document.getElementById("svg-container");
-    containerEl.innerHTML = ""; // Clear loader
+    containerEl.innerHTML = "";
+    const width = containerEl.clientWidth || 800;
+    const height = containerEl.clientHeight || 600;
 
-    const width = containerEl.clientWidth;
-    const height = containerEl.clientHeight;
-
-    // Initialize tooltip selection if not already created
     if (!tooltip) {
         tooltip = d3.select("body")
             .append("div")
             .attr("class", "graph-tooltip")
-            .style("opacity", 0);
+            .style("opacity", 0)
+            .style("pointer-events", "none");
     }
 
-    // Create SVG element
     svg = d3.select("#svg-container")
         .append("svg")
         .attr("viewBox", [0, 0, width, height]);
 
-    // Create a group that contains all zoomable graph contents
     container = svg.append("g");
 
-    // Add Zoom Behavior
     zoomBehavior = d3.zoom()
         .scaleExtent([0.1, 8])
         .on("zoom", (event) => {
             container.attr("transform", event.transform);
+            currentZoomScale = event.transform.k;
+            updateZoomLabels();
         });
 
     svg.call(zoomBehavior);
 
-    // Setup marker arrows for directed links
     const defs = svg.append("defs");
-    
-    // External Edge arrow
-    defs.append("marker")
-        .attr("id", "arrow-external")
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 20) // Position near node circle edge (circle radius + offset)
-        .attr("refY", 0)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M0,-5L10,0L0,5");
+    for (const [id, size, refX] of [["arrow-external", 6, 19], ["arrow-internal", 5, 19], ["arrow-highlighted", 7, 21]]) {
+        defs.append("marker")
+            .attr("id", id)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", refX)
+            .attr("refY", 0)
+            .attr("markerWidth", size)
+            .attr("markerHeight", size)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5");
+    }
 
-    // Internal Edge arrow
-    defs.append("marker")
-        .attr("id", "arrow-internal")
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 20)
-        .attr("refY", 0)
-        .attr("markerWidth", 5)
-        .attr("markerHeight", 5)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M0,-5L10,0L0,5");
+    container.append("g").attr("class", "links");
+    container.append("g").attr("class", "nodes");
+    container.append("g").attr("class", "labels");
 
-    // Highlighted Edge arrow
-    defs.append("marker")
-        .attr("id", "arrow-highlighted")
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 22)
-        .attr("refY", 0)
-        .attr("markerWidth", 7)
-        .attr("markerHeight", 7)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M0,-5L10,0L0,5");
+    svg.on("click", (event) => {
+        if (event.target.tagName === "svg") deselectAllNodes();
+    });
+}
 
-    // Calculate initial metrics & KPIs
-    computeKPIs();
-    populateLawFilters();
-    populateLegend();
+function setPreset(presetName, rebuild = true) {
+    activeFilters.preset = presetName;
+    activeFilters.egoNodeId = null;
+    document.querySelectorAll(".preset-btn").forEach(b => b.classList.toggle("active", b.dataset.preset === presetName));
 
-    // Map source/target node IDs into object references for D3 simulation
-    const nodeById = new Map(rawData.nodes.map(d => [d.id, d]));
-    
-    // Filter out edges whose target nodes do not exist in the node set
-    const validEdges = rawData.edges.filter(d => {
-        return d.target && nodeById.has(d.source) && nodeById.has(d.target);
+    const labelEl = document.getElementById("active-scope-label");
+    if (presetName === "triad") {
+        activeFilters.laws = new Set(["BUDGET", "SETTLE", "ACCOUNT"].filter(c => lawCounts.has(c)));
+        activeFilters.connectedOnly = true;
+        activeFilters.needsReviewOnly = false;
+        if (labelEl) labelEl.textContent = "範圍：主計三法";
+    } else if (presetName === "core") {
+        activeFilters.laws = new Set(CORE_CODES.filter(c => lawCounts.has(c)));
+        activeFilters.connectedOnly = true;
+        activeFilters.needsReviewOnly = false;
+        if (labelEl) labelEl.textContent = "範圍：核心主計法規";
+    } else if (presetName === "connected") {
+        activeFilters.laws = new Set(connectedLawCodes);
+        activeFilters.connectedOnly = true;
+        activeFilters.needsReviewOnly = false;
+        if (labelEl) labelEl.textContent = "範圍：全部有引用條文";
+    } else if (presetName === "review") {
+        activeFilters.laws = new Set(reviewLawCodes);
+        activeFilters.connectedOnly = true;
+        activeFilters.needsReviewOnly = true;
+        if (labelEl) labelEl.textContent = "範圍：僅需人工複核";
+    } else {
+        if (labelEl) labelEl.textContent = "範圍：自訂篩選";
+    }
+
+    syncFilterControlsUI();
+    if (rebuild) rebuildGraph();
+}
+
+function syncFilterControlsUI() {
+    document.getElementById("toggle-connected").checked = activeFilters.connectedOnly;
+    document.getElementById("toggle-external").checked = activeFilters.external;
+    document.getElementById("toggle-internal").checked = activeFilters.internal;
+    document.getElementById("toggle-needs-review").checked = activeFilters.needsReviewOnly;
+    document.querySelectorAll("#law-filters input[type=checkbox]").forEach(cb => {
+        cb.checked = activeFilters.laws.has(cb.dataset.code);
+    });
+}
+
+function applyRouteFromHash(initial = false) {
+    const raw = safeDecode(location.hash.slice(1)).trim();
+    if (!raw) {
+        setPreset("triad", true);
+        return;
+    }
+
+    if (nodeById.has(raw)) {
+        const node = nodeById.get(raw);
+        const lawsNeeded = new Set([node.law_code]);
+        for (const e of outgoingMap.get(node.id) || []) {
+            if (nodeById.has(e.target)) lawsNeeded.add(nodeById.get(e.target).law_code);
+        }
+        for (const e of incomingMap.get(node.id) || []) {
+            if (nodeById.has(e.source)) lawsNeeded.add(nodeById.get(e.source).law_code);
+        }
+        activeFilters.preset = "custom";
+        activeFilters.laws = lawsNeeded;
+        activeFilters.connectedOnly = connectedNodeIds.has(node.id);
+        activeFilters.external = true;
+        activeFilters.internal = true;
+        activeFilters.needsReviewOnly = false;
+        activeFilters.search = "";
+        activeFilters.egoNodeId = null;
+        document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+        document.getElementById("active-scope-label").textContent = `聚焦：${citationText(node)}`;
+        syncFilterControlsUI();
+        rebuildGraph(node);
+        return;
+    }
+
+    if (lawCounts.has(raw)) {
+        const lawsNeeded = new Set([raw]);
+        for (const e of validEdges) {
+            const s = nodeById.get(e.source), t = nodeById.get(e.target);
+            if (s.law_code === raw) lawsNeeded.add(t.law_code);
+            if (t.law_code === raw) lawsNeeded.add(s.law_code);
+        }
+        activeFilters.preset = "custom";
+        activeFilters.laws = lawsNeeded;
+        activeFilters.connectedOnly = connectedLawCodes.has(raw);
+        activeFilters.external = true;
+        activeFilters.internal = true;
+        activeFilters.needsReviewOnly = false;
+        activeFilters.search = "";
+        activeFilters.egoNodeId = null;
+        document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+        document.getElementById("active-scope-label").textContent = `聚焦法規：${lawFullNames.get(raw) || raw}`;
+        syncFilterControlsUI();
+        rebuildGraph();
+        return;
+    }
+
+    if (initial) setPreset("triad", true);
+}
+
+window.addEventListener("hashchange", () => {
+    if (rawData) applyRouteFromHash(false);
+});
+
+function setupUIEventListeners() {
+    // Presets
+    document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.addEventListener("click", () => setPreset(btn.dataset.preset, true));
     });
 
-    // Setup simulation
-    simulation = d3.forceSimulation(rawData.nodes)
-        .force("link", d3.forceLink(validEdges).id(d => d.id).distance(120).strength(0.5))
-        .force("charge", d3.forceManyBody().strength(-150))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("collision", d3.forceCollide().radius(25));
+    // Search input
+    const searchInput = document.getElementById("search-input");
+    const clearSearchBtn = document.getElementById("clear-search");
+    searchInput.addEventListener("input", (e) => {
+        activeFilters.search = e.target.value.normalize("NFKC").replace(/台/g, "臺").toLowerCase().trim();
+        clearSearchBtn.style.display = activeFilters.search ? "block" : "none";
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => rebuildGraph(), 180);
+    });
+    clearSearchBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        activeFilters.search = "";
+        clearSearchBtn.style.display = "none";
+        rebuildGraph();
+    });
 
-    // Render Edges
-    linkSelection = container.append("g")
-        .attr("class", "links")
+    // Law list search
+    document.getElementById("law-filter-search").addEventListener("input", (e) => {
+        const q = e.target.value.normalize("NFKC").replace(/台/g, "臺").toLowerCase().trim();
+        document.querySelectorAll("#law-filters .checkbox-item").forEach(item => {
+            item.hidden = q && !item.dataset.search.includes(q);
+        });
+    });
+
+    // Quick law select buttons
+    document.getElementById("laws-all").addEventListener("click", () => {
+        activeFilters.preset = "custom";
+        activeFilters.laws = new Set(lawCounts.keys());
+        activeFilters.connectedOnly = false;
+        document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+        syncFilterControlsUI();
+        rebuildGraph();
+    });
+    document.getElementById("laws-none").addEventListener("click", () => {
+        activeFilters.preset = "custom";
+        activeFilters.laws = new Set();
+        document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+        syncFilterControlsUI();
+        rebuildGraph();
+    });
+    document.getElementById("laws-connected").addEventListener("click", () => setPreset("connected", true));
+
+    // Switches
+    document.getElementById("toggle-connected").addEventListener("change", (e) => {
+        activeFilters.connectedOnly = e.target.checked;
+        rebuildGraph();
+    });
+    document.getElementById("toggle-external").addEventListener("change", (e) => {
+        activeFilters.external = e.target.checked;
+        rebuildGraph();
+    });
+    document.getElementById("toggle-internal").addEventListener("change", (e) => {
+        activeFilters.internal = e.target.checked;
+        rebuildGraph();
+    });
+    document.getElementById("toggle-needs-review").addEventListener("change", (e) => {
+        activeFilters.needsReviewOnly = e.target.checked;
+        rebuildGraph();
+    });
+
+    // HUD Zoom controls
+    document.getElementById("zoom-in").addEventListener("click", () => {
+        if (svg) svg.transition().duration(250).call(zoomBehavior.scaleBy, 1.35);
+    });
+    document.getElementById("zoom-out").addEventListener("click", () => {
+        if (svg) svg.transition().duration(250).call(zoomBehavior.scaleBy, 1 / 1.35);
+    });
+    document.getElementById("zoom-fit").addEventListener("click", resetZoomFit);
+
+    // Inspector controls
+    document.getElementById("close-inspector").addEventListener("click", deselectAllNodes);
+    document.getElementById("insp-copy").addEventListener("click", async () => {
+        if (!selectedNode) return;
+        const text = `${citationText(selectedNode)}：${selectedNode.text}`;
+        const btn = document.getElementById("insp-copy");
+        try {
+            await navigator.clipboard.writeText(text);
+            btn.textContent = "已複製";
+            setTimeout(() => { btn.textContent = "複製公文引用"; }, 1400);
+        } catch {
+            prompt("複製下面這段文字：", text);
+        }
+    });
+    document.getElementById("btn-focus-ego").addEventListener("click", () => {
+        if (!selectedNode) return;
+        if (activeFilters.egoNodeId === selectedNode.id) {
+            activeFilters.egoNodeId = null;
+        } else {
+            activeFilters.egoNodeId = selectedNode.id;
+        }
+        rebuildGraph(selectedNode);
+    });
+
+    // Inspector tabs
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    tabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            tabButtons.forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+            btn.classList.add("active");
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add("active");
+        });
+    });
+
+    // Mobile drawer controls
+    const sidebar = document.getElementById("sidebar-left");
+    const backdrop = document.getElementById("mobile-backdrop");
+    const closeBtn = document.getElementById("close-mobile-sidebar");
+    const toggleMobile = (open) => {
+        sidebar.classList.toggle("open", open);
+        backdrop.classList.toggle("show", open);
+        closeBtn.style.display = open ? "inline-flex" : "none";
+    };
+    document.getElementById("open-mobile-sidebar")?.addEventListener("click", () => toggleMobile(true));
+    closeBtn?.addEventListener("click", () => toggleMobile(false));
+    backdrop?.addEventListener("click", () => toggleMobile(false));
+}
+
+function populateLawFilters() {
+    const filterContainer = document.getElementById("law-filters");
+    filterContainer.innerHTML = "";
+    const sortedCodes = [...lawCounts.keys()].sort((a, b) => {
+        const ac = connectedLawCodes.has(a) ? 1 : 0;
+        const bc = connectedLawCodes.has(b) ? 1 : 0;
+        return (bc - ac) || (lawCounts.get(b) - lawCounts.get(a));
+    });
+
+    for (const code of sortedCodes) {
+        const fullName = lawFullNames.get(code) || code;
+        const item = document.createElement("label");
+        item.className = "checkbox-item";
+        item.dataset.search = `${code} ${fullName}`.toLowerCase();
+        item.innerHTML = `
+            <input type="checkbox" data-code="${escapeHtml(code)}">
+            <span class="law-color-dot" style="background-color: ${escapeHtml(getLawColor(code))}"></span>
+            <span class="chk-name" title="${escapeHtml(fullName)}">${escapeHtml(fullName)}</span>
+            <span style="color: var(--text-muted); font-size: 10px; margin-left: auto;">${lawCounts.get(code)}</span>
+        `;
+        item.querySelector("input").addEventListener("change", (e) => {
+            activeFilters.preset = "custom";
+            document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+            document.getElementById("active-scope-label").textContent = "範圍：自訂篩選";
+            if (e.target.checked) activeFilters.laws.add(code);
+            else activeFilters.laws.delete(code);
+            rebuildGraph();
+        });
+        filterContainer.appendChild(item);
+    }
+}
+
+function populateLegend(visibleNodes) {
+    const legendContainer = document.getElementById("legend-items");
+    legendContainer.innerHTML = "";
+    const shownCodes = [...new Set(visibleNodes.map(n => n.law_code))];
+    if (!shownCodes.length) {
+        legendContainer.innerHTML = `<span style="font-size:11px;color:var(--text-muted);">目前無顯示法規</span>`;
+        return;
+    }
+    const maxShow = 14;
+    for (const code of shownCodes.slice(0, maxShow)) {
+        const item = document.createElement("div");
+        item.className = "legend-item";
+        item.innerHTML = `<span class="legend-color" style="background-color:${escapeHtml(getLawColor(code))}"></span><span>${escapeHtml(lawFullNames.get(code) || code)}</span>`;
+        legendContainer.appendChild(item);
+    }
+    if (shownCodes.length > maxShow) {
+        const more = document.createElement("div");
+        more.className = "legend-item";
+        more.style.color = "var(--text-muted)";
+        more.textContent = `…另有 ${shownCodes.length - maxShow} 部法規`;
+        legendContainer.appendChild(more);
+    }
+}
+
+function updateKPIs(visibleNodes, visibleEdges) {
+    document.getElementById("kpi-nodes").innerText = visibleNodes.length;
+    document.getElementById("kpi-edges").innerText = visibleEdges.length;
+    document.getElementById("kpi-laws").innerText = new Set(visibleNodes.map(n => n.law_code)).size;
+    document.getElementById("kpi-review").innerText = visibleEdges.filter(e => e.needs_review).length;
+}
+
+function computeSubgraph() {
+    let candidateIds = new Set();
+
+    if (activeFilters.egoNodeId && nodeById.has(activeFilters.egoNodeId)) {
+        candidateIds.add(activeFilters.egoNodeId);
+        for (const e of outgoingMap.get(activeFilters.egoNodeId) || []) {
+            if (!activeFilters.external && e.is_external) continue;
+            if (!activeFilters.internal && !e.is_external) continue;
+            if (activeFilters.needsReviewOnly && !e.needs_review) continue;
+            candidateIds.add(e.target);
+        }
+        for (const e of incomingMap.get(activeFilters.egoNodeId) || []) {
+            if (!activeFilters.external && e.is_external) continue;
+            if (!activeFilters.internal && !e.is_external) continue;
+            if (activeFilters.needsReviewOnly && !e.needs_review) continue;
+            candidateIds.add(e.source);
+        }
+    } else {
+        for (const node of rawData.nodes) {
+            if (!activeFilters.laws.has(node.law_code)) continue;
+            if (activeFilters.connectedOnly && !connectedNodeIds.has(node.id)) continue;
+            if (activeFilters.search && !node.searchText.includes(activeFilters.search)) continue;
+            if (activeFilters.needsReviewOnly && !reviewEdgeNodeIds.has(node.id)) continue;
+            candidateIds.add(node.id);
+        }
+    }
+
+    const activeEdgeLinks = [];
+    const linkedNodeIds = new Set();
+    for (const e of validEdges) {
+        if (!candidateIds.has(e.source) || !candidateIds.has(e.target)) continue;
+        if (!activeFilters.external && e.is_external) continue;
+        if (!activeFilters.internal && !e.is_external) continue;
+        if (activeFilters.needsReviewOnly && !e.needs_review) continue;
+        activeEdgeLinks.push({ ...e });
+        linkedNodeIds.add(e.source);
+        linkedNodeIds.add(e.target);
+    }
+
+    // If connectedOnly is active without a text search, hide nodes left isolated by edge attribute filters
+    const finalNodes = rawData.nodes.filter(n => {
+        if (!candidateIds.has(n.id)) return false;
+        if (activeFilters.connectedOnly && !activeFilters.search && !activeFilters.egoNodeId && selectedNode?.id !== n.id) {
+            return linkedNodeIds.has(n.id);
+        }
+        return true;
+    });
+
+    return { visibleNodes: finalNodes, visibleEdges: activeEdgeLinks };
+}
+
+function rebuildGraph(focusTarget = null) {
+    if (!svg || !rawData) return;
+    if (simulation) simulation.stop();
+
+    const { visibleNodes, visibleEdges } = computeSubgraph();
+    updateKPIs(visibleNodes, visibleEdges);
+    populateLegend(visibleNodes);
+
+    const statusEl = document.getElementById("graph-status");
+    if (!visibleNodes.length) {
+        statusEl.hidden = false;
+        statusEl.innerHTML = `<div class="status-card"><strong>沒有符合條件的條文節點</strong><span style="font-size:13px;color:var(--text-secondary);">試著切換快速檢視範圍或放寬左側篩選條件。</span></div>`;
+    } else {
+        statusEl.hidden = true;
+    }
+
+    const containerEl = document.getElementById("svg-container");
+    const width = containerEl.clientWidth || 800;
+    const height = containerEl.clientHeight || 600;
+
+    // Seed any unpositioned nodes gently near center
+    for (const n of visibleNodes) {
+        if (!Number.isFinite(n.x) || !Number.isFinite(n.y)) {
+            n.x = width / 2 + (Math.random() - 0.5) * 160;
+            n.y = height / 2 + (Math.random() - 0.5) * 160;
+        }
+    }
+
+    const linksG = container.select("g.links");
+    const nodesG = container.select("g.nodes");
+    const labelsG = container.select("g.labels");
+
+    linkSelection = linksG
         .selectAll("path")
-        .data(validEdges)
+        .data(visibleEdges, d => `${d.source}-${d.target}-${d.kind}`)
         .join("path")
-        .attr("class", d => `edge-path ${d.is_external ? 'external' : 'internal'} ${d.kind === 'relative' ? 'relative' : ''}`)
+        .attr("class", d => `edge-path ${d.is_external ? "external" : "internal"} ${d.kind === "relative" ? "relative" : ""}`)
         .attr("marker-end", d => d.is_external ? "url(#arrow-external)" : "url(#arrow-internal)");
 
-    // Render Nodes
-    nodeSelection = container.append("g")
-        .attr("class", "nodes")
+    simulation = d3.forceSimulation(visibleNodes)
+        .force("link", d3.forceLink(visibleEdges).id(d => d.id).distance(105).strength(0.55))
+        .force("charge", d3.forceManyBody().strength(-160))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(24));
+
+    nodeSelection = nodesG
         .selectAll("circle")
-        .data(rawData.nodes)
+        .data(visibleNodes, d => d.id)
         .join("circle")
-        .attr("class", d => {
-            const hasReview = validEdges.some(e => e.source.id === d.id && e.needs_review);
-            return `node-circle ${hasReview ? 'review-needed' : ''}`;
-        })
-        .attr("r", 9)
+        .attr("class", d => `node-circle ${reviewSourceSet.has(d.id) ? "review-needed" : ""}`)
+        .attr("r", 8.5)
         .attr("fill", d => getLawColor(d.law_code))
         .call(drag(simulation));
 
-    // Render Labels
-    labelSelection = container.append("g")
-        .attr("class", "labels")
+    labelSelection = labelsG
         .selectAll("text")
-        .data(rawData.nodes)
+        .data(visibleNodes, d => d.id)
         .join("text")
         .attr("class", "node-label")
-        .attr("fill", "#e2e8f0")
-        .attr("dy", -14)
-        .text(d => d.id);
+        .attr("dy", -13)
+        .text(d => shortNodeLabel(d));
 
-    // Setup mouse interactions
-    nodeSelection.on("mouseover", handleMouseOverNode)
+    nodeSelection
+        .on("mouseover", handleMouseOverNode)
         .on("mousemove", handleMouseMoveNode)
         .on("mouseout", handleMouseOutNode)
         .on("click", handleNodeClick);
 
-    // Ticks for simulation
-    simulation.on("tick", () => {
+    const renderTick = () => {
         linkSelection.attr("d", d => {
             const dx = d.target.x - d.source.x;
             const dy = d.target.y - d.source.y;
-            const dr = Math.sqrt(dx * dx + dy * dy);
-            // Draw slightly curved paths so parallel bi-directional edges don't overlap
+            const dr = Math.sqrt(dx * dx + dy * dy) * 1.35 || 1;
             return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
         });
+        nodeSelection.attr("cx", d => d.x).attr("cy", d => d.y);
+        labelSelection.attr("x", d => d.x).attr("y", d => d.y);
+    };
 
-        nodeSelection
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+    simulation.on("tick", renderTick);
 
-        labelSelection
-            .attr("x", d => d.x)
-            .attr("y", d => d.y);
-    });
+    // Pre-settle synchronously so positions are meaningful immediately
+    const preTicks = visibleNodes.length <= 250 ? 90 : visibleNodes.length <= 700 ? 45 : 20;
+    for (let i = 0; i < preTicks; i++) simulation.tick();
+    renderTick();
 
-    // Click on empty canvas to deselect
-    svg.on("click", (event) => {
-        if (event.target.tagName === "svg") { deselectAllNodes(); }
-    });
-
-    // Fit once the layout settles (node positions are meaningless before that)
-    simulation.on("end.fit", () => {
-        simulation.on("end.fit", null);
-        resetZoomFit();
-    });
-}
-
-// Compute statistics and update KPIs
-function computeKPIs() {
-    document.getElementById("kpi-nodes").innerText = rawData.nodes.length;
-    document.getElementById("kpi-edges").innerText = rawData.edges.length;
-
-    const lawCodes = new Set(rawData.nodes.map(n => n.law_code));
-    document.getElementById("kpi-laws").innerText = lawCodes.size;
-
-    const reviewCount = rawData.edges.filter(e => e.needs_review).length;
-    document.getElementById("kpi-review").innerText = reviewCount;
-}
-
-// Dynamically generate law filter checkboxes
-function populateLawFilters() {
-    const filterContainer = document.getElementById("law-filters");
-    filterContainer.innerHTML = "";
-
-    // Count nodes per law code
-    const lawCounts = {};
-    const lawFullNames = {};
-    
-    rawData.nodes.forEach(n => {
-        lawCounts[n.law_code] = (lawCounts[n.law_code] || 0) + 1;
-        lawFullNames[n.law_code] = n.law_name;
-    });
-
-    // Populate active laws filter set with all codes initially
-    Object.keys(lawCounts).forEach(code => activeFilters.laws.add(code));
-
-    // Render checkbox options sorted by article count descending
-    const sortedCodes = Object.keys(lawCounts).sort((a, b) => lawCounts[b] - lawCounts[a]);
-    
-    sortedCodes.forEach(code => {
-        const item = document.createElement("div");
-        item.className = "checkbox-item";
-        
-        const dot = `<span class="law-color-dot" style="background-color: ${escapeHtml(getLawColor(code))}"></span>`;
-        const countBadge = `<span style="color: var(--text-muted); font-size: 10px; margin-left: auto;">(${lawCounts[code]})</span>`;
-        
-        item.innerHTML = `
-            <input type="checkbox" id="chk-${escapeHtml(code)}" checked data-code="${escapeHtml(code)}">
-            ${dot}
-            <span>${escapeHtml(code)} - ${escapeHtml(lawFullNames[code].substring(0, 10))}${lawFullNames[code].length > 10 ? '...' : ''}</span>
-            ${countBadge}
-        `;
-
-        item.querySelector("input").addEventListener("change", (e) => {
-            const codeVal = e.target.dataset.code;
-            if (e.target.checked) {
-                activeFilters.laws.add(codeVal);
-            } else {
-                activeFilters.laws.delete(codeVal);
-            }
-            applyFilters();
-        });
-
-        filterContainer.appendChild(item);
-    });
-}
-
-// Generate the legend labels dynamically
-function populateLegend() {
-    const legendContainer = document.getElementById("legend-items");
-    legendContainer.innerHTML = "";
-
-    const lawFullNames = {};
-    rawData.nodes.forEach(n => {
-        lawFullNames[n.law_code] = n.law_name;
-    });
-
-    Object.keys(lawFullNames).forEach(code => {
-        const item = document.createElement("div");
-        item.className = "legend-item";
-        item.innerHTML = `
-            <span class="legend-color" style="background-color: ${escapeHtml(getLawColor(code))}"></span>
-            <span>${escapeHtml(code)} - ${escapeHtml(lawFullNames[code])}</span>
-        `;
-        legendContainer.appendChild(item);
-    });
-}
-
-// Apply searches & active toggles to show/hide nodes and links
-function applyFilters() {
-    if (!svg) return;
-
-    // Filter matching nodes
-    const visibleNodeIds = new Set();
-
-    rawData.nodes.forEach(node => {
-        // 1. Check Law Code filter
-        if (!activeFilters.laws.has(node.law_code)) return;
-
-        // 2. Check keyword search
-        if (activeFilters.search) {
-            const matchId = node.id.toLowerCase().includes(activeFilters.search);
-            const matchText = node.text.toLowerCase().includes(activeFilters.search);
-            const matchName = node.law_name.toLowerCase().includes(activeFilters.search);
-            if (!matchId && !matchText && !matchName) return;
-        }
-
-        visibleNodeIds.add(node.id);
-    });
-
-    // Check if needs_review filter is active: further restrict visibleNodeIds
-    if (activeFilters.needsReviewOnly) {
-        const nodesCitingWithReview = new Set();
-        rawData.edges.forEach(edge => {
-            if (edge.needs_review && edge.target) {
-                const srcId = typeof edge.source === 'object' ? edge.source.id : edge.source;
-                const tgtId = typeof edge.target === 'object' ? edge.target.id : edge.target;
-                nodesCitingWithReview.add(srcId);
-                nodesCitingWithReview.add(tgtId);
-            }
-        });
-
-        // Retain only nodes connected to review edges
-        for (let id of visibleNodeIds) {
-            if (!nodesCitingWithReview.has(id)) {
-                visibleNodeIds.delete(id);
-            }
-        }
+    if (focusTarget && visibleNodes.some(n => n.id === focusTarget.id)) {
+        selectNode(focusTarget);
+    } else if (selectedNode && visibleNodes.some(n => n.id === selectedNode.id)) {
+        selectNode(selectedNode, false);
+    } else {
+        if (selectedNode) deselectAllNodes();
+        resetZoomFit(visibleNodes);
     }
 
-    // Filter matching links
-    linkSelection.style("display", d => {
-        const srcId = d.source.id;
-        const tgtId = d.target.id;
-        
-        // Both nodes must be visible
-        if (!visibleNodeIds.has(srcId) || !visibleNodeIds.has(tgtId)) return "none";
+    updateZoomLabels();
+}
 
-        // Check external / internal visibility toggle
-        if (!activeFilters.external && d.is_external) return "none";
-        if (!activeFilters.internal && !d.is_external) return "none";
-
-        // Check review flag toggle
-        if (activeFilters.needsReviewOnly && !d.needs_review) return "none";
-
-        return "block";
-    });
-
-    // Toggle node circle visibility
-    nodeSelection.style("display", d => visibleNodeIds.has(d.id) ? "block" : "none");
-
-    // Toggle label visibility
-    labelSelection.style("display", d => {
-        // Label should only show if node is visible
-        if (!visibleNodeIds.has(d.id)) return "none";
-        // If zoom scale is very small, hide label to prevent cluttering
-        return "block";
+function updateZoomLabels() {
+    if (!labelSelection) return;
+    const hideSmall = currentZoomScale < 0.75;
+    labelSelection.classed("zoom-hidden", d => {
+        if (!hideSmall) return false;
+        return !activeNeighborIds.has(d.id);
     });
 }
 
-// Drag functionality for D3 nodes
 function drag(sim) {
-    function dragstarted(event, d) {
-        if (!event.active) sim.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-        if (!event.active) sim.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-    }
-
     return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
+        .on("start", (event, d) => {
+            if (!event.active) sim.alphaTarget(0.25).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        })
+        .on("drag", (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+        })
+        .on("end", (event, d) => {
+            if (!event.active) sim.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        });
 }
 
-// Mouse Over Highlight
 function handleMouseOverNode(event, d) {
-    // Display glassmorphic tooltip
     if (tooltip) {
-        tooltip.transition()
-            .duration(150)
-            .style("opacity", 0.98);
-        
-        const textSnippet = d.text ? (d.text.length > 120 ? d.text.substring(0, 120) + "..." : d.text) : "此條無文字說明。";
-        
+        tooltip.transition().duration(120).style("opacity", 0.98);
+        const snippet = d.text ? (d.text.length > 110 ? d.text.substring(0, 110) + "…" : d.text) : "此條無文字說明。";
         tooltip.html(`
             <div class="tooltip-header">
-                <span class="tooltip-badge" style="background-color: ${escapeHtml(getLawColor(d.law_code))}">${escapeHtml(d.law_code)}</span>
+                <span class="tooltip-badge" style="background-color:${escapeHtml(getLawColor(d.law_code))}">${escapeHtml(d.law_code)}</span>
                 <span class="tooltip-id">${escapeHtml(d.id)}</span>
             </div>
             <div class="tooltip-title">${escapeHtml(d.law_name)} ${escapeHtml(d.article_zh)}</div>
-            <div class="tooltip-body">${escapeHtml(textSnippet)}</div>
+            <div class="tooltip-body">${escapeHtml(snippet)}</div>
         `);
     }
 
-    // Morph node label to full Chinese regulation name
     labelSelection.filter(n => n.id === d.id)
         .text(`${d.law_name} ${d.article_zh}`)
         .classed("hovered-label", true);
 
-    if (selectedNode) return; // Keep clicked selection locked for neighbor highlighting
+    if (selectedNode) return;
 
-    // Highlight immediate neighbors
     const neighbors = new Set([d.id]);
-    const connectedLinks = [];
-
     linkSelection.each(link => {
-        if (link.source.id === d.id) {
-            neighbors.add(link.target.id);
-            connectedLinks.push(link);
-        } else if (link.target.id === d.id) {
-            neighbors.add(link.source.id);
-            connectedLinks.push(link);
-        }
+        if (link.source.id === d.id) neighbors.add(link.target.id);
+        else if (link.target.id === d.id) neighbors.add(link.source.id);
     });
 
     nodeSelection.classed("dimmed", n => !neighbors.has(n.id));
     labelSelection.classed("dimmed", n => !neighbors.has(n.id));
     linkSelection.classed("dimmed", true);
-
     linkSelection.filter(link => link.source.id === d.id || link.target.id === d.id)
         .classed("dimmed", false)
         .classed("highlighted", true)
         .attr("marker-end", "url(#arrow-highlighted)");
 }
 
-// Mouse Move tooltips position updates
-function handleMouseMoveNode(event, d) {
+function handleMouseMoveNode(event) {
     if (!tooltip) return;
-    const tooltipEl = tooltip.node();
-    if (!tooltipEl) return;
-    
-    const tooltipWidth = tooltipEl.offsetWidth || 320;
-    const tooltipHeight = tooltipEl.offsetHeight || 120;
-    
-    let left = event.pageX + 15;
-    let top = event.pageY + 15;
-    
-    // Prevent off-screen boundaries
-    if (left + tooltipWidth > window.innerWidth) {
-        left = event.pageX - tooltipWidth - 15;
-    }
-    if (top + tooltipHeight > window.innerHeight) {
-        top = event.pageY - tooltipHeight - 15;
-    }
-    
-    if (left < 0) left = 10;
-    if (top < 0) top = 10;
-    
-    tooltip
-        .style("left", left + "px")
-        .style("top", top + "px");
+    const el = tooltip.node();
+    const w = el?.offsetWidth || 300;
+    const h = el?.offsetHeight || 120;
+    let left = event.clientX + 14;
+    let top = event.clientY + 14;
+    if (left + w > window.innerWidth) left = event.clientX - w - 14;
+    if (top + h > window.innerHeight) top = event.clientY - h - 14;
+    tooltip.style("left", Math.max(8, left) + "px").style("top", Math.max(8, top) + "px");
 }
 
-// Mouse Out Reset Highlight
 function handleMouseOutNode(event, d) {
-    // Hide tooltip
-    if (tooltip) {
-        tooltip.transition()
-            .duration(150)
-            .style("opacity", 0);
-    }
-
-    // Restore label to original ID format
+    if (tooltip) tooltip.transition().duration(120).style("opacity", 0);
     labelSelection.filter(n => n.id === d.id)
-        .text(d.id)
+        .text(shortNodeLabel(d))
         .classed("hovered-label", false);
-
-    if (selectedNode) return; // Keep clicked selection locked
+    if (selectedNode) return;
     resetHighlights();
 }
 
-// Reset D3 Highlights
 function resetHighlights() {
+    if (!nodeSelection) return;
+    activeNeighborIds = new Set();
     nodeSelection.classed("dimmed", false).classed("highlighted", false);
     labelSelection.classed("dimmed", false);
-    linkSelection.classed("dimmed", false).classed("highlighted", false);
-    
-    linkSelection.attr("marker-end", d => {
-        return d.is_external ? "url(#arrow-external)" : "url(#arrow-internal)";
-    });
+    linkSelection.classed("dimmed", false).classed("highlighted", false)
+        .attr("marker-end", d => d.is_external ? "url(#arrow-external)" : "url(#arrow-internal)");
+    updateZoomLabels();
 }
 
-// Click node handler
 function handleNodeClick(event, d) {
     event.stopPropagation();
     selectNode(d);
 }
 
-// Deselect selection
 function deselectAllNodes() {
     selectedNode = null;
+    if (activeFilters.egoNodeId) {
+        activeFilters.egoNodeId = null;
+        rebuildGraph();
+        return;
+    }
     resetHighlights();
     document.getElementById("inspector-panel").classList.add("collapsed");
 }
 
-// Main node selection logic
-function selectNode(node) {
+function selectNode(node, shouldZoom = true) {
     selectedNode = node;
-    
-    // Highlight connected elements in D3
-    const neighbors = new Set([node.id]);
-    const outgoingCitations = [];
-    const incomingCitations = [];
+    activeNeighborIds = new Set([node.id]);
 
-    // Reset highlighted states
     nodeSelection.classed("highlighted", false);
-    
     linkSelection.each(link => {
-        const srcId = link.source.id;
-        const tgtId = link.target.id;
-        
-        if (srcId === node.id) {
-            neighbors.add(tgtId);
-            outgoingCitations.push(link);
-        } else if (tgtId === node.id) {
-            neighbors.add(srcId);
-            incomingCitations.push(link);
-        }
+        if (link.source.id === node.id) activeNeighborIds.add(link.target.id);
+        else if (link.target.id === node.id) activeNeighborIds.add(link.source.id);
     });
 
-    nodeSelection.classed("dimmed", n => !neighbors.has(n.id));
-    labelSelection.classed("dimmed", n => !neighbors.has(n.id));
+    nodeSelection.classed("dimmed", n => !activeNeighborIds.has(n.id));
+    labelSelection.classed("dimmed", n => !activeNeighborIds.has(n.id));
     linkSelection.classed("dimmed", true);
-
-    // Highlight node circle
     nodeSelection.filter(n => n.id === node.id).classed("highlighted", true);
-
-    // Highlight edges
     linkSelection.filter(link => link.source.id === node.id || link.target.id === node.id)
         .classed("dimmed", false)
         .classed("highlighted", true)
         .attr("marker-end", "url(#arrow-highlighted)");
+    updateZoomLabels();
 
-    // Populate Inspector Sidebar Right
     document.getElementById("insp-law-badge").innerText = node.law_code;
     document.getElementById("insp-law-badge").style.backgroundColor = getLawColor(node.law_code);
-    document.getElementById("insp-title").innerText = `${node.article_zh}`;
+    document.getElementById("insp-title").innerText = node.article_zh;
     document.getElementById("insp-law-fullname").innerText = node.law_name;
     document.getElementById("insp-text").innerText = node.text || "此條無文字說明。";
+    document.getElementById("insp-codex-link").href = `index.html#${encodeURIComponent(node.id)}`;
 
-    // Populate lists
-    populateCitationsList("insp-outgoing-list", outgoingCitations, "target");
-    populateCitationsList("insp-incoming-list", incomingCitations, "source");
+    const egoBtn = document.getElementById("btn-focus-ego");
+    const isEgo = activeFilters.egoNodeId === node.id;
+    egoBtn.classList.toggle("active", isEgo);
+    egoBtn.setAttribute("aria-pressed", String(isEgo));
+    egoBtn.textContent = isEgo ? "顯示原範圍" : "只看此條鄰居";
 
-    document.getElementById("insp-out-count").innerText = outgoingCitations.length;
-    document.getElementById("insp-in-count").innerText = incomingCitations.length;
+    const outEdges = outgoingMap.get(node.id) || [];
+    const inEdges = incomingMap.get(node.id) || [];
+    populateCitationsList("insp-outgoing-list", outEdges, "target");
+    populateCitationsList("insp-incoming-list", inEdges, "source");
+    document.getElementById("insp-out-count").innerText = outEdges.length;
+    document.getElementById("insp-in-count").innerText = inEdges.length;
 
-    // Show sidebar
     document.getElementById("inspector-panel").classList.remove("collapsed");
-
-    // Center view on selected node smoothly
-    zoomToNode(node);
+    if (shouldZoom) zoomToNode(node);
 }
 
-// Populate reference list on inspector sidebar
-function populateCitationsList(elementId, links, directionKey) {
+function populateCitationsList(elementId, edges, directionKey) {
     const listEl = document.getElementById(elementId);
     listEl.innerHTML = "";
-
-    if (links.length === 0) {
+    if (!edges.length) {
         listEl.innerHTML = `<li class="no-citations">無引用記錄</li>`;
         return;
     }
 
-    links.forEach(link => {
+    for (const edge of edges) {
+        const targetNode = nodeById.get(edge[directionKey]);
+        if (!targetNode) continue;
         const item = document.createElement("li");
         item.className = "citation-item";
-
-        const targetNodeObj = link[directionKey];
-        const badgeClass = link.is_external ? "external" : "internal";
-        const badgeLabel = link.is_external ? "跨法規" : "本法";
-        
+        const badgeClass = edge.is_external ? "external" : "internal";
+        const badgeLabel = edge.is_external ? "跨法規" : "本法";
         let metaHtml = `<span class="cit-badge ${badgeClass}">${badgeLabel}</span>`;
-        if (link.kind === "relative") {
-            metaHtml += `<span class="cit-badge relative">相對引用</span>`;
-        }
-
-        let subRefHtml = "";
-        if (link.sub_ref) {
-            subRefHtml = `<div class="citation-subref">詳情：${escapeHtml(link.sub_ref)}</div>`;
-        }
-
-        let reviewHtml = "";
-        if (link.needs_review) {
-            reviewHtml = `
-                <div class="citation-review-flag">
-                    <span class="review-icon">⚠️</span>
-                    <span>信心度低 (${Math.round(link.confidence * 100)}%) 需複核</span>
-                </div>
-            `;
-        }
+        if (edge.kind === "relative") metaHtml += `<span class="cit-badge relative">相對引用</span>`;
+        const subRefHtml = edge.sub_ref ? `<div class="citation-subref">細部：${escapeHtml(edge.sub_ref)}</div>` : "";
+        const reviewHtml = edge.needs_review
+            ? `<div class="citation-review-flag"><span>⚠️</span><span>信心度 ${Math.round(edge.confidence * 100)}% 需複核</span></div>` : "";
 
         item.innerHTML = `
             <div class="citation-header">
-                <span class="citation-target-id">${escapeHtml(targetNodeObj.id)}</span>
+                <span class="citation-target-id">${escapeHtml(targetNode.law_name)} ${escapeHtml(targetNode.article_zh)}</span>
                 <div class="citation-meta">${metaHtml}</div>
             </div>
             ${subRefHtml}
@@ -727,58 +861,58 @@ function populateCitationsList(elementId, links, directionKey) {
         `;
 
         item.addEventListener("click", () => {
-            selectNode(targetNodeObj);
+            if (!activeFilters.laws.has(targetNode.law_code) || (activeFilters.egoNodeId && activeFilters.egoNodeId !== targetNode.id)) {
+                activeFilters.laws.add(targetNode.law_code);
+                activeFilters.egoNodeId = null;
+                syncFilterControlsUI();
+                rebuildGraph(targetNode);
+            } else {
+                selectNode(targetNode);
+            }
         });
-
         listEl.appendChild(item);
-    });
+    }
 }
 
-// Smooth zoom to focused node
 function zoomToNode(node) {
-    if (!svg) return;
-    
-    const width = document.getElementById("svg-container").clientWidth;
-    const height = document.getElementById("svg-container").clientHeight;
-    
+    if (!svg || !Number.isFinite(node.x) || !Number.isFinite(node.y)) return;
+    const el = document.getElementById("svg-container");
+    const width = el.clientWidth || 800;
+    const height = el.clientHeight || 600;
     const transform = d3.zoomIdentity
         .translate(width / 2, height / 2)
-        .scale(1.5)
+        .scale(1.35)
         .translate(-node.x, -node.y);
-
-    svg.transition()
-        .duration(750)
-        .call(zoomBehavior.transform, transform);
+    svg.transition().duration(450).call(zoomBehavior.transform, transform);
 }
 
-// Fit zoom viewport showing all nodes
-function resetZoomFit() {
-    if (!svg || !rawData || rawData.nodes.length === 0) return;
+function resetZoomFit(nodesSubset = null) {
+    if (!svg || !rawData) return;
+    const list = Array.isArray(nodesSubset) ? nodesSubset : (nodeSelection ? nodeSelection.data() : []);
+    if (!list.length) return;
 
-    const width = document.getElementById("svg-container").clientWidth;
-    const height = document.getElementById("svg-container").clientHeight;
+    const el = document.getElementById("svg-container");
+    const width = el.clientWidth || 800;
+    const height = el.clientHeight || 600;
 
-    // Find bounding box of all nodes
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-    rawData.nodes.forEach(n => {
+    for (const n of list) {
+        if (!Number.isFinite(n.x) || !Number.isFinite(n.y)) continue;
         if (n.x < minX) minX = n.x;
         if (n.x > maxX) maxX = n.x;
         if (n.y < minY) minY = n.y;
         if (n.y > maxY) maxY = n.y;
-    });
+    }
+    if (!Number.isFinite(minX)) return;
 
-    const graphWidth = (maxX - minX) || 100;
-    const graphHeight = (maxY - minY) || 100;
-    const centerX = (minX + maxX) / 2;
-    const centerY = (minY + maxY) / 2;
-
-    const scale = Math.min(width / (graphWidth + 100), height / (graphHeight + 100), 1.5);
+    const gw = (maxX - minX) || 120;
+    const gh = (maxY - minY) || 120;
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+    const scale = Math.max(0.2, Math.min(width / (gw + 120), height / (gh + 120), 1.4));
     const transform = d3.zoomIdentity
         .translate(width / 2, height / 2)
         .scale(scale)
-        .translate(-centerX, -centerY);
-
-    svg.transition()
-        .duration(750)
-        .call(zoomBehavior.transform, transform);
+        .translate(-cx, -cy);
+    svg.transition().duration(450).call(zoomBehavior.transform, transform);
 }

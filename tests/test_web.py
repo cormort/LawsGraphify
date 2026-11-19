@@ -192,7 +192,6 @@ def test_favourites_export_and_import(page, base_url):
     group = page.locator(".fav-group").first
     assert "預算法" in group.inner_text() and "第 3 條" in group.inner_text()
 
-    page.once("dialog", lambda d: d.accept())  # "已複製收藏…"
     page.click("[data-fav-io=export]")
     page.wait_for_function("navigator.clipboard.readText().then(t => t.length > 0)")
     exported = page.evaluate("navigator.clipboard.readText()")
@@ -201,9 +200,11 @@ def test_favourites_export_and_import(page, base_url):
     page.evaluate("localStorage.clear()")
     page.reload()
     page.wait_for_selector("[data-fav-io=import]")
-    dialogs = iter([lambda d: d.accept(exported + " bogus"), lambda d: d.accept()])
-    page.on("dialog", lambda d: next(dialogs)(d))
     page.click("[data-fav-io=import]")
+    page.wait_for_selector("#fav-modal[open]")
+    page.fill("#fav-import-text", exported + " bogus")
+    assert "1 筆有效" in page.locator("#fav-import-preview").inner_text()
+    page.click("#fav-import-confirm")
     page.wait_for_selector(".fav-group")
     assert "第 3 條" in page.locator(".fav-group").first.inner_text()
 
@@ -431,9 +432,12 @@ def test_read_aloud(browser, base_url):
     assert set(page.evaluate("rates")) == {1}
 
     # Speed: steps through the rates, is remembered, and applies from the next sentence
+    page.click("#prefs-btn")
     rate = page.locator("#rate-btn")
+    assert rate.is_visible()
     assert rate.inner_text() == "🔊 1×"
     button.click()
+    assert page.locator("#speech-bar").is_visible()
     rate.click()
     assert rate.inner_text() == "🔊 1.25×"
     assert page.evaluate("JSON.parse(localStorage.getItem('speechRate'))") == 1.25
@@ -442,6 +446,7 @@ def test_read_aloud(browser, base_url):
     for _ in range(4):
         rate.click()
     assert rate.inner_text() == "🔊 1×"
+    page.click("#prefs-btn")  # close popover
 
     go(page, "預算法")
     page.evaluate("spoken.length = 0")
@@ -456,6 +461,7 @@ def test_read_aloud(browser, base_url):
     page.locator("[data-speak-all]").click()
     assert page.locator(".law-article.speaking").count() == 0
     assert page.locator("[data-speak-all]").inner_text() == "朗讀全文"
+    assert page.locator("#speech-bar").is_hidden()
 
     page.locator("[data-speak-all]").click()
     assert page.locator(".law-article.speaking").get_attribute("id") == "a-BUDGET-0001"
@@ -463,3 +469,90 @@ def test_read_aloud(browser, base_url):
     assert page.evaluate("speaking") is None
     context.close()
     assert errors == []
+
+
+def test_clean_search_bar_and_scoped_search(page):
+    go(page, "基金")
+    assert page.input_value("#q") == ""
+    assert "收支辦法" in page.locator("#search-scope").inner_text()
+
+    go(page, "其他")
+    assert page.input_value("#q") == ""
+    assert page.locator("#search-scope").is_hidden()
+
+    go(page, "預算法")
+    assert page.input_value("#q") == ""
+    assert "預算法" in page.locator("#search-scope").inner_text()
+    page.fill("#q", "流用")
+    page.press("#q", "Enter")
+    page.wait_for_selector(".search-summary")
+    assert "在《預算法》中找到" in page.locator("h3").first.inner_text()
+
+
+def test_section_filters_counter_and_reset(page):
+    go(page, "基金")
+    total = int(page.locator("#section-count").inner_text())
+    assert total > 50
+    page.select_option("select[name=t]", "作業基金")
+    filtered = page.locator("#section-count").inner_text()
+    assert "/" in filtered
+    shown = int(filtered.split("/")[0].strip())
+    assert 0 < shown < total
+    assert page.locator("#section-reset").is_visible()
+    page.click("#section-reset")
+    assert int(page.locator("#section-count").inner_text()) == total
+
+
+def test_inlaw_filter_and_empty_state(page):
+    go(page, "預算法")
+    total = page.locator("#full-text .law-article").count()
+    page.fill("#law-filter", "預備金")
+    shown = page.locator("#full-text .law-article:visible").count()
+    assert 0 < shown < total
+    assert page.locator("#full-text mark").count() > 0
+
+    page.fill("#law-filter", "絕對不會出現的測試字詞xyz")
+    assert page.locator("#full-text-empty").is_visible()
+    page.click("#full-text-reset")
+    assert page.locator("#full-text .law-article:visible").count() == total
+
+
+def test_article_outgoing_and_incoming_filter(page):
+    go(page, "預算法第62條")
+    assert page.locator(".outgoing-box").is_visible()
+    go(page, "預算法第34條")
+    if page.locator(".cite-filter").count() > 0:
+        all_cards = page.locator(".cite-card:visible").count()
+        page.click(".cite-filter [data-cite-scope='ext']")
+        ext_cards = page.locator(".cite-card:visible").count()
+        assert 0 < ext_cards < all_cards
+
+
+def test_search_facet_filter_chips(page):
+    go(page, "流用 預備金")
+    assert page.locator(".facet-bar [data-facet]").count() > 1
+    first_law_chip = page.locator(".facet-bar [data-facet]:not([data-facet=''])").first
+    target_code = first_law_chip.get_attribute("data-facet")
+    expected_count = int(re.search(r"\((\d+)\)", first_law_chip.inner_text()).group(1))
+    first_law_chip.click()
+    assert page.locator("#search-hits .card").count() == expected_count
+    assert all(
+        c == target_code
+        for c in page.evaluate("[...document.querySelectorAll('#search-hits .card')].map(el => el.dataset.lawCode)")
+    )
+
+
+def test_saved_drawer_and_preferences_popover(page):
+    page.click("#prefs-btn")
+    assert page.locator("#prefs-menu").is_visible()
+    page.click("[data-theme-opt='dark']")
+    assert page.evaluate("document.documentElement.dataset.theme") == "dark"
+    assert page.evaluate("JSON.parse(localStorage.getItem('theme'))") == "dark"
+    page.click("#prefs-btn")
+
+    go(page, "預算法")
+    page.locator(".side [data-fav]").click()
+    assert page.locator("#fav-badge").inner_text() == "1"
+    page.click("#drawer-btn")
+    assert page.locator("#saved-drawer").is_visible()
+    assert "預算法" in page.locator("#drawer-body").inner_text()

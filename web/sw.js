@@ -2,9 +2,9 @@
 // (stale-while-revalidate), so the app opens instantly with or without a network.
 // Law texts (laws/) are not handled here: the page keeps them in DATA and asks
 // before downloading the ones that changed.
-const CACHE = "laws-v4";
+const CACHE = "laws-v5";
 const DATA = "laws-data";
-const SHELL = ["./", "index.html", "manifest.webmanifest",
+const SHELL = ["./", "index.html", "codex.css", "codex.js", "manifest.webmanifest",
                "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", event => {

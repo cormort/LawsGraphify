@@ -5,11 +5,12 @@ on every article to identify references (edges), and compiles them into a single
 knowledge graph JSON file (nodes & edges).
 """
 
+from collections import defaultdict
 import hashlib
+import json
 import os
 import re
 from datetime import date
-import json
 
 import yaml
 from citation_resolver import extract_short_names, parse_citations, load_aliases, normalize_text
@@ -40,12 +41,19 @@ def write_law_files(graph, out_dir):
     citations they make."""
     os.makedirs(out_dir, exist_ok=True)
     law_of = {n["id"]: n["law_code"] for n in graph["nodes"]}
+    nodes_by_law = defaultdict(list)
+    for n in graph["nodes"]:
+        nodes_by_law[n["law_code"]].append(n)
+    edges_by_law = defaultdict(list)
+    for e in graph["edges"]:
+        edges_by_law[law_of[e["source"]]].append(e)
+
     laws = []
     for law in graph["laws"]:
         code = law["code"]
         body = json.dumps({
-            "nodes": [n for n in graph["nodes"] if n["law_code"] == code],
-            "edges": [e for e in graph["edges"] if law_of[e["source"]] == code],
+            "nodes": nodes_by_law[code],
+            "edges": edges_by_law[code],
         }, ensure_ascii=False, separators=(",", ":"))
         with open(os.path.join(out_dir, f"{code}.json"), "w", encoding="utf-8") as f:
             f.write(body)
@@ -71,18 +79,22 @@ def dgbas_index():
         return json.load(f)
 
 
-def configured_links():
+def load_alias_config():
+    with open(os.path.join(BASE_DIR, "config", "law_aliases.yaml"), encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
+
+
+def configured_links(cfg=None):
     """Code -> URL from law_aliases.yaml's links: laws published elsewhere (行政院,
     人事總處, 立法院) that are linked rather than fetched."""
-    with open(os.path.join(BASE_DIR, "config", "law_aliases.yaml"), encoding="utf-8") as f:
-        return yaml.safe_load(f).get("links") or {}
+    return (cfg if cfg is not None else load_alias_config()).get("links") or {}
 
 
-def categories(laws, links):
+def categories(laws, links, cfg=None):
     """Tab -> group -> codes from law_aliases.yaml, for the home page tabs. A law
     the config leaves out (funds and abolished ones aside) goes to 其他／未分類."""
-    with open(os.path.join(BASE_DIR, "config", "law_aliases.yaml"), encoding="utf-8") as f:
-        cats = yaml.safe_load(f).get("categories") or {}
+    raw_cats = (cfg if cfg is not None else load_alias_config()).get("categories") or {}
+    cats = {tab: {grp: list(codes) for grp, codes in groups.items()} for tab, groups in raw_cats.items()}
     listed = {code for groups in cats.values() for codes in groups.values() for code in codes}
     shown = [law["code"] for law in laws if law["kind"] not in ("特種基金", "廢止")] + [l["code"] for l in links]
     unlisted = [code for code in shown if code not in listed]
@@ -92,11 +104,11 @@ def categories(laws, links):
     return cats
 
 
-def attachment_only(name_to_code, laws, dgbas):
+def attachment_only(name_to_code, laws, dgbas, cfg=None):
     """Targets with no article text the query page links to the original of
     instead: DGBAS rules published only as attachments, and configured links."""
     have = {law["code"] for law in laws}
-    links, elsewhere = {}, configured_links()
+    links, elsewhere = {}, configured_links(cfg)
     for name, code in name_to_code.items():
         url = elsewhere.get(code) or (DGBAS_PAGE + dgbas[name] if name in dgbas else None)
         if code not in have and url:
@@ -130,6 +142,7 @@ def original_offsets(text):
 def build_graph():
     # 1. Load aliases and map law names to codes
     name_to_code = load_aliases()
+    alias_cfg = load_alias_config()
 
     laws_dir = os.path.join(BASE_DIR, "data", "laws_json")
     if not os.path.exists(laws_dir):
@@ -138,10 +151,12 @@ def build_graph():
 
     # Files name their code; register each real name (this year's 編製辦法 is
     # configured as "中華民國○年度…") so citations of it resolve
-    for filename in os.listdir(laws_dir):
+    law_files = {}
+    for filename in sorted(os.listdir(laws_dir)):
         if filename.endswith(".json"):
             with open(os.path.join(laws_dir, filename), encoding="utf-8") as f:
                 law_data = json.load(f)
+            law_files[filename] = law_data
             if law_data.get("code"):
                 name_to_code[normalize_text(law_data["name"])] = law_data["code"]
                 name_to_code[law_data["code"]] = law_data["code"]
@@ -154,14 +169,8 @@ def build_graph():
     print("Building Knowledge Graph from extracted laws...")
 
     # Iterate through all populated law files
-    for filename in sorted(os.listdir(laws_dir)):
-        if not filename.endswith(".json"):
-            continue
-
-        filepath = os.path.join(laws_dir, filename)
+    for filename, law_data in law_files.items():
         try:
-            with open(filepath, "r", encoding="utf-8") as f:
-                law_data = json.load(f)
 
             law_name = law_data.get("name", "")
             law_code = law_data.get("code") or name_to_code.get(normalize_text(law_name))
@@ -253,7 +262,7 @@ def build_graph():
             print(f" Error processing file {filename}: {e}")
 
     # Output consolidated graph
-    links = attachment_only(name_to_code, laws, dgbas)
+    links = attachment_only(name_to_code, laws, dgbas, alias_cfg)
     graph_data = {
         "nodes": nodes,
         "edges": edges,
@@ -261,7 +270,7 @@ def build_graph():
         "aliases": name_to_code,
         "laws": sorted(laws, key=lambda law: (KIND_ORDER.index(law["kind"]), law["name"])),
         "links": links,
-        "categories": categories(laws, links),
+        "categories": categories(laws, links, alias_cfg),
         "built": date.today().isoformat(),
         # MOJ open data's own date, written by fetch_laws.py
         **load_meta(),

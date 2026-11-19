@@ -145,7 +145,7 @@ def load_moj(refresh: bool) -> tuple[dict[str, dict], str]:
         for law in data["Laws"]:
             name = normalize_text(law["LawName"])
             # A current record wins over an abolished one ("廢") of the same name
-            if name not in laws or laws[name].get("LawAbandonNote") and not law.get("LawAbandonNote"):
+            if name not in laws or (laws[name].get("LawAbandonNote") and not law.get("LawAbandonNote")):
                 laws[name] = law
     return laws, updated
 
@@ -347,7 +347,7 @@ def main():
     # Left over from an earlier run. Last year's version of a law written this run
     # (same code) is replaced; anything else graph_builder would still load, so
     # say so instead of deleting silently
-    stale = sorted(set(os.listdir(OUTPUT_DIR)) - written)
+    stale = sorted(set(f for f in os.listdir(OUTPUT_DIR) if f.endswith(".json")) - written)
     for name in list(stale):
         with open(os.path.join(OUTPUT_DIR, name), encoding="utf-8") as f:
             code = json.load(f).get("code")

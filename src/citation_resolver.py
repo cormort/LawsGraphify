@@ -8,14 +8,14 @@ and computes confidence scores and review flags.
 
 import os
 import re
+import sys
 import unicodedata
 
 import yaml
 
 # Cache for law aliases config
 _aliases_map = None
-_sorted_aliases_cache = None
-_sorted_aliases_id = None
+_base_sorted_aliases = None
 
 # Known maximum article numbers for the 4 core laws
 LAW_MAX_ARTICLES = {
@@ -91,7 +91,7 @@ def load_aliases() -> dict[str, str]:
     Returns:
         A dictionary mapping lowercase/standard law name to standard law code.
     """
-    global _aliases_map
+    global _aliases_map, _base_sorted_aliases
     if _aliases_map is not None:
         return _aliases_map
 
@@ -102,12 +102,14 @@ def load_aliases() -> dict[str, str]:
         "law_aliases.yaml",
     )
     if not os.path.exists(config_path):
+        _base_sorted_aliases = []
         return _aliases_map
 
     try:
         with open(config_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
             if not data or "aliases" not in data:
+                _base_sorted_aliases = []
                 return _aliases_map
             
             aliases_data = data["aliases"]
@@ -123,10 +125,10 @@ def load_aliases() -> dict[str, str]:
                     for name in val:
                         _aliases_map[normalize_text(name)] = key
                     _aliases_map[key] = key
-    except Exception:
-        # In case of any read issues, return whatever was built or empty map
-        pass
+    except Exception as e:
+        print(f"Warning: failed to load aliases from {config_path}: {e}", file=sys.stderr)
 
+    _base_sorted_aliases = sorted(_aliases_map.keys(), key=len, reverse=True)
     return _aliases_map
 
 
@@ -256,7 +258,9 @@ def parse_article_no(article_no: int | str | None) -> tuple[int, int | None]:
 
 
 def find_law_name_in_substring(
-    sub_text: str, aliases: dict[str, str]
+    sub_text: str,
+    aliases: dict[str, str],
+    sorted_aliases: list[str] | None = None,
 ) -> tuple[str | None, str | None, bool]:
     """Searches a substring for the last occurrence of a known alias or
     suspected law name.
@@ -264,6 +268,7 @@ def find_law_name_in_substring(
     Args:
         sub_text: Substring before the current citation match.
         aliases: Alias mapping dictionary.
+        sorted_aliases: Optional pre-sorted list of alias keys (longest first).
 
     Returns:
         Tuple of (law_code, law_name, is_suspected).
@@ -275,11 +280,11 @@ def find_law_name_in_substring(
         return None, None, False
 
     # 1. Search for known aliases (longest first to avoid subset matching issues)
-    global _sorted_aliases_cache, _sorted_aliases_id
-    if _sorted_aliases_cache is None or _sorted_aliases_id is not id(aliases):
-        _sorted_aliases_cache = sorted(aliases.keys(), key=len, reverse=True)
-        _sorted_aliases_id = id(aliases)
-    sorted_aliases = _sorted_aliases_cache
+    if sorted_aliases is None:
+        if aliases is _aliases_map and _base_sorted_aliases is not None:
+            sorted_aliases = _base_sorted_aliases
+        else:
+            sorted_aliases = sorted(aliases.keys(), key=len, reverse=True)
     best_alias = None
     best_idx = -1
 
@@ -388,6 +393,9 @@ def parse_citations(
     aliases = load_aliases()
     if local_aliases:
         aliases = {**aliases, **local_aliases}
+        sorted_aliases = sorted(aliases.keys(), key=len, reverse=True)
+    else:
+        sorted_aliases = _base_sorted_aliases
     normalized_text = normalize_text(text)
     
     # Parse current source coordinates
@@ -415,7 +423,7 @@ def parse_citations(
             sub_text = sub_text[boundary + 1:]
             active_law_code, active_law_name = current_law_code, None
         resolved_code, law_name, is_suspected = find_law_name_in_substring(
-            sub_text, aliases
+            sub_text, aliases, sorted_aliases
         )
         
         # "本法" / "本要點" / "本辦法"… after the last named law switches scope
