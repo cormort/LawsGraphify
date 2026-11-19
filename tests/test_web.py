@@ -501,7 +501,7 @@ def test_section_filters_counter_and_reset(page):
     assert page.locator("#section-reset").is_visible()
     page.click("#section-reset")
     assert int(page.locator("#section-count").inner_text()) == total
-    page.fill(".section-search input[name=n]", "文化發展基金收支保管及運用辦法")
+    page.fill("#q", "文化發展基金收支保管及運用辦法")
     assert page.locator("#section-count").inner_text() == f"1 / {total}"
     assert "文化發展基金" in page.locator("#section-list a:visible").first.inner_text()
 
@@ -509,12 +509,12 @@ def test_section_filters_counter_and_reset(page):
 def test_inlaw_filter_and_empty_state(page):
     go(page, "預算法")
     total = page.locator("#full-text .law-article").count()
-    page.fill("#law-filter", "預備金")
+    page.fill("#q", "預備金")
     shown = page.locator("#full-text .law-article:visible").count()
     assert 0 < shown < total
     assert page.locator("#full-text mark").count() > 0
 
-    page.fill("#law-filter", "絕對不會出現的測試字詞xyz")
+    page.fill("#q", "絕對不會出現的測試字詞xyz")
     assert page.locator("#full-text-empty").is_visible()
     page.click("#full-text-reset")
     assert page.locator("#full-text .law-article:visible").count() == total

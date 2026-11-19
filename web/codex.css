@@ -230,54 +230,53 @@ button { cursor: pointer; }
     position: absolute;
     right: 0;
     top: calc(100% + 8px);
-    width: min(310px, calc(100vw - 24px));
+    width: min(270px, calc(100vw - 24px));
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    padding: 14px;
+    padding: 12px 14px;
     z-index: 35;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .pref-row {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .pref-label {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--muted);
-    letter-spacing: 0.02em;
+    white-space: nowrap;
 }
 
 .pref-control {
     display: flex;
     align-items: center;
     gap: 6px;
-    flex-wrap: wrap;
 }
 
 .pref-val {
-    flex: 1;
+    min-width: 38px;
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
 }
 
 .seg-group {
     display: flex;
-    width: 100%;
-    padding: 3px;
+    padding: 2px;
     border-radius: var(--radius-sm);
     background: var(--surface-2);
     border: 1px solid var(--border);
-    gap: 3px;
+    gap: 2px;
 }
 
 .seg-btn {
@@ -285,10 +284,11 @@ button { cursor: pointer; }
     border: 0;
     background: transparent;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 500;
-    padding: 6px 8px;
+    padding: 5px 10px;
     border-radius: 6px;
+    white-space: nowrap;
 }
 
 .seg-btn[aria-pressed="true"] {
@@ -972,60 +972,24 @@ details > summary::before { content: "▸ "; color: var(--muted); }
 details[open] > summary::before { content: "▾ "; }
 details.card[open] > summary { margin-bottom: 8px; }
 
-/* Section Search (收支辦法 / 廢止專區) */
-.section-controls {
-    padding: 14px;
-}
-
+/* Section Search (收支辦法) */
 .section-search {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
-    margin: 0;
-}
-
-.section-search .search-input-wrap {
-    flex: 1 1 240px;
-    display: flex;
-    gap: 8px;
-}
-
-.section-search input[type=search] {
-    flex: 1;
-    min-width: 0;
-    font-size: 16px;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--bg);
-}
-
-.section-search .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    flex-basis: 100%;
-    min-width: 0;
+    margin: 10px 0 4px;
 }
 
 .section-search select {
-    flex: 1 1 160px;
+    flex: 1 1 130px;
     min-width: 0;
-    font-size: 15px;
-    padding: 8px 10px;
+    min-height: 38px;
+    font-size: 14px;
+    padding: 6px 10px;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     background: var(--surface);
-}
-
-.topic-bar {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid var(--border);
 }
 
 .chips {

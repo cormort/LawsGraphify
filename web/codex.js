@@ -706,22 +706,14 @@ function renderSection(key) {
     const topAction = key === "基金"
         ? `<a class="tool subtle-link" href="#${encodeURIComponent("廢止專區")}">廢止法規（${abolishedCount}）→</a>`
         : `<a class="tool subtle-link" href="#${encodeURIComponent("基金")}">← 返回現行收支辦法</a>`;
-    const selects = key !== "基金" ? "" : `<div class="filters">
+    const filterBar = key !== "基金" ? `<form class="section-search" data-section="${escapeHtml(key)}" hidden></form>` : `<form class="section-search" data-section="${escapeHtml(key)}">
         <select name="t" aria-label="基金類別"><option value="">全部基金類別</option>${FUND_TYPES.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("")}</select>
         <select name="o" aria-label="主管機關"><option value="">全部主管機關</option>${owners.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("")}</select>
-        <button type="button" class="tool" id="section-reset" hidden>重設篩選</button>
-    </div>`;
+        <select name="topic" aria-label="常用條文主題快搜"><option value="">常用主題快搜…</option>${sec.topics.map(t => `<option value="${escapeHtml(t)}">搜「${escapeHtml(t)}」條文</option>`).join("")}</select>
+        <button type="button" class="tool" id="section-reset" hidden>重設</button>
+    </form>`;
     return `<div class="title-row"><div><h2>${escapeHtml(sec.title)}</h2><p class="muted">${escapeHtml(sec.note(list.length))}</p></div>${topAction}</div>
-        <div class="card section-controls">
-            <form class="section-search" data-section="${escapeHtml(key)}">
-                <div class="search-input-wrap">
-                    <input name="n" type="search" enterkeyhint="search" placeholder="輸入名稱即時篩選，或按「搜條文」搜尋內容" aria-label="篩選名稱，或在${escapeHtml(sec.where)}中搜尋條文">
-                    <button class="go" type="submit">搜條文</button>
-                </div>
-                ${selects}
-            </form>
-            ${sec.topics.length ? `<div class="topic-bar"><span class="muted">常用條文主題：</span><div class="chips">${sec.topics.map(t => `<a class="tool" data-topic="${escapeHtml(t)}" href="#${encodeURIComponent(key + " " + t)}">${escapeHtml(t)}</a>`).join("")}</div></div>` : ""}
-        </div>
+        ${filterBar}
         <h3 id="section-heading">${escapeHtml(sec.where)}（<span id="section-count">${list.length}</span>）</h3>
         <div class="card list" id="section-list">${list.map(l => {
             const meta = FUND_META[l.code];
@@ -735,8 +727,8 @@ function renderSection(key) {
         ${key === "基金" ? `<div class="card list"><a href="#${encodeURIComponent("廢止專區")}"><span class="row-main"><span class="row-title">${escapeHtml(SECTIONS["廢止專區"].title)} →</span></span><span class="count">${abolishedCount} 部</span></a></div>` : ""}`;
 }
 
-function applySectionFilters(f, changedEl = null) {
-    if (!f) return;
+function applySectionFilters(f = document.querySelector(".section-search"), changedEl = null) {
+    if (!f) return 0;
     const key = f.dataset.section;
     if (f.t && f.o && changedEl === f.t) {
         const keep = f.o.value;
@@ -745,7 +737,13 @@ function applySectionFilters(f, changedEl = null) {
         f.o.innerHTML = `<option value="">全部主管機關</option>` + owners.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("");
         f.o.value = owners.includes(keep) ? keep : "";
     }
-    const t = f.t?.value || "", o = f.o?.value || "", rawN = f.n.value;
+    if (f.topic && changedEl === f.topic && f.topic.value) {
+        const topic = f.topic.value;
+        f.topic.value = "";
+        location.hash = encodeURIComponent(key + filterTokens(f) + " " + topic);
+        return 0;
+    }
+    const t = f.t?.value || "", o = f.o?.value || "", rawN = document.getElementById("q")?.value || "";
     const saved = sessionStore.get("sectionFilters", {});
     saved[key] = { t, o, n: rawN };
     sessionStore.set("sectionFilters", saved);
@@ -769,12 +767,10 @@ function applySectionFilters(f, changedEl = null) {
     const resetBtn = document.getElementById("section-reset");
     if (resetBtn) resetBtn.hidden = !t && !o && !rawN.trim();
 
-    document.querySelectorAll(".chips a[data-topic]").forEach(a => {
-        a.href = "#" + encodeURIComponent(key + filterTokens(f) + " " + a.dataset.topic);
-    });
     if (currentScope && currentScope.type === "section" && currentScope.section === key) {
         currentScope.prefix = key + filterTokens(f);
     }
+    return shown;
 }
 
 function restoreSectionFilters() {
@@ -785,25 +781,18 @@ function restoreSectionFilters() {
     if (f.t && saved.t) f.t.value = saved.t;
     applySectionFilters(f, f.t);
     if (f.o && saved.o) f.o.value = saved.o;
-    if (saved.n) f.n.value = saved.n;
+    if (saved.n) {
+        const input = document.getElementById("q");
+        const clearBtn = document.getElementById("q-clear");
+        if (input) input.value = saved.n;
+        if (clearBtn) clearBtn.hidden = !saved.n;
+    }
     applySectionFilters(f);
 }
 
-function sortLawCodes(codes, sortMode) {
-    const arr = [...codes];
-    if (sortMode === "count") {
-        return arr.sort((a, b) => (lawByCode.get(b)?.count || 0) - (lawByCode.get(a)?.count || 0) || newestFirst(a, b));
-    }
-    if (sortMode === "name") {
-        return arr.sort((a, b) => lawName(a).localeCompare(lawName(b), "zh-Hant"));
-    }
-    return arr.sort(newestFirst);
-}
-
 function renderGroups(tab) {
-    const order = codes => sortLawCodes(codes.filter(c => lawByCode.has(c) || links.has(c)), sortMode);
+    const order = codes => codes.filter(c => lawByCode.has(c) || links.has(c)).sort(newestFirst);
     const byLevel = store.get("groupBy", "topic") === "level";
-    const sortMode = store.get("groupSort", "date");
     let groups = Object.entries(categories[tab] || {}).map(([group, codes]) => [group, order(codes)]);
     if (byLevel) {
         const all = order(groups.flatMap(([, codes]) => codes));
@@ -812,23 +801,17 @@ function renderGroups(tab) {
     }
     groups = groups.filter(([, codes]) => codes.length);
     const total = groups.reduce((n, [, codes]) => n + codes.length, 0);
-    const toggle = ["topic", "level"].map(by => `<button class="tool" type="button" data-group-by="${by}" aria-pressed="${byLevel === (by === "level")}">${by === "level" ? "依層級" : "依主題"}</button>`).join("");
     const anyCollapsed = groups.some(([, codes]) => codes.length > 5);
-    const topicPills = !byLevel && groups.length > 2
-        ? `<div class="topic-pills">${groups.map(([g]) => `<button type="button" data-open-group="${escapeHtml(g)}">${escapeHtml(g)}</button>`).join("")}</div>` : "";
+    const toggle = ["topic", "level"].map(by => `<button class="tool" type="button" data-group-by="${by}" aria-pressed="${byLevel === (by === "level")}">${by === "level" ? "依層級" : "依主題"}</button>`).join("");
 
     return `<div id="groups" data-tab="${escapeHtml(tab)}">
-        <div class="section-head"><h3>${escapeHtml(tab)}（${total} 部）</h3><div class="tools">${toggle}</div></div>
-        <div class="catalog-controls">
-            <div class="filter-box"><input type="search" id="group-filter" placeholder="在此篩選法規名稱…" aria-label="篩選法規名稱"></div>
-            <select id="group-sort" aria-label="排序方式">
-                <option value="date"${sortMode === "date" ? " selected" : ""}>最新修正</option>
-                <option value="count"${sortMode === "count" ? " selected" : ""}>條文數</option>
-                <option value="name"${sortMode === "name" ? " selected" : ""}>法規名稱</option>
-            </select>
-            <button class="tool" type="button" id="toggle-all-groups" data-state="${anyCollapsed ? "expand" : "collapse"}">${anyCollapsed ? "全部展開" : "全部收合"}</button>
+        <div class="section-head">
+            <h3>${escapeHtml(tab)}（<span id="groups-count" data-total="${total}">${total}</span> 部）</h3>
+            <div class="tools">
+                ${toggle}
+                <button class="tool" type="button" id="toggle-all-groups" data-state="${anyCollapsed ? "expand" : "collapse"}">${anyCollapsed ? "全部展開" : "全部收合"}</button>
+            </div>
         </div>
-        ${topicPills}
         ${groups.map(([group, codes]) => {
             return `<details class="card" data-group="${escapeHtml(group)}"${codes.length > 5 ? "" : " open"}><summary>${escapeHtml(group)}（<span class="grp-count">${codes.length}</span>）</summary>
                 <div class="list">${codes.map(c => {
@@ -838,8 +821,37 @@ function renderGroups(tab) {
                     return `<a href="#${encodeURIComponent(c)}"><span class="row-main"><span class="row-title">${escapeHtml(law.name)}</span><span class="meta-pill">${escapeHtml(kLabel)}</span></span><span class="count">${escapeHtml(lawDate(c))} · ${law.count} ${unit(c)}</span></a>`;
                 }).join("")}</div></details>`;
         }).join("")}
-        <div class="card empty-inline" id="groups-empty" hidden>沒有符合名稱的法規。</div>
+        <div class="card empty-inline" id="groups-empty" hidden>本頁沒有符合名稱的法規，可按 Enter 搜尋全部條文。</div>
     </div>`;
+}
+
+function applyGroupFilter(raw = document.getElementById("q")?.value || "") {
+    const groupsEl = document.getElementById("groups");
+    if (!groupsEl) return 0;
+    const words = raw.normalize("NFKC").replace(/台/g, "臺").trim().split(/\s+/).filter(Boolean);
+    let totalShown = 0;
+    groupsEl.querySelectorAll("details").forEach(d => {
+        let grpShown = 0;
+        d.querySelectorAll(".list a").forEach(a => {
+            const title = (a.querySelector(".row-title")?.textContent || a.textContent).normalize("NFKC").replace(/台/g, "臺");
+            const ok = words.every(w => title.includes(w));
+            a.hidden = !ok;
+            if (ok) grpShown++;
+        });
+        const cntEl = d.querySelector(".grp-count");
+        if (cntEl) cntEl.textContent = grpShown;
+        d.hidden = grpShown === 0;
+        if (words.length && grpShown > 0) d.open = true;
+        totalShown += grpShown;
+    });
+    const countSpan = document.getElementById("groups-count");
+    if (countSpan) {
+        const total = Number(countSpan.dataset.total) || totalShown;
+        countSpan.textContent = (!words.length || totalShown === total) ? `${total}` : `${totalShown} / ${total}`;
+    }
+    const emptyEl = document.getElementById("groups-empty");
+    if (emptyEl) emptyEl.hidden = totalShown > 0;
+    return totalShown;
 }
 
 function renderHome() {
@@ -1086,18 +1098,17 @@ function renderFullText(code) {
         <p class="muted">共 ${ids.length} ${unit(code)}，${cited} ${unit(code)}被其他條文引用</p>
         <div class="action-bar">${starButton(code)}${speech ? `<button class="tool" type="button" data-speak-all>朗讀全文</button>` : ""}${EXPORT_BUTTON}${PRINT_BUTTON}<a class="tool" href="graph.html#${encodeURIComponent(code)}">關聯圖 ↗</a></div>
         <div class="controls">
-            <form class="jump" data-law="${escapeHtml(code)}">跳至 <input name="n" inputmode="numeric" enterkeyhint="go" aria-label="條號"> ${unit(code)} <button class="tool" type="submit">前往</button></form>
-            <div class="inlaw-filter"><input type="search" id="law-filter" placeholder="在本法內篩選關鍵字…" aria-label="在本法內篩選關鍵字"><button type="button" id="law-filter-clear" class="clear-x" aria-label="清除法內篩選" hidden>×</button><span id="law-filter-count" class="muted"></span></div>
             <div class="check-row">
                 <label class="check-pill"><input type="checkbox" id="only-cited"> 只看被引用的 (${cited})</label>
                 ${fund ? `<label class="check-pill"><input type="checkbox" id="only-own"> 只看本基金特有 (${fund.own})</label>` : ""}
             </div>
+            <div id="law-filter-status" class="muted" hidden></div>
         </div>${fund ? fund.html : ""}`;
     if (chapters.length) {
         html += `<details class="toc"${matchMedia("(min-width: 1100px)").matches ? " open" : ""}><summary>目錄（${chapters.length} 章）</summary>
             ${chapters.map(id => `<button type="button" data-scroll="ch-${escapeHtml(id)}">${escapeHtml(nodes.get(id).chapter)}</button>`).join("")}</details>`;
     }
-    html += `</div><div class="card" id="full-text">`;
+    html += `</div><div class="card" id="full-text" data-law="${escapeHtml(code)}">`;
     const changes = amended();
     let current = "", currentChapterId = "";
     html += ids.map(id => {
@@ -1115,14 +1126,10 @@ function renderFullText(code) {
     return html + `</div></div>`;
 }
 
-function applyInLawFilter() {
+function applyInLawFilter(raw = document.getElementById("q")?.value || "") {
     const ft = document.getElementById("full-text");
-    if (!ft) return;
-    const input = document.getElementById("law-filter");
-    const clearBtn = document.getElementById("law-filter-clear");
-    const countEl = document.getElementById("law-filter-count");
-    const raw = input?.value || "";
-    if (clearBtn) clearBtn.hidden = !raw;
+    if (!ft) return 0;
+    const statusEl = document.getElementById("law-filter-status");
     const words = raw.normalize("NFKC").replace(/台/g, "臺").split(/\s+/).filter(Boolean);
 
     const articles = [...ft.querySelectorAll(".law-article")];
@@ -1162,11 +1169,15 @@ function applyInLawFilter() {
         ch.classList.toggle("filter-hidden", !hasVis);
     });
 
-    if (countEl) countEl.textContent = words.length ? `${matched} 條` : "";
+    if (statusEl) {
+        statusEl.hidden = !words.length;
+        statusEl.innerHTML = words.length ? `關鍵字篩選：符合 <strong>${matched}</strong> / ${articles.length} 條` : "";
+    }
     const visibleCount = scrubList().length;
     const emptyEl = document.getElementById("full-text-empty");
     if (emptyEl) emptyEl.hidden = visibleCount > 0;
     updateScrubber();
+    return matched;
 }
 
 function renderCitedList(code) {
@@ -1283,10 +1294,16 @@ function syncSearchBar(q, raw) {
     if (currentScope) {
         scopeBtn.textContent = currentScope.label + " ×";
         scopeBtn.hidden = false;
-        input.placeholder = `在「${currentScope.label.replace(/^本法：/, "")}」搜尋條文，或輸入其他法規…`;
+        if (currentScope.type === "law" && document.getElementById("full-text")) {
+            input.placeholder = `輸入條號（如 62）跳至該條，或輸入關鍵字即時篩選《${lawName(currentScope.code)}》…`;
+        } else if (currentScope.type === "section") {
+            input.placeholder = `輸入名稱／機關即時篩選清單，或按 Enter 搜尋條文內容…`;
+        } else {
+            input.placeholder = `在「${currentScope.label.replace(/^本法：/, "")}」搜尋條文，或輸入其他法規…`;
+        }
     } else {
         scopeBtn.hidden = true;
-        input.placeholder = "輸入法規名稱、條號（如 預算法 62）或關鍵字";
+        input.placeholder = "即時篩選法規名稱，或輸入條號（如 預算法 62）、關鍵字按查詢";
     }
 
     input.value = q?.type === "search" ? (q.termsRaw ?? raw) : "";
@@ -1358,15 +1375,68 @@ function findMatchingLaws(normText) {
     return scored.sort((a, b) => b.score - a.score || a.name.length - b.name.length).slice(0, 6);
 }
 
-function updateSuggest() {
+function handleUnifiedInput() {
     const raw = qInput.value.trim();
     qClear.hidden = !qInput.value;
+    const norm = raw.normalize("NFKC").replace(/台/g, "臺");
+
+    const ft = document.getElementById("full-text");
+    const secList = document.getElementById("section-list");
+    const groupsEl = document.getElementById("groups");
+
+    // A. In Full-Text Law view with active law scope: live jump to article number OR live filter articles
+    if (ft && currentScope?.type === "law") {
+        const am = norm.replace(/\s+/g, "").match(ARTICLE_PAT);
+        if (!raw) {
+            applyInLawFilter("");
+            hideSuggest();
+            return;
+        }
+        if (am) {
+            applyInLawFilter("");
+            const targetEl = document.getElementById("a-" + nodeId(currentScope.code, toNumber(am[1]), am[2] ? toNumber(am[2]) : null));
+            if (targetEl) targetEl.scrollIntoView();
+            hideSuggest();
+            return;
+        }
+        const matchedCount = applyInLawFilter(raw);
+        if (matchedCount > 0) {
+            hideSuggest();
+            return;
+        }
+    }
+
+    // B. In 收支辦法 / 廢止專區 list view: live filter the fund list
+    if (secList && currentScope?.type === "section") {
+        const shown = applySectionFilters();
+        if (!raw || shown > 0) {
+            hideSuggest();
+            return;
+        }
+    }
+
+    // C. In Home (主計法規) / 其他 groups view: live filter the law groups
+    if (groupsEl && !currentScope) {
+        const shown = applyGroupFilter(raw);
+        // Only show compact suggest if user typed a direct article jump (e.g. "預算法 62") or 0 laws matched in this tab
+        let directQ = raw ? parseQuery(raw) : null;
+        if (directQ?.type !== "article" && raw) {
+            const tm = norm.match(TRAILING_ART_PAT);
+            if (tm && tm[1].trim()) {
+                const topLaw = findMatchingLaws(tm[1].trim()).find(x => !x.url);
+                if (topLaw) directQ = { type: "article", code: topLaw.code, main: toNumber(tm[3]), sub: tm[4] ? toNumber(tm[4]) : null };
+            }
+        }
+        if (!raw || (shown > 0 && directQ?.type !== "article")) {
+            hideSuggest();
+            return;
+        }
+    }
+
     if (!raw) { hideSuggest(); return; }
 
-    const norm = raw.normalize("NFKC").replace(/台/g, "臺");
+    // Render compact quick-jump suggest dropdown
     let itemsHtml = "";
-
-    // 1. Direct article jump check
     let directQ = parseQuery(raw);
     if (directQ?.type !== "article" && currentScope?.type === "law" && ARTICLE_PAT.test(norm.replace(/\s+/g, ""))) {
         const am = norm.replace(/\s+/g, "").match(ARTICLE_PAT);
@@ -1376,15 +1446,12 @@ function updateSuggest() {
         const tm = norm.match(TRAILING_ART_PAT);
         if (tm && tm[1].trim()) {
             const topLaw = findMatchingLaws(tm[1].trim()).find(x => !x.url);
-            if (topLaw) {
-                directQ = { type: "article", code: topLaw.code, main: toNumber(tm[3]), sub: tm[4] ? toNumber(tm[4]) : null };
-            }
+            if (topLaw) directQ = { type: "article", code: topLaw.code, main: toNumber(tm[3]), sub: tm[4] ? toNumber(tm[4]) : null };
         }
     }
     if (directQ?.type === "article") {
         const tid = nodeId(directQ.code, directQ.main, directQ.sub);
-        const exists = nodes.has(tid) || lawOrder.has(directQ.code);
-        if (exists) {
+        if (nodes.has(tid) || lawOrder.has(directQ.code)) {
             itemsHtml += `<button type="button" class="suggest-item jump-direct" role="option" data-suggest-hash="${escapeHtml(encodeURIComponent(tid))}">
                 <span>↗ 直接跳至：${escapeHtml(label(tid))}</span>
                 <span class="s-meta">${nodes.has(tid) ? "條文頁" : "查引用"}</span>
@@ -1392,8 +1459,9 @@ function updateSuggest() {
         }
     }
 
-    // 2. Law name / alias matches
-    const matches = findMatchingLaws(norm);
+    const matches = findMatchingLaws(norm)
+        .filter(m => !(ft && currentScope?.type === "law" && m.code === currentScope.code))
+        .slice(0, 4);
     for (const m of matches) {
         const kLabel = m.url ? "原文 ↗" : kindBadgeLabel(m.kind);
         const meta = m.url ? `<span class="meta-pill">${kLabel}</span>`
@@ -1407,25 +1475,21 @@ function updateSuggest() {
         }
     }
 
-    // 3. Full-text search trigger
-    const scopeText = currentScope ? `在「${currentScope.label.replace(/^本法：/, "")}」中` : "在全部法規中";
-    itemsHtml += `<button type="button" class="suggest-item" role="option" data-suggest-submit="1">
-        <span>🔍 ${escapeHtml(scopeText)}搜尋「${escapeHtml(raw)}」</span>
-        <span class="s-meta">Enter</span>
-    </button>`;
-    itemsHtml += `<div class="suggest-foot"><span>提示：空格＝同時包含（AND），<code>-詞</code>＝排除</span><span>↑↓ 選擇 · Esc 關閉</span></div>`;
-
+    if (!itemsHtml) { hideSuggest(); return; }
     suggestBox.innerHTML = itemsHtml;
     suggestBox.hidden = false;
     suggestIdx = -1;
 }
 
-qInput.addEventListener("input", updateSuggest);
-qInput.addEventListener("focus", () => { if (qInput.value.trim()) updateSuggest(); });
+qInput.addEventListener("input", handleUnifiedInput);
+qInput.addEventListener("focus", () => { if (qInput.value.trim()) handleUnifiedInput(); });
 qClear.addEventListener("click", () => {
     qInput.value = "";
     qClear.hidden = true;
     hideSuggest();
+    if (document.getElementById("full-text")) applyInLawFilter("");
+    if (document.getElementById("section-list")) applySectionFilters();
+    if (document.getElementById("groups")) applyGroupFilter("");
     qInput.focus();
 });
 
@@ -1433,12 +1497,13 @@ document.getElementById("search-scope").addEventListener("click", () => {
     const val = qInput.value.trim();
     currentScope = null;
     document.getElementById("search-scope").hidden = true;
-    qInput.placeholder = "輸入法規名稱、條號（如 預算法 62）或關鍵字";
+    qInput.placeholder = "即時篩選法規名稱，或輸入條號（如 預算法 62）、關鍵字按查詢";
+    if (document.getElementById("full-text")) applyInLawFilter("");
     if (currentSearch && val) {
         location.hash = encodeURIComponent(val);
     } else {
         qInput.focus();
-        if (val) updateSuggest();
+        if (val) handleUnifiedInput();
     }
 });
 
@@ -1729,7 +1794,8 @@ document.addEventListener("click", e => {
             if (f.t) f.t.value = "";
             applySectionFilters(f, f.t);
             if (f.o) f.o.value = "";
-            f.n.value = "";
+            qInput.value = "";
+            qClear.hidden = true;
             applySectionFilters(f);
         }
     }
@@ -1793,26 +1859,27 @@ document.addEventListener("click", e => {
 
     if (e.target.id === "section-reset" || e.target.id === "section-empty-reset") {
         const f = document.querySelector(".section-search");
+        qInput.value = "";
+        qClear.hidden = true;
         if (f) {
             if (f.t) f.t.value = "";
             applySectionFilters(f, f.t);
             if (f.o) f.o.value = "";
-            f.n.value = "";
             applySectionFilters(f);
         }
         return;
     }
 
     if (e.target.id === "full-text-reset") {
-        const lf = document.getElementById("law-filter");
-        if (lf) lf.value = "";
+        qInput.value = "";
+        qClear.hidden = true;
         const oc = document.getElementById("only-cited");
         if (oc) oc.checked = false;
         const oo = document.getElementById("only-own");
         if (oo) oo.checked = false;
         const ft = document.getElementById("full-text");
         ft?.classList.remove("only-cited", "only-own");
-        applyInLawFilter();
+        applyInLawFilter("");
         return;
     }
 
@@ -1902,85 +1969,16 @@ document.addEventListener("click", e => {
 
 const filterTokens = f => (f.t?.value ? ` 類別:${f.t.value}` : "") + (f.o?.value ? ` 主管:${f.o.value}` : "");
 
-document.addEventListener("input", e => {
+document.addEventListener("change", e => {
     if (e.target.closest(".section-search")) {
         applySectionFilters(e.target.closest(".section-search"), e.target);
         return;
     }
-    if (e.target.id === "law-filter") {
-        applyInLawFilter();
-        return;
-    }
-    if (e.target.id === "group-filter") {
-        const q = e.target.value.normalize("NFKC").replace(/台/g, "臺").trim();
-        const words = q.split(/\s+/).filter(Boolean);
-        let totalShown = 0;
-        document.querySelectorAll("#groups details").forEach(d => {
-            let grpShown = 0;
-            d.querySelectorAll(".list a").forEach(a => {
-                const title = a.querySelector(".row-title")?.textContent || a.textContent;
-                const ok = words.every(w => title.includes(w));
-                a.hidden = !ok;
-                if (ok) grpShown++;
-            });
-            const cntEl = d.querySelector(".grp-count");
-            if (cntEl) cntEl.textContent = grpShown;
-            d.hidden = grpShown === 0;
-            if (words.length && grpShown > 0) d.open = true;
-            totalShown += grpShown;
-        });
-        const emptyEl = document.getElementById("groups-empty");
-        if (emptyEl) emptyEl.hidden = totalShown > 0;
-    }
-});
-
-document.addEventListener("change", e => {
     if (e.target.id === "only-cited" || e.target.id === "only-own") {
         document.getElementById("full-text")?.classList.toggle(e.target.id, e.target.checked);
         const emptyEl = document.getElementById("full-text-empty");
         if (emptyEl) emptyEl.hidden = scrubList().length > 0;
         updateScrubber();
-        return;
-    }
-    if (e.target.id === "group-sort") {
-        store.set("groupSort", e.target.value);
-        const groups = document.getElementById("groups");
-        groups.outerHTML = renderGroups(groups.dataset.tab);
-    }
-});
-
-document.addEventListener("click", e => {
-    if (e.target.id === "law-filter-clear") {
-        const lf = document.getElementById("law-filter");
-        if (lf) { lf.value = ""; lf.focus(); }
-        applyInLawFilter();
-    }
-});
-
-document.addEventListener("submit", e => {
-    if (e.target.matches(".section-search")) {
-        e.preventDefault();
-        e.target.n.blur();
-        location.hash = encodeURIComponent(e.target.dataset.section + filterTokens(e.target) + " " + e.target.n.value.trim());
-        return;
-    }
-    const form = e.target.closest(".jump");
-    if (!form) return;
-    e.preventDefault();
-    const m = form.n.value.normalize("NFKC").replace(/\s+/g, "").match(ARTICLE_PAT);
-    const el = m && document.getElementById("a-" + nodeId(form.dataset.law, toNumber(m[1]), m[2] ? toNumber(m[2]) : null));
-    if (el) {
-        if (el.classList.contains("filter-hidden")) {
-            const lf = document.getElementById("law-filter");
-            if (lf) lf.value = "";
-            applyInLawFilter();
-        }
-        form.n.blur();
-        el.scrollIntoView();
-    } else {
-        form.n.setCustomValidity("沒有這一條");
-        form.n.reportValidity();
-        form.n.setCustomValidity("");
     }
 });
 
