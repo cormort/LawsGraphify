@@ -72,6 +72,9 @@ button { font: inherit; cursor: pointer; }
 }
 .tool[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
 form { display: flex; gap: 8px; margin-top: 8px; }
+.section-search { flex-wrap: wrap; }
+.section-search .filters { display: flex; gap: 8px; flex-basis: 100%; min-width: 0; }
+.section-search select { flex: 1 1 40%; min-width: 0; font-size: 16px; padding: 8px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); }
 input[type=search] {
     flex: 1; min-width: 0; font-size: 16px; padding: 10px 12px;  /* 16px stops iOS zoom-on-focus */
     border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text);
@@ -379,8 +382,8 @@ function renderSection(key) {
     const sec = SECTIONS[key], list = laws.filter(l => l.kind === sec.kind);
     list.sort(sec.sort || ((a, b) => newestFirst(a.code, b.code)));
     const owners = [...new Set(Object.values(FUND_META).map(m => m[1]))].sort((a, b) => a.localeCompare(b, "zh-Hant"));
-    const selects = key !== "基金" ? "" : `<select name="t" aria-label="基金類別"><option value="">全部類別</option>${FUND_TYPES.map(t => `<option>${t}</option>`).join("")}</select>
-        <select name="o" aria-label="主管機關"><option value="">全部主管機關</option>${owners.map(o => `<option>${o}</option>`).join("")}</select>`;
+    const selects = key !== "基金" ? "" : `<div class="filters"><select name="t" aria-label="基金類別"><option value="">全部類別</option>${FUND_TYPES.map(t => `<option>${t}</option>`).join("")}</select>
+        <select name="o" aria-label="主管機關"><option value="">全部主管機關</option>${owners.map(o => `<option>${o}</option>`).join("")}</select></div>`;
     return `<h2>${sec.title}</h2><p class="muted">${sec.note(list.length)}</p>
         <form class="section-search" data-section="${key}"><input name="n" type="search" enterkeyhint="search" placeholder="名稱篩選，按搜尋找條文內容" aria-label="篩選名稱，或在${sec.where}中搜尋條文"><button class="tool" type="submit">搜尋</button>${selects}</form>
         ${sec.topics.length ? `<div class="chips">${sec.topics.map(t => `<a class="tool" href="#${encodeURIComponent(key + " " + t)}">${t}</a>`).join("")}</div>` : ""}
