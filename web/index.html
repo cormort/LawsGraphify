@@ -1217,7 +1217,14 @@ document.addEventListener("click", e => {
 // Typing in a section's box narrows its list by name; 搜尋 searches the article text
 document.addEventListener("input", e => {
     if (!e.target.closest(".section-search")) return;
-    const f = e.target.closest(".section-search"), t = f.t?.value, o = f.o?.value;
+    const f = e.target.closest(".section-search");
+    if (e.target === f.t) {  // cascade: 主管機關 lists only the agencies with funds of this 類別
+        const keep = f.o.value, owners = [...new Set(Object.values(FUND_META).filter(m => !f.t.value || m[0] === f.t.value).map(m => m[1]))]
+            .sort((a, b) => a.localeCompare(b, "zh-Hant"));
+        f.o.innerHTML = `<option value="">全部主管機關</option>` + owners.map(o => `<option>${o}</option>`).join("");
+        f.o.value = owners.includes(keep) ? keep : "";
+    }
+    const t = f.t?.value, o = f.o?.value;
     const words = f.n.value.normalize("NFKC").replace(/台/g, "臺").split(/\s+/).filter(Boolean);
     document.querySelectorAll("#section-list a").forEach(a => {
         a.hidden = !words.every(w => a.firstElementChild.textContent.includes(w)) || !!t && a.dataset.t !== t || !!o && a.dataset.o !== o;
