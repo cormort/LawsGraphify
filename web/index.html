@@ -338,7 +338,12 @@ function parseQuery(raw) {
     const compact = text.replace(/\s+/g, "");
     if (text === "其他") return { type: "tab", tab: "其他" };
     const sec = text.match(/^(基金|廢止專區)(?:專區)?(?:\s+(.*))?$/);
-    if (sec) return sec[2] ? { type: "search", code: null, section: sec[1], ...terms(sec[2]) } : { type: "section", section: sec[1] };
+    if (sec && sec[2]) {
+        const pick = k => sec[2].match(new RegExp(`(?:^|\\s)${k}:(\\S+)`))?.[1] || "";
+        const rest = sec[2].replace(/(?:^|\s)(?:類別|主管):\S+/g, " ").trim();
+        return { type: "search", code: null, section: sec[1], fundType: pick("類別"), owner: pick("主管"), ...terms(rest) };
+    }
+    if (sec) return { type: "section", section: sec[1] };
     const direct = compact.toUpperCase().match(/^([A-Z0-9]+)-(\d{1,4})(?:-(\d{1,3}))?$/);
     if (direct && codeToName[direct[1]]) {
         return { type: "article", code: direct[1], main: +direct[2], sub: direct[3] ? +direct[3] : null };
@@ -386,7 +391,7 @@ function renderSection(key) {
         <select name="o" aria-label="主管機關"><option value="">全部主管機關</option>${owners.map(o => `<option>${o}</option>`).join("")}</select></div>`;
     return `<h2>${sec.title}</h2><p class="muted">${sec.note(list.length)}</p>
         <form class="section-search" data-section="${key}"><input name="n" type="search" enterkeyhint="search" placeholder="名稱篩選，按搜尋找條文內容" aria-label="篩選名稱，或在${sec.where}中搜尋條文"><button class="tool" type="submit">搜尋</button>${selects}</form>
-        ${sec.topics.length ? `<div class="chips">${sec.topics.map(t => `<a class="tool" href="#${encodeURIComponent(key + " " + t)}">${t}</a>`).join("")}</div>` : ""}
+        ${sec.topics.length ? `<div class="chips">${sec.topics.map(t => `<a class="tool" data-topic="${t}" href="#${encodeURIComponent(key + " " + t)}">${t}</a>`).join("")}</div>` : ""}
         <h3>${sec.where}（${list.length}）</h3>
         <div class="card list" id="section-list">${list.map(l => `<a href="#${encodeURIComponent(l.code)}" data-t="${FUND_META[l.code]?.[0] || ""}" data-o="${FUND_META[l.code]?.[1] || ""}">
             <span>${escapeHtml(sec.short(l))}</span><span class="count">${l.amended || l.published || ""} · ${l.count} ${unit(l.code)}</span></a>`).join("")}</div>
@@ -955,13 +960,14 @@ function renderSearch(q) {
     if (!q.include.length) return `<p class="warn">請輸入要搜尋的關鍵字。</p>`;
     const scope = q.code ? lawOrder.get(q.code) || []
         : laws.filter(l => q.section ? l.kind === SECTIONS[q.section].kind : l.kind !== ABOLISHED_KIND)
+            .filter(l => (!q.fundType || FUND_META[l.code]?.[0] === q.fundType) && (!q.owner || FUND_META[l.code]?.[1] === q.owner))
             .flatMap(l => lawOrder.get(l.code) || []);
     const hits = scope.filter(id => {
         const t = nodes.get(id).norm;
         return q.include.every(w => t.includes(w)) && !q.exclude.some(w => t.includes(w));
     });
     const favs = store.get("favs", []);
-    const where = q.code ? `《${lawName(q.code)}》` : q.section ? SECTIONS[q.section].where : "全部法規";
+    const where = q.code ? `《${lawName(q.code)}》` : q.section ? [q.owner, q.fundType, SECTIONS[q.section].where].filter(Boolean).join(" ") : "全部法規";
     const title = `在${where}中找到 ${hits.length} 條「${q.include.join(" ")}」${q.exclude.length ? `（排除 ${q.exclude.join("、")}）` : ""}`;
     const names = renderNameMatches(q);
     if (!hits.length) return names + `<h3>${escapeHtml(title)}</h3><p class="empty">沒有符合的條文。${q.code || names ? "" : "要查法規請輸入名稱，例如「預算法」。"}</p>`;
@@ -1214,6 +1220,9 @@ document.addEventListener("click", e => {
     }
 });
 
+// " 類別:作業基金 主管:環境部" for the 收支辦法 filters chosen
+const filterTokens = f => (f.t?.value ? ` 類別:${f.t.value}` : "") + (f.o?.value ? ` 主管:${f.o.value}` : "");
+
 // Typing in a section's box narrows its list by name; 搜尋 searches the article text
 document.addEventListener("input", e => {
     if (!e.target.closest(".section-search")) return;
@@ -1225,6 +1234,9 @@ document.addEventListener("input", e => {
         f.o.value = owners.includes(keep) ? keep : "";
     }
     const t = f.t?.value, o = f.o?.value;
+    document.querySelectorAll(".chips a[data-topic]").forEach(a => {
+        a.href = "#" + encodeURIComponent(f.dataset.section + filterTokens(f) + " " + a.dataset.topic);
+    });
     const words = f.n.value.normalize("NFKC").replace(/台/g, "臺").split(/\s+/).filter(Boolean);
     document.querySelectorAll("#section-list a").forEach(a => {
         a.hidden = !words.every(w => a.firstElementChild.textContent.includes(w)) || !!t && a.dataset.t !== t || !!o && a.dataset.o !== o;
@@ -1243,7 +1255,7 @@ document.addEventListener("submit", e => {
     if (e.target.matches(".section-search")) {
         e.preventDefault();
         e.target.n.blur();
-        location.hash = encodeURIComponent(e.target.dataset.section + " " + e.target.n.value.trim());
+        location.hash = encodeURIComponent(e.target.dataset.section + filterTokens(e.target) + " " + e.target.n.value.trim());
         return;
     }
     const form = e.target.closest(".jump");
